@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h2>Welcome, <span id="username"></span></h2>
+<button id="logoutBtn">Logout</button>
+<p id="message"></p>
+
+<script>
+  $(document).ready(function () {
+    $.ajax({
+      url: "http://localhost:8080/HotelSystemEnterprise_war_exploded/home",
+      type: "GET",
+      contentType: "application/json",
+      xhrFields: { withCredentials: true }, // Send cookies
+      success: function (response) {
+        $("#username").text(response.username);
+      },
+      error: function (xhr) {
+        window.location.href = "Login.jsp"; // Redirect if not logged in
+      }
+    });
+
+    $("#logoutBtn").click(function () {
+      $.ajax({
+        url: "http://localhost:8080/HotelSystemEnterprise_war_exploded/logout",
+        type: "POST",
+        contentType: "application/json",
+        success: function () {
+          window.location.href = "Login.jsp";
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

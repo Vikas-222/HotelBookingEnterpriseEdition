@@ -14,6 +14,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 
 public class SignupServlet extends HttpServlet {
@@ -28,6 +29,7 @@ public class SignupServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
+        PrintWriter out = response.getWriter();
         APIResponse apiResponse;
         try {
 
@@ -41,6 +43,20 @@ public class SignupServlet extends HttpServlet {
 
         } catch (ApplicationException e) {
             e.printStackTrace();
+            Throwable cause = e.getCause();
+
+            if (cause instanceof SQLException) {
+                // Database error
+                out.println("Database error: " + cause.getMessage());
+                ((SQLException) cause).printStackTrace(); // Log the stack trace
+            } else if (e.getMessage().equals(Messages.Error.USERNOTFOUND)) {
+                // User not found
+                out.println("User not found.");
+            } else {
+                // Other application exception
+                out.println("An application error occurred: " + e.getMessage());
+                e.printStackTrace();
+            }
             apiResponse = new APIResponse(e.getMessage());
             Response.responseMethod(response, 400, apiResponse);
         } catch (Exception ex) {

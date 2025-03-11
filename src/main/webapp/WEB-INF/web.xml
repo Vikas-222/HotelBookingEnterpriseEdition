@@ -10,7 +10,7 @@
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.example.servlet.LoginServlet</servlet-class>
+        <servlet-class>com.example.userServlet.LoginServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -20,7 +20,7 @@
 
     <servlet>
         <servlet-name>SignupServlet</servlet-name>
-        <servlet-class>com.example.servlet.SignupServlet</servlet-class>
+        <servlet-class>com.example.userServlet.SignupServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -30,7 +30,7 @@
 
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>com.example.servlet.HomePageServlet</servlet-class>
+        <servlet-class>com.example.userServlet.HomePageServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -40,7 +40,7 @@
 
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>com.example.servlet.Logout</servlet-class>
+        <servlet-class>com.example.userServlet.Logout</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -50,7 +50,7 @@
 
     <servlet>
         <servlet-name>GetAllUserServlet</servlet-name>
-        <servlet-class>com.example.servlet.GetAllUserServlet</servlet-class>
+        <servlet-class>com.example.userServlet.GetAllUserServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -60,12 +60,22 @@
 
     <servlet>
         <servlet-name>FetchOneUserServlet</servlet-name>
-        <servlet-class>com.example.servlet.FetchOneUserServlet</servlet-class>
+        <servlet-class>com.example.userServlet.FetchOneUserServlet</servlet-class>
     </servlet>
     
     <servlet-mapping>
         <servlet-name>FetchOneUserServlet</servlet-name>
         <url-pattern>/fetchoneuser</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addRoomServlet</servlet-name>
+        <servlet-class>com.example.roomServlet.addRoomServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addRoomServlet</servlet-name>
+        <url-pattern>/addRoomServlet</url-pattern>
     </servlet-mapping>
 
 </web-app>

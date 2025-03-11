@@ -2,7 +2,7 @@ package com.example.entity;
 
 public class User {
 
-    private String userId; //userId
+    private int userId; //userId
     private String firstName; //firstName
     private String lastName; //lastName
     private String email;
@@ -28,7 +28,7 @@ public class User {
         this.isActive = user.isActive;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
@@ -69,7 +69,7 @@ public class User {
     }
 
     public static class UserBuilder {
-        private String userId;
+        private int userId;
         private String firstName;
         private String lastName;
         private String email;
@@ -85,6 +85,11 @@ public class User {
             this.email = email;
             this.passwords = passwords;
             this.contact = contact;
+        }
+
+        public UserBuilder setUserId(int userId) {
+            this.userId = userId;
+            return this;
         }
 
         public UserBuilder setLastName(String lastName) {
@@ -117,4 +122,17 @@ public class User {
         }
     }
 
+    @Override
+    public String toString() {
+        return "userId='" + userId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", passwords='" + passwords + '\'' +
+                ", contact='" + contact + '\'' +
+                ", gender='" + gender + '\'' +
+                ", profilePic='" + profilePic + '\'' +
+                ", roles='" + roles + '\'' +
+                ", isActive=" + isActive;
+    }
 }

@@ -5,6 +5,8 @@ public class Messages {
     public static final String ACCOUNTCREATED = "Account created successfully";
     public static final String LOGINSUCCESSFUL = "Login successful";
     public static final String LOGOUTSUCCESSFUL = "Logout successful";
+    public static final String FETCHINGUSER = "User details fetched";
+    public static final String ROOMADDED = "Room added successfully";
 
     public static class Error {
         public static final String ALREADYEXISTS = "User already exists";
@@ -17,6 +19,11 @@ public class Messages {
         public static final String INVALIDACTION = "Unauthorized access";
         public static final String USERNOTFOUND = "User not found";
         public static final String NOUSERFOUND = "No user found";
+        public static final String ERROROCCURED = "Sorry! Some error occured";
+        public static final String ROOMEXISTS = "Sorry! Room already exists";
+        public static final String INVALIDEMAILLENGTH = "Email is too big! Please use another email";
+        public static final String INVALIDNAMELENGTH = "Name is too big! Please use short names";
+        public static final String INVALIDPASSWORDLENGTH = "Password is too big! Please use other strong password";
     }
 
 }

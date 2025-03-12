@@ -4,12 +4,8 @@ import com.example.common.Messages;
 import com.example.db.DbConnect;
 import com.example.entity.User;
 import com.example.exception.ApplicationException;
-import jakarta.servlet.http.HttpSession;
-import jdk.jfr.Frequency;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class UserDao {

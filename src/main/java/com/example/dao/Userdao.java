@@ -4,6 +4,9 @@ import com.example.common.Messages;
 import com.example.db.DbConnect;
 import com.example.entity.User;
 import com.example.exception.ApplicationException;
+import jakarta.servlet.http.HttpSession;
+import jdk.jfr.Frequency;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,7 @@ public class UserDao {
                 return true;
             }
         } catch (Exception ex) {
-            throw new ApplicationException(ex);
+            throw new ApplicationException(Messages.Error.FAILED,ApplicationException.ErrorType.SYSTEM_ERROR,ex);
         }
         return false;
     }
@@ -51,7 +54,7 @@ public class UserDao {
             pst1.setString(4, user.getContact());
             pst1.executeUpdate();
         } catch (Exception ex) {
-            throw new ApplicationException(ex);
+            throw new ApplicationException(Messages.Error.FAILED,ApplicationException.ErrorType.SYSTEM_ERROR,ex);
         }
     }
 
@@ -72,11 +75,11 @@ public class UserDao {
             pst.setString(2, password);
             ResultSet rs = pst.executeQuery();
             if (!rs.next()) {
-                throw new ApplicationException(Messages.Error.USERNOTFOUND);
+                throw new ApplicationException(Messages.Error.USER_NOT_FOUND,ApplicationException.ErrorType.USER_ERROR);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApplicationException(e);
+            throw new ApplicationException(Messages.Error.FAILED,ApplicationException.ErrorType.SYSTEM_ERROR,e);
         }
     }
 

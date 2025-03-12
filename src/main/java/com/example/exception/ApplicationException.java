@@ -2,12 +2,21 @@ package com.example.exception;
 
 public class ApplicationException extends Exception {
 
-    public ApplicationException(String message){
-        super(message);
+    public enum ErrorType {
+        USER_ERROR,
+        SYSTEM_ERROR
     }
 
-    public ApplicationException(String message, Throwable cause) {
+    private ErrorType errorType;
+
+    public ApplicationException(String message,ErrorType error){
+        super(message);
+        errorType = error;
+    }
+
+    public ApplicationException(String message, ErrorType errorType, Throwable cause) {
         super(message, cause);
+        this.errorType = errorType;
     }
 
     public ApplicationException(Throwable cause) {
@@ -16,5 +25,9 @@ public class ApplicationException extends Exception {
 
     public ApplicationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
     }
 }

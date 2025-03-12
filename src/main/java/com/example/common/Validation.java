@@ -12,65 +12,72 @@ public class Validation {
         String regex = "^(?=.*[0-9])"
                 + "(?=.*[a-z])(?=.*[A-Z])"
                 + "(?=.*[@#$%^&+=])"
-                + "(?=\\S+$).{8,20}$";
+                + "(?=\\S+$).{6,15}$";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(password);
-        return m.matches();
+        if(m.matches()){
+            return true;
+        }
+        return false;
     }
 
     public static boolean isValidContact(String contact) {
-        if (contact.length() != 10 || !contact.chars().allMatch(Character::isDigit)) {
+        if (contact.length() != 10)
+            return false;
+        if (!contact.chars().allMatch(Character::isDigit)) {
             return false;
         }
         return true;
     }
 
-    public static boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) throws ApplicationException {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +
                 "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
         Pattern p = Pattern.compile(emailRegex);
 
-        if (email == null && !p.matcher(email).matches()) {
+        if (email == null) {
+            return false;
+        }
+        if (!p.matcher(email).matches()) {
             return false;
         }
         return true;
     }
 
     public static boolean isNullCheckUserValues(User user) throws ApplicationException {
-        if (user.getFirstName() == null || user.getEmail() == null || user.getPasswords() == null || user.getContact() == null
-                || user.getFirstName().trim().isEmpty() || user.getEmail().trim().isEmpty() || user.getPasswords().trim().isEmpty()
+        if (user.getFirstName().trim().isEmpty() || user.getEmail().trim().isEmpty() || user.getPasswords().trim().isEmpty()
                 || user.getContact().trim().isEmpty()) {
             return false;
         }
         return true;
     }
 
-    public static boolean isValidFirstNameLength(String fname){
-        if(fname.length() > 50){
-            return false;
-        }
-        return true;
-    }
-    public static boolean isValidLastNameLength(String lname){
-        if(lname.length() > 50){
-            return false;
-        }
-        return true;
-    }
-    public static boolean isValidEmailLength(String email){
-        if(email.length() > 60){
+    public static boolean isValidFirstNameLength(String fname) {
+        if (fname.length() > 50) {
             return false;
         }
         return true;
     }
 
-    public static boolean isValidPasswordLength(String password){
-        if(password.length() > 20){
+    public static boolean isValidLastNameLength(String lname) {
+        if (lname.length() > 50) {
             return false;
         }
         return true;
     }
 
+    public static boolean isValidEmailLength(String email) {
+        if (email.length() > 60) {
+            return false;
+        }
+        return true;
+    }
 
+    public static boolean isValidPasswordLength(String password) {
+        if (password.length() > 6 && password.length() < 15) {
+            return true;
+        }
+        return false;
+    }
 }

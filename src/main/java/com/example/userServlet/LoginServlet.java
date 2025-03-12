@@ -10,10 +10,8 @@ import com.example.exception.ApplicationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.*;
 
 public class LoginServlet extends HttpServlet {
 
@@ -38,11 +36,11 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(60);
             session.setAttribute("user", user);
-            apiResponse = new APIResponse(Messages.LOGINSUCCESSFUL);
-            Response.responseMethod(response,200,apiResponse);
+            apiResponse = new APIResponse(Messages.LOGIN_SUCCESSFUL);
+            Response.responseMethod(response, 200, apiResponse);
         } catch (ApplicationException e) {
             e.printStackTrace();
-            apiResponse = new APIResponse(Messages.Error.INVALIDCREDENTIALS);
+            apiResponse = new APIResponse(Messages.Error.INVALID_CREDENTIALS);
             Response.responseMethod(response, 400, apiResponse);
         }
     }

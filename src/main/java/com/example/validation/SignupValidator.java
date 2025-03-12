@@ -12,33 +12,28 @@ public class SignupValidator {
 
     public static void validate(User user) throws ApplicationException {
         if(!Validation.isNullCheckUserValues(user)){
-            throw new ApplicationException(Messages.Error.INVALIDVALUES);
+            throw new ApplicationException(Messages.Error.INVALID_VALUES,ApplicationException.ErrorType.USER_ERROR);
         }
-
         if (!Validation.isValidPassword(user.getPasswords())) {
-            throw new ApplicationException(Messages.Error.WEAKPASSWORD);
+            throw new ApplicationException(Messages.Error.WEAK_PASSWORD,ApplicationException.ErrorType.USER_ERROR);
         }
-
         if (!Validation.isValidEmail(user.getEmail())) {
-            throw new ApplicationException(Messages.Error.INVALIDEMAIL);
+            throw new ApplicationException(Messages.Error.INVALID_EMAIL,ApplicationException.ErrorType.USER_ERROR);
         }
         if (!Validation.isValidContact(user.getContact())) {
-            throw new ApplicationException(Messages.Error.INVALIDCONTACT);
+            throw new ApplicationException(Messages.Error.INVALID_CONTACT,ApplicationException.ErrorType.USER_ERROR);
         }
         if (userDao.isUserExistByEmail(user.getEmail())) {
-            throw new ApplicationException(Messages.Error.ALREADYEXISTS);
+            throw new ApplicationException(Messages.Error.ALREADY_EXISTS,ApplicationException.ErrorType.USER_ERROR);
         }
         if(!Validation.isValidEmailLength(user.getEmail())){
-            throw new ApplicationException(Messages.Error.INVALIDEMAILLENGTH);
+            throw new ApplicationException(Messages.Error.INVALID_EMAIL_LENGTH,ApplicationException.ErrorType.USER_ERROR);
         }
         if(!Validation.isValidFirstNameLength(user.getFirstName())){
-            throw new ApplicationException(Messages.Error.INVALIDNAMELENGTH);
-        }
-        if(!Validation.isValidLastNameLength(user.getLastName())){
-            throw new ApplicationException(Messages.Error.INVALIDNAMELENGTH);
+            throw new ApplicationException(Messages.Error.INVALID_NAME_LENGTH,ApplicationException.ErrorType.USER_ERROR);
         }
         if(!Validation.isValidPasswordLength(user.getPasswords())){
-            throw new ApplicationException(Messages.Error.INVALIDPASSWORDLENGTH);
+            throw new ApplicationException(Messages.Error.INVALID_PASSWORD_LENGTH,ApplicationException.ErrorType.USER_ERROR);
         }
 
     }

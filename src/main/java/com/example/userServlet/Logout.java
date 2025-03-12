@@ -27,10 +27,10 @@ public class Logout extends HttpServlet {
 
             if(session.getAttribute("user") != null) {
                 session.invalidate();
-                apiResponse = new APIResponse(Messages.LOGOUTSUCCESSFUL);
+                apiResponse = new APIResponse(Messages.LOGOUT_SUCCESSFUL);
                 response.setStatus(200);
             } else {
-                apiResponse = new APIResponse(Messages.Error.USERNOTFOUND);
+                apiResponse = new APIResponse(Messages.Error.USER_NOT_FOUND);
                 response.setStatus(400);
             }
             out.write(mapper.writeValueAsString(apiResponse));

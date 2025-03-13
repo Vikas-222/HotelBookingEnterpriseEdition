@@ -1,19 +1,24 @@
-package com.example.userServlet;
+package com.example.userController;
 
 import com.example.APIResponse;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.Validation;
-import com.example.dao.UserDao;
-import com.example.entity.User;
+import com.example.dao.IUserDAO;
+import com.example.dao.UserDAOImpl;
+import com.example.model.User;
 import com.example.exception.ApplicationException;
+import com.example.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class LoginServlet extends HttpServlet {
+public class LoginController extends HttpServlet {
+
+    private IUserDAO iUserDAO = new UserDAOImpl();
+    private UserService userService = UserService.getInstance(iUserDAO);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,13 +30,12 @@ public class LoginServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
-        UserDao userdao = new UserDao();
         APIResponse apiResponse;
 
         try {
             User user = mapper.readValue(request.getReader(), User.class);
             Validation.isNullCheckUserValues(user);
-            userdao.userLogin(user.getEmail(), user.getPasswords());
+            userService.userLogin(user.getEmail(), user.getPasswords());
 
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(60);

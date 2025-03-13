@@ -2,8 +2,6 @@
 //
 //import com.example.APIResponse;
 //import com.example.common.Messages;
-//import com.example.dao.RoomDao;
-//import com.example.entity.Room;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import jakarta.servlet.*;
 //import jakarta.servlet.http.*;

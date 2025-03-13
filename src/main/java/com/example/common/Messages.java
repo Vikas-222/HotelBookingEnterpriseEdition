@@ -18,6 +18,7 @@ public class Messages {
         public static final String INVALID_CREDENTIALS = "Please enter valid credentials";
         public static final String INVALID_ACTION = "Unauthorized access";
         public static final String USER_NOT_FOUND = "User not found";
+        public static final String NO_USER_EXISTS = "User record not exists";
         public static final String ERROR_OCCURED = "Sorry! Some error occured";
         public static final String ROOM_EXISTS = "Sorry! Room already exists";
         public static final String INVALID_EMAIL_LENGTH = "Email is too big! Please use another email";

@@ -2,13 +2,13 @@ package com.example.validation;
 
 import com.example.common.Messages;
 import com.example.common.Validation;
-import com.example.dao.UserDao;
-import com.example.entity.User;
+import com.example.dao.UserDAOImpl;
+import com.example.model.User;
 import com.example.exception.ApplicationException;
 
 public class SignupValidator {
 
-    private static UserDao userDao = new UserDao();
+    private static UserDAOImpl userDao = new UserDAOImpl();
 
     public static void validate(User user) throws ApplicationException {
         if(!Validation.isNullCheckUserValues(user)){

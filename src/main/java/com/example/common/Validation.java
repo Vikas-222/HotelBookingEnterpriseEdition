@@ -1,6 +1,6 @@
 package com.example.common;
 
-import com.example.entity.User;
+import com.example.model.User;
 import com.example.exception.ApplicationException;
 
 import java.util.regex.Matcher;

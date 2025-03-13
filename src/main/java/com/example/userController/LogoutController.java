@@ -1,4 +1,4 @@
-package com.example.userServlet;
+package com.example.userController;
 
 
 import com.example.APIResponse;
@@ -10,7 +10,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class Logout extends HttpServlet {
+public class LogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

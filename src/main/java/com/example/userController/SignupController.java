@@ -1,11 +1,13 @@
-package com.example.userServlet;
+package com.example.userController;
 
 import com.example.APIResponse;
 import com.example.common.Messages;
 import com.example.common.Response;
-import com.example.dao.UserDao;
-import com.example.entity.User;
+import com.example.dao.IUserDAO;
+import com.example.dao.UserDAOImpl;
+import com.example.model.User;
 import com.example.exception.ApplicationException;
+import com.example.service.UserService;
 import com.example.validation.SignupValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
@@ -13,9 +15,10 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-public class SignupServlet extends HttpServlet {
+public class SignupController extends HttpServlet {
 
-    UserDao userdao = new UserDao();
+    private IUserDAO iUserDAO = new UserDAOImpl();
+    private UserService userService = UserService.getInstance(iUserDAO);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,7 +32,7 @@ public class SignupServlet extends HttpServlet {
         try {
             User user = mapper.readValue(request.getReader(), User.class);
             SignupValidator.validate(user);
-            userdao.addUser(user);
+            userService.addUser(user);
             apiResponse = new APIResponse(Messages.ACCOUNT_CREATED);
             Response.responseMethod(response, 200, apiResponse);
         } catch (ApplicationException e) {

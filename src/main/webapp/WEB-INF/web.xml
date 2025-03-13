@@ -10,7 +10,7 @@
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.example.userServlet.LoginServlet</servlet-class>
+        <servlet-class>com.example.userController.LoginController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -20,7 +20,7 @@
 
     <servlet>
         <servlet-name>SignupServlet</servlet-name>
-        <servlet-class>com.example.userServlet.SignupServlet</servlet-class>
+        <servlet-class>com.example.userController.SignupController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -30,7 +30,7 @@
 
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>com.example.userServlet.HomePageServlet</servlet-class>
+        <servlet-class>com.example.userController.HomePageController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -40,7 +40,7 @@
 
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>com.example.userServlet.Logout</servlet-class>
+        <servlet-class>com.example.userController.LogoutController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -50,7 +50,7 @@
 
     <servlet>
         <servlet-name>GetAllUserServlet</servlet-name>
-        <servlet-class>com.example.userServlet.GetAllUserServlet</servlet-class>
+        <servlet-class>com.example.userController.GetAllUserServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -60,7 +60,7 @@
 
     <servlet>
         <servlet-name>FetchOneUserServlet</servlet-name>
-        <servlet-class>com.example.userServlet.FetchOneUserServlet</servlet-class>
+        <servlet-class>com.example.userController.FetchOneUserServlet</servlet-class>
     </servlet>
     
     <servlet-mapping>

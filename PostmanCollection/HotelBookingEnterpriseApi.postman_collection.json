@@ -1,19 +1,19 @@
 {
 	"info": {
-		"_postman_id": "8e619a8d-b947-4def-b557-52d7ac88f879",
-		"name": "HotelBookingEnterpriseApi",
+		"_postman_id": "198fb6a0-8927-4e1c-9e47-4774027c599c",
+		"name": "HotelBookingEE",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "42892893"
 	},
 	"item": [
 		{
-			"name": "logout",
+			"name": "Signup",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\r\n    \"firstName\":\"admin\",\r\n    \"email\":\"admin@gmail.com\",\r\n    \"password\":\"Admin@123\",\r\n    \"contact\":\"9876543210\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,15 +21,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/HotelSystemEnterprise_war_exploded/logout",
+					"raw": "http://localhost:8080/HotelBookingEnterpriseEdition_war_exploded/signup",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"HotelSystemEnterprise_war_exploded",
-						"logout"
+						"HotelBookingEnterpriseEdition_war_exploded",
+						"signup"
 					]
 				}
 			},
@@ -42,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"vikas1@gmail.com\",\r\n    \"passwords\": \"123456\"\r\n}",
+					"raw": "{\r\n    \"email\":\"vsa@gmail.com\",\r\n    \"password\":\"Vsa123@@\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -50,14 +50,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/HotelSystemEnterprise_war_exploded/login",
+					"raw": "http://localhost:8080/HotelBookingEnterpriseEdition_war_exploded/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"HotelSystemEnterprise_war_exploded",
+						"HotelBookingEnterpriseEdition_war_exploded",
 						"login"
 					]
 				}
@@ -65,13 +65,13 @@
 			"response": []
 		},
 		{
-			"name": "signup",
+			"name": "getOneUser",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"firstName\":\"admin1\",\r\n    \"email\":\"admin1@gmail.com\",\r\n    \"passwords\":\"Admin@@123@@\",\r\n    \"contact\":\"1205645342\"\r\n}",
+					"raw": "{\r\n    \"userId\":3\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -79,101 +79,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/HotelSystemEnterprise_war_exploded/signup",
+					"raw": "http://localhost:8080/HotelBookingEnterpriseEdition_war_exploded/getoneuser",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"HotelSystemEnterprise_war_exploded",
-						"signup"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "home",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/HotelSystemEnterprise_war_exploded/home",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"HotelSystemEnterprise_war_exploded",
-						"home"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "fetchOneUser",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n   \"userId\":10\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/HotelSystemEnterprise_war_exploded/fetchoneuser",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"HotelSystemEnterprise_war_exploded",
-						"fetchoneuser"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getAllUser",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "addRoom",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"room_number\":101,\r\n    \"room_type\":\"KING\",\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/HotelSystemEnterprise_war_exploded/addRoomServlet",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"HotelSystemEnterprise_war_exploded",
-						"addRoomServlet"
+						"HotelBookingEnterpriseEdition_war_exploded",
+						"getoneuser"
 					]
 				}
 			},

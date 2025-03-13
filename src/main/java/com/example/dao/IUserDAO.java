@@ -8,7 +8,7 @@ public interface IUserDAO {
 
     boolean isUserExistByEmail(String emailId) throws ApplicationException;
 
-    void addUser(User user) throws ApplicationException;
+    void addUser(String fname,String email,String password,String contact) throws ApplicationException;
 
     void userLogin(String email, String password) throws ApplicationException;
 

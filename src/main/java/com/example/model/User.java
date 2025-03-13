@@ -6,7 +6,7 @@ public class User {
     private String firstName; //firstName
     private String lastName; //lastName
     private String email;
-    private String passwords;
+    private String password;
     private String contact;
     private String gender;
     private String profilePic; //profilePic
@@ -20,7 +20,7 @@ public class User {
         this.firstName = user.firstName;
         this.lastName = user.lastName;
         this.email = user.email;
-        this.passwords = user.passwords;
+        this.password = user.password;
         this.contact = user.contact;
         this.gender = user.gender;
         this.profilePic = user.profilePic;
@@ -40,8 +40,8 @@ public class User {
         return email;
     }
 
-    public String getPasswords() {
-        return passwords;
+    public String getPassword() {
+        return password;
     }
 
     public String getLastName() {
@@ -73,17 +73,17 @@ public class User {
         private String firstName;
         private String lastName;
         private String email;
-        private String passwords;
+        private String password;
         private String contact;
         private String gender;
         private String profilePic;
         private String roles;
         private boolean isActive;
 
-        public UserBuilder(String firstName, String email, String passwords, String contact) {
+        public UserBuilder(String firstName, String email, String password, String contact) {
             this.firstName = firstName;
             this.email = email;
-            this.passwords = passwords;
+            this.password = password;
             this.contact = contact;
         }
 
@@ -128,7 +128,7 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", passwords='" + passwords + '\'' +
+                ", password='" + password + '\'' +
                 ", contact='" + contact + '\'' +
                 ", gender='" + gender + '\'' +
                 ", profilePic='" + profilePic + '\'' +

@@ -46,7 +46,7 @@ public class Validation {
     }
 
     public static boolean isNullCheckUserValues(User user) throws ApplicationException {
-        if (user.getFirstName().trim().isEmpty() || user.getEmail().trim().isEmpty() || user.getPasswords().trim().isEmpty()
+        if (user.getFirstName().trim().isEmpty() || user.getEmail().trim().isEmpty() || user.getPassword().trim().isEmpty()
                 || user.getContact().trim().isEmpty()) {
             return false;
         }
@@ -79,5 +79,12 @@ public class Validation {
             return true;
         }
         return false;
+    }
+
+    public static boolean isNullCheckLoginValues(String email,String password) throws ApplicationException {
+        if (email.trim().isEmpty() || password.trim().isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

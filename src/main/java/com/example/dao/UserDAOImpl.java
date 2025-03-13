@@ -36,21 +36,23 @@ public class UserDAOImpl implements IUserDAO {
 
 
     /**
-     * add new user
      *
-     * @param user
+     * @param fname
+     * @param email
+     * @param password
+     * @param contact
      * @throws ApplicationException
      */
     @Override
-    public void addUser(User user) throws ApplicationException {
+    public void addUser(String fname,String email,String password,String contact) throws ApplicationException {
         try {
             Connection connection = DbConnect.getConnection();
             String insertSql = "insert into user(first_name,email,passwords,contact) values (?,?,?,?)";
             PreparedStatement pst1 = connection.prepareStatement(insertSql);
-            pst1.setString(1, user.getFirstName());
-            pst1.setString(2, user.getEmail());
-            pst1.setString(3, user.getPasswords());
-            pst1.setString(4, user.getContact());
+            pst1.setString(1, fname);
+            pst1.setString(2, email);
+            pst1.setString(3, password);
+            pst1.setString(4, contact);
             pst1.executeUpdate();
         } catch (Exception ex) {
             throw new ApplicationException(Messages.Error.FAILED, ApplicationException.ErrorType.SYSTEM_ERROR, ex);
@@ -86,7 +88,6 @@ public class UserDAOImpl implements IUserDAO {
         List<User> list;
         try {
             Connection connection = DbConnect.getConnection();
-            System.out.println(id);
             String sql = "Select * from user where user_id = ?";
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setInt(1, id);
@@ -123,7 +124,6 @@ public class UserDAOImpl implements IUserDAO {
             } else {
                 throw new ApplicationException(Messages.Error.NO_USER_EXISTS, ApplicationException.ErrorType.SYSTEM_ERROR);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApplicationException(Messages.Error.FAILED, ApplicationException.ErrorType.SYSTEM_ERROR, e);

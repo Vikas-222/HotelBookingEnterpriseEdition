@@ -5,7 +5,7 @@ public class Messages {
     public static final String ACCOUNT_CREATED = "Account created successfully";
     public static final String LOGIN_SUCCESSFUL = "Login successful";
     public static final String LOGOUT_SUCCESSFUL = "Logout successful";
-    public static final String FETCHING_USER = "User details fetched";
+    public static final String FETCHED_USER = "User details fetched";
     public static final String ROOM_ADDED = "Room added successfully";
 
     public static class Error {
@@ -23,7 +23,8 @@ public class Messages {
         public static final String ROOM_EXISTS = "Sorry! Room already exists";
         public static final String INVALID_EMAIL_LENGTH = "Email is too big! Please use another email";
         public static final String INVALID_NAME_LENGTH = "Name is too big! Please use short names";
-        public static final String INVALID_PASSWORD_LENGTH = "Password is too big! Please use other strong password";
+        public static final String INVALID_PASSWORD_LENGTH = "Password is too big! Please use other password";
+        public static final String INVALID_DATABASE_CREDENTIALS = "Unable to connect database";
     }
 
 }

@@ -8,9 +8,36 @@
         <welcome-file>Login.jsp</welcome-file>
     </welcome-file-list>
 
+<!--    <servlet>-->
+<!--        <servlet-name>DatabaseController</servlet-name>-->
+<!--        <servlet-class>com.example.Controller.DatabaseController</servlet-class>-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--        <init-param>-->
+<!--            <param-name>driver</param-name>-->
+<!--            <param-value>"com.mysql.cj.jdbc.Driver"</param-value>-->
+<!--        </init-param>-->
+<!--        <init-param>-->
+<!--            <param-name>db_url</param-name>-->
+<!--            <param-value>"jdbc:mysql://localhost:3306/hotel_db"</param-value>-->
+<!--        </init-param>-->
+<!--        <init-param>-->
+<!--            <param-name>username</param-name>-->
+<!--            <param-value>root</param-value>-->
+<!--        </init-param>-->
+<!--        <init-param>-->
+<!--            <param-name>password</param-name>-->
+<!--            <param-value>password123#</param-value>-->
+<!--        </init-param>-->
+<!--    </servlet>-->
+
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>DatabaseController</servlet-name>-->
+<!--        <url-pattern>/database</url-pattern>-->
+<!--    </servlet-mapping>-->
+
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.example.userController.LoginController</servlet-class>
+        <servlet-class>com.example.Controller.LoginController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -20,7 +47,7 @@
 
     <servlet>
         <servlet-name>SignupServlet</servlet-name>
-        <servlet-class>com.example.userController.SignupController</servlet-class>
+        <servlet-class>com.example.Controller.SignupController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -30,7 +57,7 @@
 
     <servlet>
         <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>com.example.userController.HomePageController</servlet-class>
+        <servlet-class>com.example.Controller.HomePageController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -40,7 +67,7 @@
 
     <servlet>
         <servlet-name>Logout</servlet-name>
-        <servlet-class>com.example.userController.LogoutController</servlet-class>
+        <servlet-class>com.example.Controller.LogoutController</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -48,34 +75,34 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
+<!--    <servlet>-->
+<!--        <servlet-name>GetAllUserServlet</servlet-name>-->
+<!--        <servlet-class>com.example.Controller.</servlet-class>-->
+<!--    </servlet>-->
+
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>GetAllUserServlet</servlet-name>-->
+<!--        <url-pattern>/getalluser</url-pattern>-->
+<!--    </servlet-mapping>-->
+
     <servlet>
-        <servlet-name>GetAllUserServlet</servlet-name>
-        <servlet-class>com.example.userController.GetAllUserServlet</servlet-class>
+        <servlet-name>GetOneUserController</servlet-name>
+        <servlet-class>com.example.Controller.GetOneUserController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>GetAllUserServlet</servlet-name>
-        <url-pattern>/getalluser</url-pattern>
+        <servlet-name>GetOneUserController</servlet-name>
+        <url-pattern>/getoneuser</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>FetchOneUserServlet</servlet-name>
-        <servlet-class>com.example.userController.FetchOneUserServlet</servlet-class>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>FetchOneUserServlet</servlet-name>
-        <url-pattern>/fetchoneuser</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>addRoomServlet</servlet-name>-->
+<!--        <servlet-class>com.example.roomServlet.addRoomServlet</servlet-class>-->
+<!--    </servlet>-->
 
-    <servlet>
-        <servlet-name>addRoomServlet</servlet-name>
-        <servlet-class>com.example.roomServlet.addRoomServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>addRoomServlet</servlet-name>
-        <url-pattern>/addRoomServlet</url-pattern>
-    </servlet-mapping>
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>addRoomServlet</servlet-name>-->
+<!--        <url-pattern>/addRoomServlet</url-pattern>-->
+<!--    </servlet-mapping>-->
 
 </web-app>

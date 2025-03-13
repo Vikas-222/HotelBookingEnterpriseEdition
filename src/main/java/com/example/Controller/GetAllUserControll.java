@@ -2,8 +2,11 @@
 //
 //import com.example.APIResponse;
 //import com.example.common.Messages;
+//import com.example.dao.IUserDAO;
+//import com.example.dao.UserDAOImpl;
 //import com.example.dao.UserDao;
 //import com.example.entity.User;
+//import com.example.model.User;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import jakarta.servlet.*;
 //import jakarta.servlet.http.*;
@@ -17,7 +20,7 @@
 //    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        response.setContentType("application/json");
 //        ObjectMapper mapper = new ObjectMapper();
-//        UserDao userdao = new UserDao();
+//        IUserDAO userdao = new UserDAOImpl();
 //        APIResponse apiResponse;
 //        PrintWriter out = response.getWriter();
 //
@@ -28,7 +31,7 @@
 ////                if (user.getRoles() == "admin") {
 //                    List<User> userList = userdao.getAllUser();
 //                    if (userList == null) {
-//                        apiResponse = new APIResponse(Messages.Error.NOUSERFOUND);
+//                        apiResponse = new APIResponse(Messages.Error.NO_USER_EXISTS);
 //                        response.setStatus(400);
 //                        out.write(mapper.writeValueAsString(apiResponse));
 //                    } else {
@@ -37,7 +40,7 @@
 //                        out.write(mapper.writeValueAsString(apiResponse));
 //                    }
 //                } else {
-//                    apiResponse = new APIResponse(Messages.Error.INVALIDACTION);
+//                    apiResponse = new APIResponse(Messages.Error.INVALID_ACTION);
 //                    response.setStatus(400);
 //                    out.write(mapper.writeValueAsString(apiResponse));
 //                }

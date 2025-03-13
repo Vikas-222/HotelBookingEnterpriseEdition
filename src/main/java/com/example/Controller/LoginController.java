@@ -1,4 +1,4 @@
-package com.example.userController;
+package com.example.Controller;
 
 import com.example.APIResponse;
 import com.example.common.Messages;
@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class LoginController extends HttpServlet {
 
@@ -27,18 +26,17 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
         APIResponse apiResponse;
 
         try {
             User user = mapper.readValue(request.getReader(), User.class);
-            Validation.isNullCheckUserValues(user);
-            userService.userLogin(user.getEmail(), user.getPasswords());
+            Validation.isNullCheckLoginValues(user.getEmail(),user.getPassword());
+            userService.userLogin(user.getEmail(), user.getPassword());
 
             HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(60);
+            session.setMaxInactiveInterval(5*60);
             session.setAttribute("user", user);
             apiResponse = new APIResponse(Messages.LOGIN_SUCCESSFUL);
             Response.responseMethod(response, 200, apiResponse);

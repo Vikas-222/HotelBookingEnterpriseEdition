@@ -1,4 +1,4 @@
-package com.example.userController;
+package com.example.Controller;
 
 import com.example.APIResponse;
 import com.example.common.Messages;
@@ -32,7 +32,10 @@ public class SignupController extends HttpServlet {
         try {
             User user = mapper.readValue(request.getReader(), User.class);
             SignupValidator.validate(user);
-            userService.addUser(user);
+            userService.addUser(user.getFirstName(),user.getEmail(),user.getPassword(),user.getContact());
+            HttpSession session = request.getSession();
+            session.setAttribute("user",user);
+            session.setMaxInactiveInterval(5*60);
             apiResponse = new APIResponse(Messages.ACCOUNT_CREATED);
             Response.responseMethod(response, 200, apiResponse);
         } catch (ApplicationException e) {

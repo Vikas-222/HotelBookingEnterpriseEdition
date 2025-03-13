@@ -3,7 +3,6 @@ package com.example.service;
 import com.example.dao.IUserDAO;
 import com.example.exception.ApplicationException;
 import com.example.model.User;
-
 import java.util.List;
 
 public class UserService {
@@ -14,8 +13,8 @@ public class UserService {
         this.iUserDAO = iUserDAO;
     };
 
-    public void addUser(User user) throws ApplicationException {
-        iUserDAO.addUser(user);
+    public void addUser(String fname,String email,String password,String contact) throws ApplicationException {
+        iUserDAO.addUser(fname,email,password,contact);
     }
 
     public boolean isUserExists(String email) throws ApplicationException {

@@ -1,12 +1,14 @@
-package com.example.userController;
+package com.example.Controller;
 
 import com.example.APIResponse;
 import com.example.common.Messages;
 import com.example.common.Response;
+import com.example.exception.ApplicationException;
 import com.example.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -24,7 +26,7 @@ public class HomePageController extends HttpServlet {
             String[] username = user.getEmail().split("@");
             out.println("<h1>Welcome " + username[0] + "</h1>");
         } else {
-            apiResponse = new APIResponse(Messages.Error.USER_NOT_FOUND);
+            apiResponse = new APIResponse(Messages.Error.INVALID_ACTION);
             Response.responseMethod(response, 400, apiResponse);
         }
     }

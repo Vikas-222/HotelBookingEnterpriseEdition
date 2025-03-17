@@ -1,6 +1,7 @@
 package com.example.Controller;
 
 import com.example.APIResponse;
+import com.example.common.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.Validation;
@@ -17,7 +18,7 @@ import java.io.IOException;
 public class LoginController extends HttpServlet {
 
     private IUserDAO iUserDAO = new UserDAOImpl();
-    private UserService userService = UserService.getInstance(iUserDAO);
+    private UserService userService = new UserService(iUserDAO);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,16 +35,19 @@ public class LoginController extends HttpServlet {
             User user = mapper.readValue(request.getReader(), User.class);
             Validation.isNullCheckLoginValues(user.getEmail(),user.getPassword());
             userService.userLogin(user.getEmail(), user.getPassword());
-
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(5*60);
             session.setAttribute("user", user);
-            apiResponse = new APIResponse(Messages.LOGIN_SUCCESSFUL);
-            Response.responseMethod(response, 200, apiResponse);
+            createResponse(response,Messages.LOGIN_SUCCESSFUL,null,200);
         } catch (ApplicationException e) {
             e.printStackTrace();
-            apiResponse = new APIResponse(Messages.Error.INVALID_CREDENTIALS);
-            Response.responseMethod(response, 400, apiResponse);
+            createResponse(response,Messages.Error.INVALID_CREDENTIALS,null,400);
         }
+    }
+
+    private void createResponse(HttpServletResponse response, String message, Object data, int statusCode) throws IOException {
+        response.setStatus(statusCode);
+        Response apiResponse = new Response(message, data);
+        response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

@@ -1,35 +1,34 @@
 package com.example.db;
 
-import com.example.common.Messages;
-import com.example.exception.ApplicationException;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DbConnect {
 
-    static Connection connection = null;
-//    private static String Dbusername;
-//    private static String Dbpassword;
-//    private static String Dburl;
-//    private static String Dbdriver;
-//
-//    public DbConnect(String driver, String url, String username, String password){
-//        Dbdriver = driver;
-//        Dburl = url;
-//        Dbusername = username;
-//        Dbpassword = password;
-//    }
+    public static DbConnect instance = null;
 
-    public static Connection getConnection() throws ApplicationException {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/hotel_db","root","password123#");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
-            throw new ApplicationException(Messages.Error.FAILED,ApplicationException.ErrorType.SYSTEM_ERROR);
+    private String dbUrl;
+    private String dbUsername;
+    private String dbPassword;
+    private String dbDriver;
+
+    private DbConnect(String url, String username, String password, String driver) {
+        dbUrl = url;
+        dbUsername = username;
+        dbPassword = password;
+        dbDriver = driver;
+    }
+
+    public static DbConnect getInstance(String url, String username, String password, String driver) {
+        if (instance == null) {
+            instance = new DbConnect(url, username, password, driver);
         }
+        return instance;
+    }
+
+    public Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName(dbDriver);
+        return DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
     }
 }

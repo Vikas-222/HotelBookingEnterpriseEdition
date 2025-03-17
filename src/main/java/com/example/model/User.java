@@ -2,16 +2,16 @@ package com.example.model;
 
 public class User {
 
-    private int userId; //userId
-    private String firstName; //firstName
-    private String lastName; //lastName
+    private int userId;
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
-    private String contact;
+    private String contactNumber;
     private String gender;
-    private String profilePic; //profilePic
+    private String profilePic;
     private String roles;
-    private boolean isActive; //isActive
+    private boolean isActive;
 
     public User(){}
 
@@ -21,7 +21,7 @@ public class User {
         this.lastName = user.lastName;
         this.email = user.email;
         this.password = user.password;
-        this.contact = user.contact;
+        this.contactNumber = user.contactNumber;
         this.gender = user.gender;
         this.profilePic = user.profilePic;
         this.roles = user.roles;
@@ -48,8 +48,8 @@ public class User {
         return lastName;
     }
 
-    public String getContact() {
-        return contact;
+    public String getContactNumber() {
+        return contactNumber;
     }
 
     public String getGender() {
@@ -74,26 +74,27 @@ public class User {
         private String lastName;
         private String email;
         private String password;
-        private String contact;
+        private String contactNumber;
         private String gender;
         private String profilePic;
         private String roles;
         private boolean isActive;
 
-        public UserBuilder(String firstName, String email, String password, String contact) {
+        public UserBuilder(String firstName,String lastName, String email, String password, String contactNumber) {
             this.firstName = firstName;
+            this.lastName = lastName;
             this.email = email;
             this.password = password;
-            this.contact = contact;
+            this.contactNumber = contactNumber;
+        }
+
+        public UserBuilder(String email, String password) {
+            this.email = email;
+            this.password = password;
         }
 
         public UserBuilder setUserId(int userId) {
             this.userId = userId;
-            return this;
-        }
-
-        public UserBuilder setLastName(String lastName) {
-            this.lastName = lastName;
             return this;
         }
 
@@ -129,7 +130,7 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", contact='" + contact + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
                 ", gender='" + gender + '\'' +
                 ", profilePic='" + profilePic + '\'' +
                 ", roles='" + roles + '\'' +

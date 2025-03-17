@@ -1,20 +1,37 @@
 package com.example.service;
 
 import com.example.dao.IUserDAO;
+import com.example.dto.LoginRequestUserDTO;
+import com.example.dto.SignupRequestUserDTO;
 import com.example.exception.ApplicationException;
 import com.example.model.User;
 import java.util.List;
 
 public class UserService {
 
-    private IUserDAO iUserDAO;
-    private static UserService instance;
-    private UserService(IUserDAO iUserDAO){
+    private final IUserDAO iUserDAO;
+    public UserService(IUserDAO iUserDAO){
         this.iUserDAO = iUserDAO;
     };
 
-    public void addUser(String fname,String email,String password,String contact) throws ApplicationException {
-        iUserDAO.addUser(fname,email,password,contact);
+    public static User UserDTOToUser(SignupRequestUserDTO signupRequestUserDTO){
+        String fname = signupRequestUserDTO.getFirstName();
+        String lname = signupRequestUserDTO.getLastName();
+        String email = signupRequestUserDTO.getEmail();
+        String password = signupRequestUserDTO.getPassword();
+        String contactNumber = signupRequestUserDTO.getContactNumber();
+        return new User.UserBuilder(fname,lname,email,password,contactNumber).build();
+    }
+
+    public static User LoginUserDTOTOUser(LoginRequestUserDTO user){
+        String email = user.getEmail();
+        String password = user.getPassword();
+        return new User.UserBuilder(email,password).build();
+    }
+
+    public void addUser(SignupRequestUserDTO signupRequestUserDTO) throws ApplicationException {
+        User user = UserService.UserDTOToUser(signupRequestUserDTO);
+        iUserDAO.addUser(user);
     }
 
     public boolean isUserExists(String email) throws ApplicationException {
@@ -25,19 +42,11 @@ public class UserService {
         iUserDAO.userLogin(email,password);
     }
 
-    public List<User> getOneUserDetails(int id) throws ApplicationException{
-        return iUserDAO.getOneUserDetails(id);
+    public List<User> getOneUserDetails(String email) throws ApplicationException{
+        return iUserDAO.getOneUserDetails(email);
     }
 
     public List<User> getAllUser() throws ApplicationException{
         return iUserDAO.getAllUser();
     }
-
-    public static synchronized UserService getInstance(IUserDAO userDAO) {
-        if (instance == null) {
-            instance = new UserService(userDAO);
-        }
-        return instance;
-    }
-
 }

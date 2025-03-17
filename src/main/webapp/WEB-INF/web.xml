@@ -8,32 +8,32 @@
         <welcome-file>Login.jsp</welcome-file>
     </welcome-file-list>
 
-<!--    <servlet>-->
-<!--        <servlet-name>DatabaseController</servlet-name>-->
-<!--        <servlet-class>com.example.Controller.DatabaseController</servlet-class>-->
-<!--        <load-on-startup>1</load-on-startup>-->
-<!--        <init-param>-->
-<!--            <param-name>driver</param-name>-->
-<!--            <param-value>"com.mysql.cj.jdbc.Driver"</param-value>-->
-<!--        </init-param>-->
-<!--        <init-param>-->
-<!--            <param-name>db_url</param-name>-->
-<!--            <param-value>"jdbc:mysql://localhost:3306/hotel_db"</param-value>-->
-<!--        </init-param>-->
-<!--        <init-param>-->
-<!--            <param-name>username</param-name>-->
-<!--            <param-value>root</param-value>-->
-<!--        </init-param>-->
-<!--        <init-param>-->
-<!--            <param-name>password</param-name>-->
-<!--            <param-value>password123#</param-value>-->
-<!--        </init-param>-->
-<!--    </servlet>-->
+    <servlet>
+        <servlet-name>DatabaseController</servlet-name>
+        <servlet-class>com.example.Controller.DatabaseController</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>driver</param-name>
+            <param-value>com.mysql.cj.jdbc.Driver</param-value>
+        </init-param>
+        <init-param>
+            <param-name>db_url</param-name>
+            <param-value>jdbc:mysql://localhost:3306/hotel_db</param-value>
+        </init-param>
+        <init-param>
+            <param-name>username</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <param-name>password</param-name>
+            <param-value>password123#</param-value>
+        </init-param>
+    </servlet>
 
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>DatabaseController</servlet-name>-->
-<!--        <url-pattern>/database</url-pattern>-->
-<!--    </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>DatabaseController</servlet-name>
+        <url-pattern>/database</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>

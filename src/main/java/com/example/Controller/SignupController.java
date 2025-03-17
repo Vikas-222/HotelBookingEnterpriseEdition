@@ -1,10 +1,12 @@
 package com.example.Controller;
 
 import com.example.APIResponse;
+import com.example.common.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
+import com.example.dto.SignupRequestUserDTO;
 import com.example.model.User;
 import com.example.exception.ApplicationException;
 import com.example.service.UserService;
@@ -18,7 +20,7 @@ import java.io.IOException;
 public class SignupController extends HttpServlet {
 
     private IUserDAO iUserDAO = new UserDAOImpl();
-    private UserService userService = UserService.getInstance(iUserDAO);
+    private UserService userService = new UserService(iUserDAO);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,24 +32,27 @@ public class SignupController extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         APIResponse apiResponse;
         try {
-            User user = mapper.readValue(request.getReader(), User.class);
+            SignupRequestUserDTO user = mapper.readValue(request.getReader(), SignupRequestUserDTO.class);
             SignupValidator.validate(user);
-            userService.addUser(user.getFirstName(),user.getEmail(),user.getPassword(),user.getContact());
+            userService.addUser(user);
             HttpSession session = request.getSession();
             session.setAttribute("user",user);
             session.setMaxInactiveInterval(5*60);
-            apiResponse = new APIResponse(Messages.ACCOUNT_CREATED);
-            Response.responseMethod(response, 200, apiResponse);
+            createResponse(response,Messages.ACCOUNT_CREATED,null,200);
         } catch (ApplicationException e) {
             e.printStackTrace();
              if(e.getErrorType() == ApplicationException.ErrorType.SYSTEM_ERROR) {
-                apiResponse = new APIResponse(e.getMessage());
-                Response.responseMethod(response, 500, apiResponse);
-            }
+                 createResponse(response,e.getMessage(),null,500);
+             }
             else{
-                apiResponse = new APIResponse(e.getMessage());
-                Response.responseMethod(response, 400, apiResponse);
-            }
+                 createResponse(response,e.getMessage(),null,400);
+             }
         }
+    }
+
+    private void createResponse(HttpServletResponse response, String message, Object data, int statusCode) throws IOException {
+        response.setStatus(statusCode);
+        Response apiResponse = new Response(message, data);
+        response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

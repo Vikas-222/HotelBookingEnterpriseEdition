@@ -1,5 +1,6 @@
 package com.example.common;
 
+import com.example.dto.SignupRequestUserDTO;
 import com.example.model.User;
 import com.example.exception.ApplicationException;
 
@@ -45,9 +46,9 @@ public class Validation {
         return true;
     }
 
-    public static boolean isNullCheckUserValues(User user) throws ApplicationException {
+    public static boolean isNullCheckUserValues(SignupRequestUserDTO user) throws ApplicationException {
         if (user.getFirstName().trim().isEmpty() || user.getEmail().trim().isEmpty() || user.getPassword().trim().isEmpty()
-                || user.getContact().trim().isEmpty()) {
+                || user.getContactNumber().trim().isEmpty()) {
             return false;
         }
         return true;

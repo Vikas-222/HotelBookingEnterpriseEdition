@@ -1,6 +1,7 @@
 package com.example.Controller;
 
 import com.example.APIResponse;
+import com.example.common.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.exception.ApplicationException;
@@ -26,8 +27,7 @@ public class HomePageController extends HttpServlet {
             String[] username = user.getEmail().split("@");
             out.println("<h1>Welcome " + username[0] + "</h1>");
         } else {
-            apiResponse = new APIResponse(Messages.Error.INVALID_ACTION);
-            Response.responseMethod(response, 400, apiResponse);
+            createResponse(response,Messages.Error.INVALID_ACTION,null,400);
         }
     }
 
@@ -35,5 +35,11 @@ public class HomePageController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
+    }
+
+    private void createResponse(HttpServletResponse response, String message, Object data, int statusCode) throws IOException {
+        response.setStatus(statusCode);
+        Response apiResponse = new Response(message, data);
+        response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

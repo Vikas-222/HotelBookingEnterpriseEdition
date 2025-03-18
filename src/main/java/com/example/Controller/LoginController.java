@@ -1,21 +1,18 @@
 package com.example.Controller;
 
-import com.example.APIResponse;
 import com.example.common.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
-import com.example.common.Validation;
+import com.example.common.UserValidation;
 import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
 import com.example.dto.LoginRequestUserDTO;
-import com.example.model.User;
 import com.example.exception.ApplicationException;
 import com.example.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.util.List;
 
 public class LoginController extends HttpServlet {
 
@@ -34,7 +31,7 @@ public class LoginController extends HttpServlet {
 
         try {
             LoginRequestUserDTO loginUser = mapper.readValue(request.getReader(), LoginRequestUserDTO.class);
-            Validation.isNullCheckLoginValues(loginUser.getEmail(),loginUser.getPassword());
+            UserValidation.isNullCheckLoginValues(loginUser.getEmail(),loginUser.getPassword());
             userService.userLogin(loginUser);
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(5*60);

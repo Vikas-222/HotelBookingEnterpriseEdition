@@ -1,13 +1,12 @@
 package com.example.common;
 
 import com.example.dto.SignupRequestUserDTO;
-import com.example.model.User;
 import com.example.exception.ApplicationException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Validation {
+public class UserValidation {
 
     public static boolean isValidPassword(String password) {
         String regex = "^(?=.*[0-9])"
@@ -47,8 +46,8 @@ public class Validation {
     }
 
     public static boolean isNullCheckUserValues(SignupRequestUserDTO user) throws ApplicationException {
-        if (user.getFirstName().trim().isEmpty() || user.getEmail().trim().isEmpty() || user.getPassword().trim().isEmpty()
-                || user.getContactNumber().trim().isEmpty()) {
+        if (user.getFirstName().isBlank() || user.getEmail().isBlank() || user.getPassword().isBlank()
+                || user.getContactNumber().isBlank()) {
             return false;
         }
         return true;

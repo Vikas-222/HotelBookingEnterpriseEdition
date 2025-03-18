@@ -20,11 +20,18 @@ public class Messages {
         public static final String USER_NOT_FOUND = "User not found";
         public static final String NO_USER_EXISTS = "User record not exists";
         public static final String ERROR_OCCURED = "Sorry! Some error occured";
-        public static final String ROOM_EXISTS = "Sorry! Room already exists";
         public static final String INVALID_EMAIL_LENGTH = "Email is too big! Please use another email";
         public static final String INVALID_NAME_LENGTH = "Name is too big! Please use short names";
         public static final String INVALID_PASSWORD_LENGTH = "Password is too big! Please use other password";
         public static final String INVALID_DATABASE_CREDENTIALS = "Unable to connect database";
+    }
+
+    public static class RoomError{
+        public static final String ROOM_EXISTS = "Sorry! Room number already exists";
+        public static final String INVALID_CAPACITY = "Please enter valid room capacity";
+        public static final String INVALID_ROOM_PRICE = "Please enter valid room price";
+        public static final String INVALID_ROOM_NUMBER = "Please enter valid room number";
+        public static final String INVALID_VALUES = "Please enter valid details";
     }
 
 }

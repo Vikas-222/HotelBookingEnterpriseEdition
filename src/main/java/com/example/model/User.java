@@ -1,5 +1,7 @@
 package com.example.model;
 
+import java.time.LocalDateTime;
+
 public class User {
 
     private int userId;
@@ -12,6 +14,8 @@ public class User {
     private String profilePic;
     private String roles;
     private boolean isActive;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public User(){}
 
@@ -26,6 +30,8 @@ public class User {
         this.profilePic = user.profilePic;
         this.roles = user.roles;
         this.isActive = user.isActive;
+        this.createdAt = user.createdAt;
+        this.updatedAt = user.updatedAt;
     }
 
     public int getUserId() {
@@ -68,6 +74,14 @@ public class User {
         return isActive;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
     public static class UserBuilder {
         private int userId;
         private String firstName;
@@ -79,6 +93,8 @@ public class User {
         private String profilePic;
         private String roles;
         private boolean isActive;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         public UserBuilder(String firstName,String lastName, String email, String password, String contactNumber) {
             this.firstName = firstName;
@@ -118,6 +134,16 @@ public class User {
             return this;
         }
 
+        public UserBuilder setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public UserBuilder setUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
         public User build(){
             return new User(this);
         }
@@ -125,7 +151,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "userId='" + userId + '\'' +
+        return  "userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -134,6 +160,8 @@ public class User {
                 ", gender='" + gender + '\'' +
                 ", profilePic='" + profilePic + '\'' +
                 ", roles='" + roles + '\'' +
-                ", isActive=" + isActive;
+                ", isActive=" + isActive +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt;
     }
 }

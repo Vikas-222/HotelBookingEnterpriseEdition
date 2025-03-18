@@ -35,9 +35,9 @@ public class SignupController extends HttpServlet {
             SignupRequestUserDTO user = mapper.readValue(request.getReader(), SignupRequestUserDTO.class);
             SignupValidator.validate(user);
             userService.addUser(user);
-            HttpSession session = request.getSession();
-            session.setAttribute("user",user);
-            session.setMaxInactiveInterval(5*60);
+//            HttpSession session = request.getSession();
+//            session.setAttribute("user",user);
+//            session.setMaxInactiveInterval(5*60);
             createResponse(response,Messages.ACCOUNT_CREATED,null,200);
         } catch (ApplicationException e) {
             e.printStackTrace();

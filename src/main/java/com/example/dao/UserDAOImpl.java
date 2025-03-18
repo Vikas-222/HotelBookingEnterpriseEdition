@@ -55,12 +55,12 @@ public class UserDAOImpl implements IUserDAO {
      * @throws ApplicationException
      */
     @Override
-    public void userLogin(String email, String password) throws ApplicationException {
+    public void userLogin(User user) throws ApplicationException {
         try (Connection connection = DbConnect.instance.getConnection()){
             String foundEmail = "select email,passwords from user where email = ? and passwords =?";
             PreparedStatement pst = connection.prepareStatement(foundEmail);
-            pst.setString(1, email);
-            pst.setString(2, password);
+            pst.setString(1,user.getEmail());
+            pst.setString(2, user.getPassword());
             ResultSet rs = pst.executeQuery();
             if (!rs.next()) {
                 throw new ApplicationException(Messages.Error.USER_NOT_FOUND, ApplicationException.ErrorType.USER_ERROR);
@@ -72,8 +72,9 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     @Override
-    public List<User> getOneUserDetails(String email) throws ApplicationException {
-        List<User> list = new ArrayList<>();
+    public User getOneUserDetails(String email) throws ApplicationException {
+//        List<User> list = new ArrayList<>();
+        User user = null;
         ResultSet rs =null;
         try (Connection connection = DbConnect.instance.getConnection()){
             String sql = "Select * from user where email = ?";
@@ -81,10 +82,9 @@ public class UserDAOImpl implements IUserDAO {
             pst.setString(1, email);
             rs = pst.executeQuery();
             if(rs.next()) {
-                User user1 = new User.UserBuilder(rs.getString("first_name"),rs.getString("last_name"), rs.getString("email"), rs.getString("passwords"), rs.getString("contact")).setUserId(rs.getInt("user_id")).setGender(rs.getString("gender")).setIsActive(rs.getBoolean("is_active")).setRoles(rs.getString("roles")).build();
-                list.add(user1);
+                user = new User.UserBuilder(rs.getString("first_name"),rs.getString("last_name"), rs.getString("email"), rs.getString("passwords"), rs.getString("contact")).setUserId(rs.getInt("user_id")).setGender(rs.getString("gender")).setIsActive(rs.getBoolean("is_active")).setRoles(rs.getString("roles")).build();
             }
-            return list;
+            return user;
         } catch (Exception e) {
             e.printStackTrace();
             throw new ApplicationException(Messages.Error.FAILED, ApplicationException.ErrorType.SYSTEM_ERROR, e);

@@ -6,6 +6,8 @@ import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
+import com.example.dto.LoginRequestUserDTO;
+import com.example.dto.UserDTO;
 import com.example.exception.ApplicationException;
 import com.example.model.User;
 import com.example.service.UserService;
@@ -21,7 +23,6 @@ public class GetOneUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
         ObjectMapper mapper = new ObjectMapper();
         IUserDAO userdao = new UserDAOImpl();
         UserService userService = new UserService(userdao);
@@ -29,8 +30,8 @@ public class GetOneUserController extends HttpServlet {
         try {
             HttpSession session = request.getSession(false);
             if (session.getAttribute("user") != null) {
-                User sessionUser = (User) session.getAttribute("user");
-                List<User> list = userService.getOneUserDetails(sessionUser.getEmail());
+                LoginRequestUserDTO sessionUser = (LoginRequestUserDTO) session.getAttribute("user");
+                List<UserDTO> list = userService.getOneUserDetails(sessionUser.getEmail());
                 createResponse(response,Messages.FETCHED_USER,list,200);
             } else {
                 throw new ApplicationException(Messages.Error.INVALID_ACTION, ApplicationException.ErrorType.USER_ERROR);

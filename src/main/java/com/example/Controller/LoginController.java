@@ -7,6 +7,7 @@ import com.example.common.Response;
 import com.example.common.Validation;
 import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
+import com.example.dto.LoginRequestUserDTO;
 import com.example.model.User;
 import com.example.exception.ApplicationException;
 import com.example.service.UserService;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
 
 public class LoginController extends HttpServlet {
 
@@ -29,15 +31,14 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         ObjectMapper mapper = new ObjectMapper();
-        APIResponse apiResponse;
 
         try {
-            User user = mapper.readValue(request.getReader(), User.class);
-            Validation.isNullCheckLoginValues(user.getEmail(),user.getPassword());
-            userService.userLogin(user.getEmail(), user.getPassword());
+            LoginRequestUserDTO loginUser = mapper.readValue(request.getReader(), LoginRequestUserDTO.class);
+            Validation.isNullCheckLoginValues(loginUser.getEmail(),loginUser.getPassword());
+            userService.userLogin(loginUser);
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(5*60);
-            session.setAttribute("user", user);
+            session.setAttribute("user", loginUser);
             createResponse(response,Messages.LOGIN_SUCCESSFUL,null,200);
         } catch (ApplicationException e) {
             e.printStackTrace();

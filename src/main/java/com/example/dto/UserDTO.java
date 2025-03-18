@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.example.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -23,6 +24,16 @@ public class UserDTO {
     }
 
     public UserDTO() {
+    }
+
+    public UserDTO(User user) {
+        this.userId = user.getUserId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.contactNumber = user.getContactNumber();
+        this.gender = user.getGender();
+        this.profilePic = user.getProfilePic();
     }
 
     public int getUserId() {

@@ -1,7 +1,7 @@
 package com.example.common;
 
 import com.example.dto.SignupRequestUserDTO;
-import com.example.exception.ApplicationException;
+import com.example.common.exception.ApplicationException;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

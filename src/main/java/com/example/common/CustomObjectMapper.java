@@ -10,10 +10,6 @@ import java.io.IOException;
 public class CustomObjectMapper {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-//    static {
-//        objectMapper.registerModule(new JavaTimeModule());
-//    }
-
     public static <T> T toObject(BufferedReader reader, Class<T> targetClass) throws IOException {
         return objectMapper.readValue(reader, targetClass);
     }

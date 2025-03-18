@@ -5,12 +5,12 @@
          version="5.0">
 
     <welcome-file-list>
-        <welcome-file>Login.jsp</welcome-file>
+        <welcome-file>Login.html</welcome-file>
     </welcome-file-list>
 
     <servlet>
         <servlet-name>DatabaseController</servlet-name>
-        <servlet-class>com.example.Controller.DatabaseController</servlet-class>
+        <servlet-class>com.example.controller.DatabaseController</servlet-class>
         <load-on-startup>1</load-on-startup>
         <init-param>
             <param-name>driver</param-name>
@@ -36,63 +36,73 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>com.example.Controller.LoginController</servlet-class>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>com.example.controller.LoginController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
+        <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>SignupServlet</servlet-name>
-        <servlet-class>com.example.Controller.SignupController</servlet-class>
+        <servlet-name>SignupController</servlet-name>
+        <servlet-class>com.example.controller.SignupController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>SignupServlet</servlet-name>
+        <servlet-name>SignupController</servlet-name>
         <url-pattern>/signup</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>HomeServlet</servlet-name>
-        <servlet-class>com.example.Controller.HomePageController</servlet-class>
+        <servlet-name>HomePageController</servlet-name>
+        <servlet-class>com.example.controller.HomePageController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>HomeServlet</servlet-name>
+        <servlet-name>HomePageController</servlet-name>
         <url-pattern>/home</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>Logout</servlet-name>
-        <servlet-class>com.example.Controller.LogoutController</servlet-class>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>com.example.controller.LogoutController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Logout</servlet-name>
+        <servlet-name>LogoutController</servlet-name>
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
 
-<!--    <servlet>-->
-<!--        <servlet-name>GetAllUserServlet</servlet-name>-->
-<!--        <servlet-class>com.example.Controller.</servlet-class>-->
-<!--    </servlet>-->
+    <servlet>
+        <servlet-name>GetAllUserController</servlet-name>
+        <servlet-class>com.example.controller.GetAllUserController</servlet-class>
+    </servlet>
 
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>GetAllUserServlet</servlet-name>-->
-<!--        <url-pattern>/getalluser</url-pattern>-->
-<!--    </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>GetAllUserController</servlet-name>
+        <url-pattern>/getalluser</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>GetOneUserController</servlet-name>
-        <servlet-class>com.example.Controller.GetOneUserController</servlet-class>
+        <servlet-class>com.example.controller.GetOneUserController</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>GetOneUserController</servlet-name>
         <url-pattern>/getoneuser</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MyServlet</servlet-name>
+        <servlet-class>com.example.controller.MyServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MyServlet</servlet-name>
+        <url-pattern>/myservlet</url-pattern>
     </servlet-mapping>
 
 <!--    <servlet>-->

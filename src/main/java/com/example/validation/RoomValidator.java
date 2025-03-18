@@ -2,9 +2,7 @@ package com.example.validation;
 
 import com.example.common.Messages;
 import com.example.dto.RoomDTO;
-import com.example.dto.SignupRequestUserDTO;
-import com.example.exception.ApplicationException;
-import com.example.model.Room;
+import com.example.common.exception.ApplicationException;
 
 public class RoomValidator {
 

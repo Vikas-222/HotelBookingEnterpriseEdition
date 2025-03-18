@@ -1,6 +1,6 @@
 package com.example.dao;
 
-import com.example.exception.ApplicationException;
+import com.example.common.exception.ApplicationException;
 import com.example.model.Room;
 
 public interface IRoomDAO {

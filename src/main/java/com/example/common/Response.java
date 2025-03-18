@@ -1,12 +1,6 @@
 package com.example.common;
 
-import com.example.APIResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.io.PrintWriter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response {

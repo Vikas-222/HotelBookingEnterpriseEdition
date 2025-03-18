@@ -1,8 +1,6 @@
 package com.example.dao;
 
-import com.example.dto.LoginRequestUserDTO;
-import com.example.dto.UserDTO;
-import com.example.exception.ApplicationException;
+import com.example.common.exception.ApplicationException;
 import com.example.model.User;
 import java.util.List;
 
@@ -15,6 +13,8 @@ public interface IUserDAO {
     void userLogin(User user) throws ApplicationException;
 
     User getOneUserDetails(String email) throws ApplicationException;
+
+    String getRoleOfUser(String email) throws ApplicationException;
 
     List<User> getAllUser() throws ApplicationException;
 }

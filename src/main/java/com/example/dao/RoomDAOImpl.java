@@ -2,13 +2,11 @@ package com.example.dao;
 
 import com.example.common.Messages;
 import com.example.db.DbConnect;
-import com.example.exception.ApplicationException;
+import com.example.common.exception.ApplicationException;
 import com.example.model.Room;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class RoomDAOImpl implements IRoomDAO {
 

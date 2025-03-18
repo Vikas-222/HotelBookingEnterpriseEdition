@@ -5,7 +5,7 @@ import com.example.common.UserValidation;
 import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
 import com.example.dto.SignupRequestUserDTO;
-import com.example.exception.ApplicationException;
+import com.example.common.exception.ApplicationException;
 import com.example.service.UserService;
 
 public class SignupValidator {

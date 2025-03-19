@@ -44,4 +44,22 @@ public class RoomDAOImpl implements IRoomDAO {
         }
         return true;
     }
+
+    @Override
+    public void updateRoomPrice(int roomNumber, float price) throws DBException {
+        String findRoom = "select * from room where roomNumber = ?";
+        ResultSet rs = null;
+        try(Connection connection = DbConnect.instance.getConnection();
+        PreparedStatement pst = connection.prepareStatement(findRoom);){
+        rs = pst.executeQuery();
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }
+    }
+
+    @Override
+    public void updateRoomStatus(int roomNumber, boolean status) throws DBException {
+
+    }
 }

@@ -30,7 +30,7 @@ public class GetAllUserController extends HttpServlet {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
             UserDTO user = (UserDTO) session.getAttribute("user");
-            if (!user.getRole().equalsIgnoreCase("admin")) {
+            if (!user.getRole().equalsIgnoreCase("Admin")) {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
             List<UserDTO> userList = userService.getAllUser();
@@ -43,7 +43,7 @@ public class GetAllUserController extends HttpServlet {
             sendResponse(response, e.getMessage(), null, 500);
         } catch (ApplicationException e) {
             e.printStackTrace();
-            sendResponse(response,e.getMessage(),null,500);
+            sendResponse(response,Messages.Error.UNAUTHORIZED_ACCESS,null,500);
         }
     }
 

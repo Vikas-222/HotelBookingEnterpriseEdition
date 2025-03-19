@@ -38,7 +38,6 @@ public class UserMapper {
                         .setEmail(user.getEmail())
                         .setContactNumber(user.getContactNumber())
                         .setGender(user.getGender())
-//                        .setProfilePic(user.getProfilePic())
                         .setRole(user.getRole())
                         .build())
                 .collect(Collectors.toList());

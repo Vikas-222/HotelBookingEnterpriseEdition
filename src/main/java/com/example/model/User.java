@@ -137,7 +137,7 @@ public class User {
             return this;
         }
 
-        public UserBuilder setRoles(String roles) {
+        public UserBuilder setRole(String role) {
             this.role = role;
             return this;
         }

@@ -82,7 +82,7 @@ public class UserDAOImpl implements IUserDAO {
                         .setLastName(rs.getString("last_name")).setEmail(rs.getString("email"))
                         .setContactNumber(rs.getString("contact"))
                         .setUserId(rs.getInt("user_id")).setGender(rs.getString("gender"))
-                        .setIsActive(rs.getBoolean("is_active")).setRoles(rs.getString("roles")).build();
+                        .setIsActive(rs.getBoolean("is_active")).setRole(rs.getString("roles")).build();
             }
             return user;
         } catch (SQLException | ClassNotFoundException e) {
@@ -111,7 +111,7 @@ public class UserDAOImpl implements IUserDAO {
                             .setLastName(rs.getString("last_name")).setEmail(rs.getString("email"))
                             .setContactNumber(rs.getString("contact"))
                             .setUserId(rs.getInt("user_id")).setGender(rs.getString("gender"))
-                            .setIsActive(rs.getBoolean("is_active")).setRoles(rs.getString("roles")).build();
+                            .setIsActive(rs.getBoolean("is_active")).setRole(rs.getString("roles")).build();
                     list.add(user);
                 }
             }

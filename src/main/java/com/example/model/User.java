@@ -12,12 +12,13 @@ public class User {
     private String contactNumber;
     private String gender;
     private String profilePic;
-    private String roles;
+    private String role;
     private boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public User(){}
+    public User() {
+    }
 
     public User(UserBuilder user) {
         this.userId = user.userId;
@@ -28,7 +29,7 @@ public class User {
         this.contactNumber = user.contactNumber;
         this.gender = user.gender;
         this.profilePic = user.profilePic;
-        this.roles = user.roles;
+        this.role = user.role;
         this.isActive = user.isActive;
         this.createdAt = user.createdAt;
         this.updatedAt = user.updatedAt;
@@ -66,8 +67,8 @@ public class User {
         return profilePic;
     }
 
-    public String getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
     public boolean getIsActive() {
@@ -91,23 +92,10 @@ public class User {
         private String contactNumber;
         private String gender;
         private String profilePic;
-        private String roles;
+        private String role;
         private boolean isActive;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
-
-        public UserBuilder(String firstName,String lastName, String email, String password, String contactNumber) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.email = email;
-            this.password = password;
-            this.contactNumber = contactNumber;
-        }
-
-        public UserBuilder(String email, String password) {
-            this.email = email;
-            this.password = password;
-        }
 
         public UserBuilder setFirstName(String firstName) {
             this.firstName = firstName;
@@ -146,12 +134,12 @@ public class User {
 
         public UserBuilder setProfilePic(String profilePic) {
             this.profilePic = profilePic;
-            return  this;
+            return this;
         }
 
         public UserBuilder setRoles(String roles) {
-            this.roles = roles;
-            return  this;
+            this.role = role;
+            return this;
         }
 
         public UserBuilder setIsActive(boolean isActive) {
@@ -169,14 +157,14 @@ public class User {
             return this;
         }
 
-        public User build(){
+        public User build() {
             return new User(this);
         }
     }
 
     @Override
     public String toString() {
-        return  "userId=" + userId +
+        return "userId=" + userId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
@@ -184,7 +172,7 @@ public class User {
                 ", contactNumber='" + contactNumber + '\'' +
                 ", gender='" + gender + '\'' +
                 ", profilePic='" + profilePic + '\'' +
-                ", roles='" + roles + '\'' +
+                ", role='" + role + '\'' +
                 ", isActive=" + isActive +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt;

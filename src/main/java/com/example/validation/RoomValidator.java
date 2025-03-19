@@ -8,25 +8,25 @@ public class RoomValidator {
 
     public void roomValidate(RoomDTO room) throws ApplicationException {
         if (!isNullRoomValues(room)) {
-            throw new ApplicationException(Messages.RoomError.INVALID_VALUES, ApplicationException.ErrorType.USER_ERROR);
+            throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
         }
         if (checkZeros(room.getRoomNumber())) {
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER, ApplicationException.ErrorType.USER_ERROR);
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
         if (checkZeros(room.getCapacity())) {
-            throw new ApplicationException(Messages.RoomError.INVALID_CAPACITY, ApplicationException.ErrorType.USER_ERROR);
+            throw new ApplicationException(Messages.RoomError.INVALID_CAPACITY);
         }
         if (checkZeros(room.getPricePerNight())) {
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE, ApplicationException.ErrorType.USER_ERROR);
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE);
         }
         if (!isValidCapacity(room.getCapacity())) {
-            throw new ApplicationException(Messages.RoomError.INVALID_CAPACITY, ApplicationException.ErrorType.USER_ERROR);
+            throw new ApplicationException(Messages.RoomError.INVALID_CAPACITY);
         }
         if (!isValidRoomPrice(room.getPricePerNight())) {
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE, ApplicationException.ErrorType.USER_ERROR);
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE);
         }
         if (!isValidRoomNumber(room.getRoomNumber())) {
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER, ApplicationException.ErrorType.USER_ERROR);
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
     }
 
@@ -63,7 +63,7 @@ public class RoomValidator {
         return true;
     }
 
-    public static boolean isNullRoomValues(RoomDTO roomDTO) throws ApplicationException {
+    public static boolean isNullRoomValues(RoomDTO roomDTO) {
         if (String.valueOf(roomDTO.getRoomNumber()).isBlank() || String.valueOf(roomDTO.getCapacity()).isBlank() ||
                 String.valueOf(roomDTO.getPricePerNight()).isBlank() || String.valueOf(roomDTO.getRoomType()).isBlank() ||
                   roomDTO.getImagePath().isBlank()) {

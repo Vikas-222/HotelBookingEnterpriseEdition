@@ -107,7 +107,7 @@
 
 <!--    <servlet>-->
 <!--        <servlet-name>addRoomServlet</servlet-name>-->
-<!--        <servlet-class>com.example.roomServlet.addRoomServlet</servlet-class>-->
+<!--        <servlet-class>com.example.RoomController.addRoomServlet</servlet-class>-->
 <!--    </servlet>-->
 
 <!--    <servlet-mapping>-->

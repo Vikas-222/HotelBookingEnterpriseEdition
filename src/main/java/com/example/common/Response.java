@@ -6,10 +6,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Response {
 
     private String message;
+    private String TechnicalMessage;
     private Object data;
 
     public Response(String message, Object data) {
         this.message = message;
+        this.data = data;
+    }
+
+    public Response(String message, String technicalMessage, Object data) {
+        this.message = message;
+        TechnicalMessage = technicalMessage;
+        this.data = data;
+    }
+
+    public Response(Object data) {
         this.data = data;
     }
 
@@ -33,9 +44,18 @@ public class Response {
         this.data = data;
     }
 
+    public String getTechnicalMessage() {
+        return TechnicalMessage;
+    }
+
+    public void setTechnicalMessage(String technicalMessage) {
+        TechnicalMessage = technicalMessage;
+    }
+
     @Override
     public String toString() {
         return "message='" + message + '\'' +
-                ", data=" + data ;
+                ", TechnicalMessage='" + TechnicalMessage + '\'' +
+                ", data=" + data;
     }
 }

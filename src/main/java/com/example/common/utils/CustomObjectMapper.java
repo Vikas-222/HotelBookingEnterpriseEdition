@@ -1,4 +1,4 @@
-package com.example.common;
+package com.example.common.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,5 +17,4 @@ public class CustomObjectMapper {
     public static <T> String toString(T object) throws JsonProcessingException {
         return objectMapper.writeValueAsString(object);
     }
-
 }

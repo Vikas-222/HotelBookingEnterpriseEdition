@@ -1,10 +1,10 @@
-package com.example.db;
+package com.example.dbconfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class DbConnect {
+public class DbConnect {//config
 
     public static DbConnect instance = null;
 

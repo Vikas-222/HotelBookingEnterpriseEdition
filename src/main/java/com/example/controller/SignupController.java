@@ -1,17 +1,18 @@
 package com.example.controller;
 
-import com.example.common.CustomObjectMapper;
+import com.example.common.AppConstant;
+import com.example.common.exception.DBException;
+import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
-import com.example.dto.SignupRequestUserDTO;
 import com.example.common.exception.ApplicationException;
+import com.example.dto.UserDTO;
 import com.example.service.UserService;
-import com.example.validation.SignupValidator;
+import com.example.validation.UserValidator;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
 
 public class SignupController extends HttpServlet {
@@ -25,26 +26,24 @@ public class SignupController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setContentType(AppConstant.APPLICATION_JSON);
         try {
-            SignupRequestUserDTO user = CustomObjectMapper.toObject(request.getReader(),SignupRequestUserDTO.class);
-            SignupValidator.validate(user);
+            UserDTO user = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
+            UserValidator.validate(user);
             userService.addUser(user);
-            sendResponse(response,Messages.ACCOUNT_CREATED,null,200);
+            sendResponse(response, Messages.ACCOUNT_CREATED,null, null, 200);
+        } catch (DBException e) {
+            e.printStackTrace();
+            sendResponse(response, Messages.Error.FAILED,e.getMessage(), null, 400);
         } catch (ApplicationException e) {
             e.printStackTrace();
-             if(e.getErrorType() == ApplicationException.ErrorType.SYSTEM_ERROR) {
-                 sendResponse(response,e.getMessage(),null,500);
-             }
-            else{
-                 sendResponse(response,e.getMessage(),null,400);
-             }
+            sendResponse(response,e.getMessage(),null,null, 500);
         }
     }
 
-    private void sendResponse(HttpServletResponse response, String message, Object data, int statusCode) throws IOException {
+    private void sendResponse(HttpServletResponse response, String message,String technicalMessage, Object data, int statusCode) throws IOException {
         response.setStatus(statusCode);
-        Response apiResponse = new Response(message, data);
+        Response apiResponse = new Response(message,technicalMessage, data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

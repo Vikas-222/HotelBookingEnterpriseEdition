@@ -1,5 +1,7 @@
 package com.example.model;
 
+import com.example.common.enums.RoomType;
+
 import java.time.LocalDateTime;
 
 public class Room {
@@ -13,15 +15,6 @@ public class Room {
     private boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public enum RoomType {
-        DELUXE,
-        SINGLEBED,
-        DOUBLEBED,
-        TRIPLEBED,
-        QUEEN,
-        KING
-    }
 
     public Room(int roomNumber, int capacity, RoomType roomType, float pricePerNight, String imagePath) {
         this.roomNumber = roomNumber;

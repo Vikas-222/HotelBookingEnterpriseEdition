@@ -1,41 +1,30 @@
 package com.example.controller;
 
-import com.example.common.CustomObjectMapper;
+import com.example.common.AppConstant;
+import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
-import com.example.dao.IUserDAO;
-import com.example.dao.UserDAOImpl;
-import com.example.dto.LoginRequestUserDTO;
 import com.example.dto.UserDTO;
 import com.example.common.exception.ApplicationException;
-import com.example.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
-import java.util.List;
 
 public class GetOneUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
-        IUserDAO userdao = new UserDAOImpl();
-        UserService userService = new UserService(userdao);
-
+        response.setContentType(AppConstant.APPLICATION_JSON);
         try {
             HttpSession session = request.getSession(false);
             if (session.getAttribute("user") != null) {
-                LoginRequestUserDTO sessionUser = (LoginRequestUserDTO) session.getAttribute("user");
-                List<UserDTO> list = userService.getOneUserDetails(sessionUser.getEmail());
-                sendResponse(response,Messages.FETCHED_USER,list,200);
+                UserDTO sessionUser = (UserDTO) session.getAttribute("user");
+                sendResponse(response, null, sessionUser, 200);
             } else {
-                throw new ApplicationException(Messages.Error.INVALID_ACTION, ApplicationException.ErrorType.USER_ERROR);
+                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
         } catch (ApplicationException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
-            sendResponse(response,e.getMessage(),null,500);
+            sendResponse(response, e.getMessage(), null, 500);
         }
     }
 

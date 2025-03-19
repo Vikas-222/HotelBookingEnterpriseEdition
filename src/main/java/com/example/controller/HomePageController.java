@@ -1,19 +1,19 @@
 package com.example.controller;
 
-import com.example.common.CustomObjectMapper;
+import com.example.common.AppConstant;
+import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 
 public class HomePageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setContentType(AppConstant.APPLICATION_JSON);
         PrintWriter out = response.getWriter();
 
         HttpSession session = request.getSession(false);
@@ -22,7 +22,7 @@ public class HomePageController extends HttpServlet {
             String[] username = user.getEmail().split("@");
             out.println("<h1>Welcome " + username[0] + "</h1>");
         } else {
-            sendResponse(response,Messages.Error.INVALID_ACTION,null,400);
+            sendResponse(response,Messages.Error.UNAUTHORIZED_ACCESS,null,400);
         }
     }
 

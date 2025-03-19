@@ -1,15 +1,18 @@
 package com.example.controller;
 
-import com.example.common.CustomObjectMapper;
+import com.example.common.AppConstant;
+import com.example.common.exception.ApplicationException;
+import com.example.common.exception.DBException;
+import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
-import com.example.dto.LoginRequestUserDTO;
 import com.example.dto.UserDTO;
 import com.example.service.UserService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -19,28 +22,31 @@ public class GetAllUserController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
+        response.setContentType(AppConstant.APPLICATION_JSON);
 
         try {
             HttpSession session = request.getSession(false);
-            if (session.getAttribute("user") != null) {
-                LoginRequestUserDTO user = (LoginRequestUserDTO) request.getAttribute("user");
-                if (userService.getRole(user.getEmail()) == "admin") {
-                    List<UserDTO> userList = userService.getAllUser();
-                    if (userList == null) {
-                        sendResponse(response, Messages.Error.NO_USER_EXISTS, null, 400);
-                    } else {
-                        sendResponse(response, Messages.FETCHED_USER, userList, 200);
-                    }
-                }
-            } else {
-                sendResponse(response, Messages.Error.INVALID_ACTION, null, 400);
+            if (session.getAttribute("user") == null) {
+                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-        } catch (Exception e) {
+            UserDTO user = (UserDTO) session.getAttribute("user");
+            if (!user.getRole().equalsIgnoreCase("admin")) {
+                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
+            }
+            List<UserDTO> userList = userService.getAllUser();
+            if (userList == null) {
+                sendResponse(response, Messages.Error.NO_USER_EXISTS, null, 200);
+            }
+            sendResponse(response, null, userList, 200);
+        } catch (DBException e) {
             e.printStackTrace();
-            sendResponse(response, Messages.Error.FAILED, null, 500);
+            sendResponse(response, e.getMessage(), null, 500);
+        } catch (ApplicationException e) {
+            e.printStackTrace();
+            sendResponse(response,e.getMessage(),null,500);
         }
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

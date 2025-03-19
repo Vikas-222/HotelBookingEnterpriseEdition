@@ -1,27 +1,18 @@
 package com.example.dto;
 
-import com.example.model.Room;
+import com.example.common.enums.RoomType;
 
 public class RoomDTO {
 
     private int roomId;
     private int roomNumber;
-    private Room.RoomType roomType;
+    private RoomType roomType;
     private int capacity;
     private float pricePerNight;
     private String imagePath;
     private boolean isActive;
 
-    public enum RoomType {
-        DELUXE,
-        SINGLEBED,
-        DOUBLEBED,
-        TRIPLEBED,
-        QUEEN,
-        KING
-    }
-
-    public RoomDTO(int roomId, int roomNumber, Room.RoomType roomType, int capacity, float pricePerNight, String imagePath) {
+    public RoomDTO(int roomId, int roomNumber, RoomType roomType, int capacity, float pricePerNight, String imagePath) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
         this.roomType = roomType;
@@ -47,11 +38,11 @@ public class RoomDTO {
         this.roomNumber = roomNumber;
     }
 
-    public Room.RoomType getRoomType() {
+    public RoomType getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(Room.RoomType roomType) {
+    public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
     }
 

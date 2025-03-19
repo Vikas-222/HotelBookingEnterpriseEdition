@@ -1,14 +1,12 @@
 package com.example.service;
 
+import com.example.common.exception.DBException;
 import com.example.common.mapper.UserMapper;
 import com.example.dao.IUserDAO;
-import com.example.dto.LoginRequestUserDTO;
-import com.example.dto.SignupRequestUserDTO;
 import com.example.dto.UserDTO;
 import com.example.common.exception.ApplicationException;
 import com.example.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
@@ -19,32 +17,27 @@ public class UserService {
         this.iUserDAO = iUserDAO;
     }
 
-    public void addUser(SignupRequestUserDTO signupRequestUserDTO) throws ApplicationException {
-        User user = UserMapper.userDTOToEntity(signupRequestUserDTO);
+    public void addUser(UserDTO userDTO) throws DBException {
+        User user = UserMapper.convertUserDTOToUserForSignup(userDTO);
         iUserDAO.addUser(user);
     }
 
-    public boolean isUserExists(String email) throws ApplicationException {
+    public boolean isUserExists(String email) throws DBException {
         return iUserDAO.isUserExistByEmail(email);
     }
 
-    public void userLogin(LoginRequestUserDTO loginUser) throws ApplicationException {
-        User user = UserMapper.loginUserDTOtoEntity(loginUser);
-        iUserDAO.userLogin(user);
+    public UserDTO userLogin(UserDTO userDTO) throws DBException {
+        User user = UserMapper.convertUserDTOToUserForLogin(userDTO);
+        iUserDAO.isValidUser(user);
+        return getOneUserDetails(userDTO.getEmail());
     }
 
-    public List<UserDTO> getOneUserDetails(String email) throws ApplicationException {
+    public UserDTO getOneUserDetails(String email) throws DBException {
         UserDTO userDTO = UserMapper.ToUserDTO(iUserDAO.getOneUserDetails(email));
-        List<UserDTO> list = new ArrayList<>();
-        list.add(userDTO);
-        return list;
+        return userDTO;
     }
 
-    public List<UserDTO> getAllUser() throws ApplicationException {
-        return UserMapper.entityToDTOList(iUserDAO.getAllUser());
-    }
-
-    public String getRole(String email) throws ApplicationException {
-        return iUserDAO.getRoleOfUser(email);
+    public List<UserDTO> getAllUser() throws DBException {
+        return UserMapper.convertUserToUserDTOList(iUserDAO.getAllUser());
     }
 }

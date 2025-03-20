@@ -1,30 +1,26 @@
 package com.example.controller;
 
+
 import com.example.common.AppConstant;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.dao.IUserDAO;
-import com.example.dao.UserDAOImpl;
-import com.example.dto.UserDTO;
-import com.example.service.UserService;
-import com.example.validation.UserValidator;
+import com.example.dao.IRoomDAO;
+import com.example.dao.RoomDAOImpl;
+import com.example.dto.RoomDTO;
+import com.example.service.RoomService;
+import com.example.validation.RoomValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-public class LoginController extends HttpServlet {
-
-    private IUserDAO iUserDAO = new UserDAOImpl();
-    private UserService userService = new UserService(iUserDAO);
-
+public class UpdateRoomStatusController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -33,27 +29,27 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-
+        IRoomDAO iRoomDAO = new RoomDAOImpl();
+        RoomValidator roomValidator = new RoomValidator();
+        RoomService roomService = new RoomService(iRoomDAO);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            UserDTO user = mapper.readValue(request.getReader(), UserDTO.class);
-            if (!UserValidator.isNullCheckLoginValues(user.getEmail(), user.getPassword())) {
-                throw new ApplicationException(Messages.Error.INVALID_CREDENTIALS);
-            }
-            UserDTO userDTO = userService.userLogin(user);
-            HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(5 * 60);
-            session.setAttribute("user", userDTO);
-            sendResponse(response, Messages.LOGIN_SUCCESSFUL, null, null, 200);
+            System.out.println("hii");
+//            RoomDTO roomDTO = CustomObjectMapper.toObject(request.getReader(), RoomDTO.class);
+            RoomDTO roomDTO = mapper.readValue(request.getReader(),RoomDTO.class);
+            System.out.println(roomDTO);
+            roomValidator.ValidateForUpdate(roomDTO);
+            roomService.updateRoomStatus(roomDTO);
         } catch (DBException e) {
             e.printStackTrace();
-            sendResponse(response, "Something went wrong", e.getMessage(), null, 500);
+            System.out.println(e.getMessage());
+            sendResponse(response, Messages.Error.FAILED,e.getMessage(),null,500);
         } catch (ApplicationException e) {
             e.printStackTrace();
-            sendResponse(response, e.getMessage(), null, null, 400);
-        } catch (Exception e) {
+            sendResponse(response,e.getMessage(),null,null,500);
+        }
+        catch(Exception e){
             e.printStackTrace();
-            sendResponse(response, "Something went wrong", e.getMessage(), null, 500);
         }
     }
 

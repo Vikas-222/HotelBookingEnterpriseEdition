@@ -1,81 +1,119 @@
 package com.example.dto;
 
 import com.example.common.enums.RoomType;
+import com.example.dao.RoomImages;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@JsonDeserialize(builder = RoomDTO.Builder.class)
 public class RoomDTO {
-
     private int roomId;
     private int roomNumber;
     private RoomType roomType;
     private int capacity;
     private float pricePerNight;
-    private String imagePath;
+    private List<RoomImages> roomImagesList;
     private boolean isActive;
 
-    public RoomDTO(int roomId, int roomNumber, RoomType roomType, int capacity, float pricePerNight, String imagePath) {
-        this.roomId = roomId;
-        this.roomNumber = roomNumber;
-        this.roomType = roomType;
-        this.capacity = capacity;
-        this.pricePerNight = pricePerNight;
-        this.imagePath = imagePath;
-        this.isActive = true;
+    public RoomDTO() {
+    }
+
+    private RoomDTO(Builder builder) {
+        this.roomId = builder.roomId;
+        this.roomNumber = builder.roomNumber;
+        this.roomType = builder.roomType;
+        this.capacity = builder.capacity;
+        this.pricePerNight = builder.pricePerNight;
+        this.roomImagesList = builder.roomImagesList;
+        this.isActive = builder.isActive;
     }
 
     public int getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
-    }
-
     public int getRoomNumber() {
         return roomNumber;
-    }
-
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
     }
 
     public RoomType getRoomType() {
         return roomType;
     }
 
-    public void setRoomType(RoomType roomType) {
-        this.roomType = roomType;
-    }
-
     public int getCapacity() {
         return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
     }
 
     public float getPricePerNight() {
         return pricePerNight;
     }
 
-    public void setPricePerNight(float pricePerNight) {
-        this.pricePerNight = pricePerNight;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public List<RoomImages> getRoomImagesList() {
+        return roomImagesList;
     }
 
     public boolean isActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
-        isActive = active;
+    @JsonPOJOBuilder(withPrefix = "set")
+    public static class Builder {
+        private int roomId;
+        private int roomNumber;
+        private RoomType roomType;
+        private int capacity;
+        private float pricePerNight;
+        private List<RoomImages> roomImagesList = new ArrayList<>();
+        private boolean isActive = true;
+
+        public Builder() {}
+
+        public Builder roomId(int roomId) {
+            this.roomId = roomId;
+            return this;
+        }
+
+        public Builder roomNumber(int roomNumber) {
+            this.roomNumber = roomNumber;
+            return this;
+        }
+
+        public Builder roomType(RoomType roomType) {
+            this.roomType = roomType;
+            return this;
+        }
+
+        public Builder capacity(int capacity) {
+            this.capacity = capacity;
+            return this;
+        }
+
+        public Builder pricePerNight(float pricePerNight) {
+            this.pricePerNight = pricePerNight;
+            return this;
+        }
+
+        public Builder roomImagesList(List<RoomImages> roomImagesList) {
+            this.roomImagesList = roomImagesList;
+            return this;
+        }
+
+        public Builder addRoomImage(RoomImages roomImage) {
+            this.roomImagesList.add(roomImage);
+            return this;
+        }
+
+        public Builder setIsActive(boolean isActive) {
+            this.isActive = isActive;
+            return this;
+        }
+
+        public RoomDTO build() {
+            return new RoomDTO(this);
+        }
     }
 
     @Override
@@ -85,7 +123,7 @@ public class RoomDTO {
                 ", roomType=" + roomType +
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
-                ", imagePath='" + imagePath + '\'' +
+                ", roomImagesList=" + roomImagesList +
                 ", isActive=" + isActive;
     }
 }

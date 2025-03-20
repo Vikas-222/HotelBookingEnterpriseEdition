@@ -11,7 +11,7 @@ public class Messages {
         public static final String ALREADY_EXISTS = "User already exists";
         public static final String INVALID_VALUES = "Please enter all the details";
         public static final String INVALID_EMAIL = "Please enter valid email address";
-        public static final String FAILED = "Something went wrong! Please try again after some time";
+        public static final String FAILED = "OOPS! Something went wrong! Please try again after some time";
         public static final String WEAK_PASSWORD = "Please enter strong password";
         public static final String INVALID_CONTACT = "Please enter valid contact number";
         public static final String INVALID_CREDENTIALS = "Please enter valid credentials";

@@ -87,22 +87,12 @@
 
     <servlet>
         <servlet-name>GetOneUserController</servlet-name>
-        <servlet-class>com.example.controller.GetOneUserController</servlet-class>
+        <servlet-class>com.example.controller.FetchLoggedUserController</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>GetOneUserController</servlet-name>
-        <url-pattern>/getoneuser</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>MyServlet</servlet-name>
-        <servlet-class>com.example.controller.MyServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>MyServlet</servlet-name>
-        <url-pattern>/myservlet</url-pattern>
+        <url-pattern>/fetch</url-pattern>
     </servlet-mapping>
 
 <!--    <servlet>-->
@@ -114,5 +104,14 @@
 <!--        <servlet-name>addRoomServlet</servlet-name>-->
 <!--        <url-pattern>/addRoomServlet</url-pattern>-->
 <!--    </servlet-mapping>-->
+
+    <servlet>
+        <servlet-name>UpdateRoomStatusController</servlet-name>
+        <servlet-class>com.example.controller.UpdateRoomStatusController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateRoomStatusController</servlet-name>
+        <url-pattern>/updateroom</url-pattern>
+    </servlet-mapping>
 
 </web-app>

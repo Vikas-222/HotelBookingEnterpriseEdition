@@ -20,7 +20,7 @@ public class UserDAOImpl implements IUserDAO {
             ResultSet rs = pst.executeQuery();
             return rs.next();
         } catch (SQLException | ClassNotFoundException e) {
-            throw new DBException(Messages.Error.FAILED, e);
+            throw new DBException(e);
         }
     }
 
@@ -36,7 +36,7 @@ public class UserDAOImpl implements IUserDAO {
             pst1.setString(5, user.getContactNumber());
             pst1.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
-            throw new DBException(Messages.Error.FAILED, e);
+            throw new DBException(e);
         }
     }
 
@@ -50,11 +50,11 @@ public class UserDAOImpl implements IUserDAO {
             pst.setString(1, user.getEmail());
             pst.setString(2, user.getPassword());
             rs = pst.executeQuery();
-            if (!rs.next()) {
-                return false;
+            if (rs.next()) {
+                return true;
             }
         } catch (SQLException | ClassNotFoundException e) {
-            throw new DBException(Messages.Error.FAILED, e);
+            throw new DBException(e);
         }
         finally {
             if(rs != null){
@@ -65,7 +65,7 @@ public class UserDAOImpl implements IUserDAO {
                 }
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class UserDAOImpl implements IUserDAO {
             }
             return user;
         } catch (SQLException | ClassNotFoundException e) {
-            throw new DBException(Messages.Error.FAILED, e);
+            throw new DBException(e);
         } finally {
             if (rs != null) {
                 try {
@@ -117,7 +117,7 @@ public class UserDAOImpl implements IUserDAO {
             }
             return list;
         } catch (SQLException | ClassNotFoundException e) {
-            throw new DBException(Messages.Error.FAILED, e);
+            throw new DBException(e);
         }
     }
 }

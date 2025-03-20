@@ -26,7 +26,7 @@ public class GetAllUserController extends HttpServlet {
 
         try {
             HttpSession session = request.getSession(false);
-            if (session.getAttribute("user") == null) {
+            if (session == null) {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
             UserDTO user = (UserDTO) session.getAttribute("user");

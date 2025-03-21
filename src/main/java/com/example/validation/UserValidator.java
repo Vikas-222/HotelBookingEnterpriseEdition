@@ -47,46 +47,28 @@ public class UserValidator {
     }
 
     public static boolean isNullCheckUserValues(UserDTO user) throws ApplicationException {
-        if (user.getFirstName().isBlank() || user.getEmail().isBlank() || user.getPassword().isBlank()
-                || user.getContactNumber().isBlank()) {
-            return false;
-        }
-        return true;
+        return !user.getFirstName().isBlank() && !user.getEmail().isBlank() && !user.getPassword().isBlank()
+                && !user.getContactNumber().isBlank();
     }
 
     public static boolean isValidFirstNameLength(String fname) {
-        if (fname.length() > 50) {
-            return false;
-        }
-        return true;
+        return fname.length() <= 50;
     }
 
     public static boolean isValidLastNameLength(String lname) {
-        if (lname.length() > 50) {
-            return false;
-        }
-        return true;
+        return lname.length() <= 50;
     }
 
     public static boolean isValidEmailLength(String email) {
-        if (email.length() > 60) {
-            return false;
-        }
-        return true;
+        return email.length() <= 60;
     }
 
     public static boolean isValidPasswordLength(String password) {
-        if (password.length() > 6 && password.length() < 15) {
-            return true;
-        }
-        return false;
+        return password.length() > 6 && password.length() < 15;
     }
 
     public static boolean isNullCheckLoginValues(String email,String password) throws ApplicationException {
-        if (email.isBlank() || password.isBlank()) {
-            return false;
-        }
-        return true;
+        return !email.isBlank() && !password.isBlank();
     }
 
     public static boolean isValidPassword(String password) {
@@ -96,19 +78,13 @@ public class UserValidator {
                 + "(?=\\S+$).{6,15}$";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(password);
-        if(m.matches()){
-            return true;
-        }
-        return false;
+        return m.matches();
     }
 
     public static boolean isValidContact(String contact) {
         if (contact.length() != 10)
             return false;
-        if (!contact.chars().allMatch(Character::isDigit)) {
-            return false;
-        }
-        return true;
+        return contact.chars().allMatch(Character::isDigit);
     }
 
     public static boolean isValidEmail(String email) throws ApplicationException {
@@ -120,9 +96,6 @@ public class UserValidator {
         if (email == null) {
             return false;
         }
-        if (!p.matcher(email).matches()) {
-            return false;
-        }
-        return true;
+        return p.matcher(email).matches();
     }
 }

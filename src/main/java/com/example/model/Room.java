@@ -2,6 +2,7 @@ package com.example.model;
 
 import com.example.common.enums.RoomType;
 import com.example.dao.RoomImages;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Room {
     private int capacity;
     private float pricePerNight;
     private List<RoomImages> roomImagesList;
-    private boolean isActive;
+    private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -28,7 +29,7 @@ public class Room {
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
         this.roomImagesList = builder.roomImagesList;
-        this.isActive = builder.isActive;
+        this.active = builder.active;
     }
 
     public int getRoomId() {
@@ -55,8 +56,8 @@ public class Room {
         return roomImagesList;
     }
 
-    public boolean isActive() {
-        return isActive;
+    public boolean getIsActive() {
+        return active;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -74,45 +75,40 @@ public class Room {
         private int capacity;
         private float pricePerNight;
         private List<RoomImages> roomImagesList = new ArrayList<>();
-        private boolean isActive = true;
+        private boolean active;
 
-        public Builder roomId(int roomId) {
+        public Builder setRoomId(int roomId) {
             this.roomId = roomId;
             return this;
         }
 
-        public Builder roomNumber(int roomNumber) {
+        public Builder setRoomNumber(int roomNumber) {
             this.roomNumber = roomNumber;
             return this;
         }
 
-        public Builder roomType(RoomType roomType) {
+        public Builder setRoomType(RoomType roomType) {
             this.roomType = roomType;
             return this;
         }
 
-        public Builder capacity(int capacity) {
+        public Builder setCapacity(int capacity) {
             this.capacity = capacity;
             return this;
         }
 
-        public Builder pricePerNight(float pricePerNight) {
+        public Builder setPricePerNight(float pricePerNight) {
             this.pricePerNight = pricePerNight;
             return this;
         }
 
-        public Builder roomImagesList(List<RoomImages> roomImagesList) {
+        public Builder setRoomImagesList(List<RoomImages> roomImagesList) {
             this.roomImagesList = roomImagesList;
             return this;
         }
 
-        public Builder addRoomImage(RoomImages roomImage) {
-            this.roomImagesList.add(roomImage);
-            return this;
-        }
-
-        public Builder isActive(boolean isActive) {
-            this.isActive = isActive;
+        public Builder setActive(boolean active) {
+            this.active = active;
             return this;
         }
 
@@ -129,7 +125,7 @@ public class Room {
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
                 ", roomImagesList=" + roomImagesList +
-                ", isActive=" + isActive +
+                ", isActive=" + active +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt;
     }

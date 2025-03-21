@@ -1,8 +1,9 @@
 package com.example.dao;
 
 import com.example.common.Messages;
+import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
-import com.example.dbconfig.DbConnect;
+import com.example.config.DbConnect;
 import com.example.model.User;
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class UserDAOImpl implements IUserDAO {
     public boolean isUserExistByEmail(String emailId) throws DBException {
         String foundEmail = "select email from user where email = ?";
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(foundEmail);) {
+             PreparedStatement pst = connection.prepareStatement(foundEmail)) {
             pst.setString(1, emailId);
             ResultSet rs = pst.executeQuery();
             return rs.next();
@@ -28,7 +29,7 @@ public class UserDAOImpl implements IUserDAO {
     public void addUser(User user) throws DBException {
         String insertSql = "insert into user(first_name,last_name,email,passwords,contact) values (?,?,?,?,?)";
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst1 = connection.prepareStatement(insertSql);) {
+             PreparedStatement pst1 = connection.prepareStatement(insertSql)) {
             pst1.setString(1, user.getFirstName());
             pst1.setString(2, user.getLastName());
             pst1.setString(3, user.getEmail());
@@ -46,7 +47,7 @@ public class UserDAOImpl implements IUserDAO {
         ResultSet rs = null;
         String findEmail = "select email,passwords from user where email = ? and passwords =?";
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(findEmail);) {
+             PreparedStatement pst = connection.prepareStatement(findEmail)) {
             pst.setString(1, user.getEmail());
             pst.setString(2, user.getPassword());
             rs = pst.executeQuery();
@@ -69,12 +70,12 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     @Override
-    public User getOneUserDetails(String email) throws DBException {
+    public User fetchLoggedInUserDetails(String email) throws DBException {
         User user = null;
         String sql = "Select * from user where email = ?";
         ResultSet rs = null;
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(sql);) {
+             PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setString(1, email);
             rs = pst.executeQuery();
             if (rs.next()) {
@@ -103,7 +104,7 @@ public class UserDAOImpl implements IUserDAO {
         String sql = "Select * from user";
         try (Connection connection = DbConnect.instance.getConnection();
              Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery(sql);) {
+             ResultSet rs = st.executeQuery(sql)) {
             List<User> list = new ArrayList<>();
             if (rs.next()) {
                 while (rs.next()) {
@@ -118,6 +119,32 @@ public class UserDAOImpl implements IUserDAO {
             return list;
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
+        }
+    }
+
+    @Override
+    public void updateUserdetails(User user) throws ApplicationException {
+        String find = "Select user_id from user where user_id = ?";
+        String updateQuery = "update user set last_name = ?, contact = ?, gender = ? where user_id = ?";
+        ResultSet rs = null;
+        try(Connection connection = DbConnect.instance.getConnection();
+        PreparedStatement pst = connection.prepareStatement(find);
+        PreparedStatement pstUpdate = connection.prepareStatement(updateQuery);) {
+            pst.setInt(1,user.getUserId());
+            rs = pst.executeQuery();
+            if(!rs.next()){
+                System.out.println(rs.next());
+                throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
+            }
+            pstUpdate.setString(1,user.getLastName());
+            pstUpdate.setString(2,user.getContactNumber());
+            pstUpdate.setString(3,user.getGender());
+            pstUpdate.setInt(4,user.getUserId());
+            pstUpdate.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        } catch (ApplicationException e) {
+            throw e;
         }
     }
 }

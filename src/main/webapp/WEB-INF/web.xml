@@ -8,6 +8,11 @@
         <welcome-file>Login.html</welcome-file>
     </welcome-file-list>
 
+    <listener>
+        <listener-class>com.example.config.FlywayConfig</listener-class>
+    </listener>
+
+
     <servlet>
         <servlet-name>DatabaseController</servlet-name>
         <servlet-class>com.example.controller.DatabaseController</servlet-class>
@@ -86,6 +91,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>UpdateUserController</servlet-name>
+        <servlet-class>com.example.controller.UpdateUserController</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UpdateUserController</servlet-name>
+        <url-pattern>/updateuser</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>GetOneUserController</servlet-name>
         <servlet-class>com.example.controller.FetchLoggedUserController</servlet-class>
     </servlet>
@@ -95,15 +110,20 @@
         <url-pattern>/fetch</url-pattern>
     </servlet-mapping>
 
-<!--    <servlet>-->
-<!--        <servlet-name>addRoomServlet</servlet-name>-->
-<!--        <servlet-class>com.example.RoomController.addRoomServlet</servlet-class>-->
-<!--    </servlet>-->
+    <servlet>
+        <servlet-name>AddRoomController</servlet-name>
+        <servlet-class>com.example.controller.AddRoomController</servlet-class>
+        <multipart-config>
+            <max-file-size>1000000</max-file-size>
+            <max-request-size>1000000</max-request-size>
+            <file-size-threshold>1000000</file-size-threshold>
+        </multipart-config>
+    </servlet>
 
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>addRoomServlet</servlet-name>-->
-<!--        <url-pattern>/addRoomServlet</url-pattern>-->
-<!--    </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>AddRoomController</servlet-name>
+        <url-pattern>/addRoom</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>UpdateRoomStatusController</servlet-name>
@@ -112,6 +132,15 @@
     <servlet-mapping>
         <servlet-name>UpdateRoomStatusController</servlet-name>
         <url-pattern>/updateroom</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FetchAllRoomController</servlet-name>
+        <servlet-class>com.example.controller.FetchAllRoomController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FetchAllRoomController</servlet-name>
+        <url-pattern>/fetchallroom</url-pattern>
     </servlet-mapping>
 
 </web-app>

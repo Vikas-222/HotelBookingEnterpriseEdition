@@ -28,25 +28,31 @@ public class UserService {
     }
 
     public UserDTO userLogin(UserDTO userDTO) throws ApplicationException {
-        try {
+        try{
             User user = UserMapper.convertUserDTOToUserForLogin(userDTO);
-            if (iUserDAO.isValidUser(user) == false) {
-                throw new DBException(Messages.Error.INVALID_CREDENTIALS);
+            if(!iUserDAO.isUserExistByEmail(user.getEmail())){
+                throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
             }
-            return getOneUserDetails(userDTO.getEmail());
+            if (iUserDAO.isValidUser(user) == false) {
+                throw new ApplicationException(Messages.Error.INVALID_CREDENTIALS);
+            }
+            return fetchLoggedInUserDetails(userDTO.getEmail());
         } catch (DBException ex) {
             throw ex;
-        } catch (Exception ex) {
-            throw new ApplicationException("Exception while performing login:", ex);
         }
     }
 
-    public UserDTO getOneUserDetails(String email) throws DBException {
-        UserDTO userDTO = UserMapper.ToUserDTO(iUserDAO.getOneUserDetails(email));
+    public UserDTO fetchLoggedInUserDetails(String email) throws DBException {
+        UserDTO userDTO = UserMapper.ToUserDTO(iUserDAO.fetchLoggedInUserDetails(email));
         return userDTO;
     }
 
     public List<UserDTO> getAllUser() throws DBException {
         return UserMapper.convertUserToUserDTOList(iUserDAO.getAllUser());
+    }
+
+    public void updateUserDetails(UserDTO userDTO) throws ApplicationException {
+        User user = UserMapper.ForUpdateDTOToEntity(userDTO);
+        iUserDAO.updateUserdetails(user);
     }
 }

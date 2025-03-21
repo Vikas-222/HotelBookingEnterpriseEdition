@@ -6,6 +6,7 @@ public class Messages {
     public static final String LOGIN_SUCCESSFUL = "Login successful";
     public static final String LOGOUT_SUCCESSFUL = "Logout successful";
     public static final String ROOM_ADDED = "Room added successfully";
+    public static final String ROOM_UPDATED = "Room updated successfully";
 
     public static class Error {
         public static final String ALREADY_EXISTS = "User already exists";
@@ -18,7 +19,6 @@ public class Messages {
         public static final String UNAUTHORIZED_ACCESS = "You are unauthorized to access";
         public static final String USER_NOT_FOUND = "User not found";
         public static final String NO_USER_EXISTS = "User record not exists";
-        public static final String ERROR_OCCURED = "Sorry! Some error occured";
         public static final String INVALID_EMAIL_LENGTH = "Email is too big! Please use another email";
         public static final String INVALID_NAME_LENGTH = "Name is too big! Please use short names";
         public static final String INVALID_PASSWORD_LENGTH = "Password is too big! Please use other password";

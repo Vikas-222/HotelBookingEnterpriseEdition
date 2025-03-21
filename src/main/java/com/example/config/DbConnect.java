@@ -1,4 +1,4 @@
-package com.example.dbconfig;
+package com.example.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,10 +8,10 @@ public class DbConnect {//config
 
     public static DbConnect instance = null;
 
-    private String dbUrl;
-    private String dbUsername;
-    private String dbPassword;
-    private String dbDriver;
+    private final String dbUrl;
+    private final String dbUsername;
+    private final String dbPassword;
+    private final String dbDriver;
 
     private DbConnect(String url, String username, String password, String driver) {
         dbUrl = url;

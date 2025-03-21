@@ -22,8 +22,8 @@ import java.io.IOException;
 
 public class LoginController extends HttpServlet {
 
-    private IUserDAO iUserDAO = new UserDAOImpl();
-    private UserService userService = new UserService(iUserDAO);
+    private final IUserDAO iUserDAO = new UserDAOImpl();
+    private final UserService userService = new UserService(iUserDAO);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,13 +47,10 @@ public class LoginController extends HttpServlet {
             sendResponse(response, Messages.LOGIN_SUCCESSFUL, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
-            sendResponse(response, "Something went wrong", e.getMessage(), null, 500);
+            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
         } catch (ApplicationException e) {
             e.printStackTrace();
             sendResponse(response, e.getMessage(), null, null, 400);
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendResponse(response, "Something went wrong", e.getMessage(), null, 500);
         }
     }
 

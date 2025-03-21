@@ -6,14 +6,16 @@ import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.common.exception.ApplicationException;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 public class RoomValidator {
 
     IRoomDAO iRoomDAO = new RoomDAOImpl();
 
     /**
      * @param room
-     * @throws ApplicationException
-     * for validation of room object when inserting new room
+     * @throws ApplicationException for validation of room object when inserting new room
      */
     public void roomValidate(RoomDTO room) throws ApplicationException {
         if (!isNullRoomValues(room)) {
@@ -37,7 +39,7 @@ public class RoomValidator {
         if (!isValidRoomNumber(room.getRoomNumber())) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        if(!iRoomDAO.isRoomNumberExists(room.getRoomNumber())){
+        if (!iRoomDAO.isRoomNumberExists(room.getRoomNumber())) {
             System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
             throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
         }
@@ -46,24 +48,25 @@ public class RoomValidator {
 
     /**
      * @param room
-     * @throws ApplicationException
-     * for validation of room object when updating room's status
+     * @throws ApplicationException for validation of room object when updating room's status
      */
     public void ValidateForUpdate(RoomDTO room) throws ApplicationException {
         if (!isNullForUpdateRoomValues(room)) {
-            System.out.println("validation "+isNullForUpdateRoomValues(room));
+            System.out.println("validation " + isNullForUpdateRoomValues(room));
             throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
         }
-        if (checkZeros(room.getRoomNumber())) {
+        if (!checkZeros(room.getRoomNumber())) {
+            System.out.println("checkzeros");
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
         if (!isValidRoomNumber(room.getRoomNumber())) {
+            System.out.println("isValidRoomNumber");
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        if(!iRoomDAO.isRoomNumberExists(room.getRoomNumber())){
-            System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
-            throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
-        }
+//        if(!iRoomDAO.isRoomNumberExists(room.getRoomNumber())){
+//            System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
+//            throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
+//        }
     }
 
     public static boolean isValidRoomNumber(int roomNumber) {
@@ -71,10 +74,7 @@ public class RoomValidator {
         if (roomNum.length() > 5) {
             return false;
         }
-        if (!roomNum.chars().allMatch(Character::isDigit)) {
-            return false;
-        }
-        return true;
+        return roomNum.chars().allMatch(Character::isDigit);
     }
 
     public static boolean isValidCapacity(int capacity) {
@@ -82,10 +82,7 @@ public class RoomValidator {
         if (cap.length() > 5) {
             return false;
         }
-        if (!cap.chars().allMatch(Character::isDigit)) {
-            return false;
-        }
-        return true;
+        return cap.chars().allMatch(Character::isDigit);
     }
 
     public static boolean isValidRoomPrice(float price) {
@@ -93,26 +90,21 @@ public class RoomValidator {
         if (roomPrice.length() > 8) {
             return false;
         }
-        if (!roomPrice.chars().allMatch(Character::isDigit)) {
-            return false;
-        }
-        return true;
+        return roomPrice.chars().allMatch(Character::isDigit);
     }
 
     public static boolean isNullRoomValues(RoomDTO roomDTO) {
 
-        if (String.valueOf(roomDTO.getRoomNumber()).isBlank() || String.valueOf(roomDTO.getCapacity()).isBlank() ||
-                String.valueOf(roomDTO.getPricePerNight()).isBlank() || String.valueOf(roomDTO.getRoomType()).isBlank()) {
-            return false;
-        }
-        return true;
+        return !String.valueOf(roomDTO.getRoomNumber()).isBlank() && !String.valueOf(roomDTO.getCapacity()).isBlank() &&
+                !String.valueOf(roomDTO.getPricePerNight()).isBlank() && !String.valueOf(roomDTO.getRoomType()).isBlank();
     }
 
     public static boolean isNullForUpdateRoomValues(RoomDTO roomDTO) {
-        if (String.valueOf(roomDTO.getRoomNumber()).isBlank()) {
-            System.out.println("roomvalidation "+String.valueOf(roomDTO.isActive()).isBlank());
+        if (String.valueOf(roomDTO.getRoomNumber()).isBlank() && String.valueOf(roomDTO.getIsActive()).isBlank())  {
+            System.out.println("roomvalidation ");
             return false;
         }
+
         return true;
     }
 

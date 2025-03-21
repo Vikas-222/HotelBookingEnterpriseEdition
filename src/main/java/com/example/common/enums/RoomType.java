@@ -8,7 +8,7 @@ public enum RoomType {
     QUEEN,
     KING;
 
-    public static RoomType fromString(String roomTypeString) {
-        return RoomType.valueOf(roomTypeString.toUpperCase());
+    public static RoomType fromString(String roomType) {
+        return RoomType.valueOf(roomType.toUpperCase());
     }
 }

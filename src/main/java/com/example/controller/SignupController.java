@@ -17,8 +17,8 @@ import java.io.IOException;
 
 public class SignupController extends HttpServlet {
 
-    private IUserDAO iUserDAO = new UserDAOImpl();
-    private UserService userService = new UserService(iUserDAO);
+    private final IUserDAO iUserDAO = new UserDAOImpl();
+    private final UserService userService = new UserService(iUserDAO);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

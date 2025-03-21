@@ -29,6 +29,15 @@ public class UserMapper {
                 .setRole(user.getRole()).build();
     }
 
+    public static User ForUpdateDTOToEntity(UserDTO user) {
+        return new User.UserBuilder()
+                .setLastName(user.getLastName())
+                .setContactNumber(user.getContactNumber())
+                .setGender(user.getGender())
+//                .setProfilePic(user.getProfilePic())
+                .setRole(user.getRole()).build();
+    }
+
     public static List<UserDTO> convertUserToUserDTOList(List<User> list) {
         return list.stream()
                 .map(user -> new UserDTO.Builder()

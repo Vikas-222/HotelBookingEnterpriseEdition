@@ -2,6 +2,7 @@ package com.example.dao;
 
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
+import com.example.dto.UserDTO;
 import com.example.model.User;
 import java.util.List;
 
@@ -13,7 +14,9 @@ public interface IUserDAO {
 
     boolean isValidUser(User user) throws DBException;
 
-    User getOneUserDetails(String email) throws DBException;
+    User fetchLoggedInUserDetails(String email) throws DBException;
 
     List<User> getAllUser() throws DBException;
+
+    void updateUserdetails(User user) throws ApplicationException;
 }

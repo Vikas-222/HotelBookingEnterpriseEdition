@@ -41,9 +41,12 @@ public class SignupController extends HttpServlet {
         }
     }
 
-    private void sendResponse(HttpServletResponse response, String message,String technicalMessage, Object data, int statusCode) throws IOException {
+    private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {
         response.setStatus(statusCode);
-        Response apiResponse = new Response(message,technicalMessage, data);
+        Response apiResponse = new Response();
+        apiResponse.setMessage(message);
+        apiResponse.setTechnicalMessage(technicalMessage);
+        apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

@@ -4,7 +4,6 @@ import com.example.common.Messages;
 import com.example.common.enums.RoomType;
 import com.example.common.exception.DBException;
 import com.example.config.DbConnect;
-import com.example.common.exception.ApplicationException;
 import com.example.model.Room;
 
 import java.sql.Connection;
@@ -48,28 +47,19 @@ public class RoomDAOImpl implements IRoomDAO {
             preparedStatement.setInt(1, roomNumber);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                return false;
+                return true;
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }
-        return true;
+        return false;
     }
 
     @Override
     public void updateRoomPrice(int roomNumber, Room room) throws DBException {
-        String findRoom = "select * from room where roomNumber = ?";
         String updatePrice = "update room set capacity = ? and price = ? where room_number = ?";
-        ResultSet rs = null;
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pstFind = connection.prepareStatement(findRoom);
              PreparedStatement pstUpdate = connection.prepareStatement(updatePrice)) {
-            pstFind.setInt(1, roomNumber);
-            rs = pstFind.executeQuery();
-
-//            if (!rs.next()) {
-//                throw new DBException("Room with number " + roomNumber + " does not exist.");
-//            } this validation should be check on controller and throw ApplicaExcep
             pstUpdate.setInt(1, room.getCapacity());
             pstUpdate.setFloat(2, room.getPricePerNight());
             pstUpdate.setInt(3, roomNumber);
@@ -80,25 +70,15 @@ public class RoomDAOImpl implements IRoomDAO {
     }
 
     @Override
-    public void updateRoomStatus(int roomNumber, boolean status) throws ApplicationException {
-        String findRoom = "select * from room where room_number = ?";
+    public void updateRoomStatus(int roomNumber, boolean status) throws DBException {
         String updateStatus = "update room set is_active = ? where room_number = ?";
-        ResultSet rs = null;
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pstFind = connection.prepareStatement(findRoom);
              PreparedStatement pstUpdate = connection.prepareStatement(updateStatus)) {
-            pstFind.setInt(1, roomNumber);
-            rs = pstFind.executeQuery();
-            if (!rs.next()) {
-                throw new ApplicationException("Room with number " + roomNumber + " does not exist.");
-            }
             pstUpdate.setBoolean(1, status);
             pstUpdate.setInt(2, roomNumber);
             pstUpdate.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
-        } catch (ApplicationException e) {
-            throw e;
         }
     }
 
@@ -138,6 +118,24 @@ public class RoomDAOImpl implements IRoomDAO {
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }
+    }
+
+    @Override
+    public boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException {
+        String sql = "SELECT capacity FROM rooms WHERE room_number = ?";
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql);) {
+            pst.setInt(1, roomNumber);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                int capacity = rs.getInt("capacity");
+                return numberOfGuests <= capacity;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("dao " + e.getMessage());
+            throw new DBException(e);
+        }
+        return false;
     }
 }
 

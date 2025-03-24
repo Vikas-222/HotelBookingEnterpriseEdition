@@ -5,6 +5,7 @@ import com.example.dao.IRoomDAO;
 import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.common.exception.ApplicationException;
+import com.example.service.RoomService;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -12,6 +13,7 @@ import java.util.TreeMap;
 public class RoomValidator {
 
     IRoomDAO iRoomDAO = new RoomDAOImpl();
+    RoomService roomService = new RoomService(iRoomDAO);
 
     /**
      * @param room
@@ -39,8 +41,8 @@ public class RoomValidator {
         if (!isValidRoomNumber(room.getRoomNumber())) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        if (!iRoomDAO.isRoomNumberExists(room.getRoomNumber())) {
-            System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
+        if (roomService.isRoomNumberExists(room.getRoomNumber())) {
+            System.out.println(roomService.isRoomNumberExists(room.getRoomNumber()));
             throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
         }
     }
@@ -63,10 +65,10 @@ public class RoomValidator {
             System.out.println("isValidRoomNumber");
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-//        if(!iRoomDAO.isRoomNumberExists(room.getRoomNumber())){
-//            System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
-//            throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
-//        }
+        if (roomService.isRoomNumberExists(room.getRoomNumber())) {
+            System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
+            throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
+        }
     }
 
     public static boolean isValidRoomNumber(int roomNumber) {
@@ -100,7 +102,7 @@ public class RoomValidator {
     }
 
     public static boolean isNullForUpdateRoomValues(RoomDTO roomDTO) {
-        if (String.valueOf(roomDTO.getRoomNumber()).isBlank() && String.valueOf(roomDTO.getIsActive()).isBlank())  {
+        if (String.valueOf(roomDTO.getRoomNumber()).isBlank() && String.valueOf(roomDTO.getIsActive()).isBlank()) {
             System.out.println("roomvalidation ");
             return false;
         }

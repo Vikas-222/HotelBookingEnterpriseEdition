@@ -53,6 +53,10 @@ public class UserService {
 
     public void updateUserDetails(UserDTO userDTO) throws ApplicationException {
         User user = UserMapper.ForUpdateDTOToEntity(userDTO);
+        boolean flag = iUserDAO.isUserExistByEmail(user.getEmail());
+        if(!flag){
+            throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
+        }
         iUserDAO.updateUserdetails(user);
     }
 }

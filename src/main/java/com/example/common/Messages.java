@@ -22,7 +22,7 @@ public class Messages {
         public static final String INVALID_EMAIL_LENGTH = "Email is too big! Please use another email";
         public static final String INVALID_NAME_LENGTH = "Name is too big! Please use short names";
         public static final String INVALID_PASSWORD_LENGTH = "Password is too big! Please use other password";
-        public static final String INVALID_DATABASE_CREDENTIALS = "Unable to connect database";
+        public static final String LOGIN_FIRST = "Please login first";
     }
 
     public static class RoomError{
@@ -31,6 +31,11 @@ public class Messages {
         public static final String INVALID_ROOM_PRICE = "Please enter valid room price";
         public static final String INVALID_ROOM_NUMBER = "Please enter valid room number";
         public static final String INVALID_VALUES = "Please enter valid details";
+    }
+
+    public static class BookingError{
+        public static final String BOOKING_NOT_FOUND = "Booking not found!";
+        public static final String INVALID_CAPACITY = "Please select one more room. Guest is higher than room capacity";
     }
 
 }

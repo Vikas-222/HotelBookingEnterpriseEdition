@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.common.Messages;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.RoomMapper;
@@ -27,13 +28,19 @@ public class RoomService {
         return iRoomDAO.isRoomNumberExists(roomNumber);
     }
 
-    public void updateRoomPrice(int roomNumber,RoomDTO roomDTO) throws DBException {
+    public void updateRoomPrice(int roomNumber,RoomDTO roomDTO) throws ApplicationException {
         Room room = RoomMapper.convertRoomDTOToRoom(roomDTO);
+        if(iRoomDAO.isRoomNumberExists(room.getRoomNumber())){
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+        }
         iRoomDAO.updateRoomPrice(roomNumber,room);
     }
 
     public void updateRoomStatus(RoomDTO roomDTO) throws ApplicationException {
         Room room = RoomMapper.convertRoomDTOToUpdateRoom(roomDTO);
+        if(!iRoomDAO.isRoomNumberExists(roomDTO.getRoomNumber())){
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+        }
         iRoomDAO.updateRoomStatus(room.getRoomNumber(),room.getIsActive());
     }
 
@@ -43,5 +50,15 @@ public class RoomService {
 
     public void saveImagePathsToDatabase(List<String> imagePaths, int roomId) throws DBException {
         iRoomDAO.saveImagePathsToDatabase(imagePaths,roomId);
+    }
+
+    public boolean isCapacityValid(int roomNumber,int numberOfGuest) throws ApplicationException {
+        if(!iRoomDAO.isRoomNumberExists(roomNumber)){
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+        }
+        if(!iRoomDAO.isCapacityValid(roomNumber,numberOfGuest)){
+            throw new ApplicationException(Messages.BookingError.INVALID_CAPACITY);
+        }
+        return iRoomDAO.isCapacityValid(roomNumber,numberOfGuest);
     }
 }

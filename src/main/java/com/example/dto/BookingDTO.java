@@ -1,4 +1,4 @@
-package com.example.model;
+package com.example.dto;
 
 import com.example.common.enums.BookingStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Booking {
+public class BookingDTO {
 
     private int bookingId;
     private int userId;
@@ -19,12 +19,10 @@ public class Booking {
     private Date cancellationDate;
     private float refundAmount;
     private int numberOfGuests;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
 
-    public Booking(){}
+    public BookingDTO(){}
 
-    private Booking(Builder builder) {
+    private BookingDTO(Builder builder) {
         this.bookingId = builder.bookingId;
         this.userId = builder.userId;
         this.roomNumber = builder.roomNumber;
@@ -35,8 +33,6 @@ public class Booking {
         this.cancellationDate = builder.cancellationDate;
         this.refundAmount = builder.refundAmount;
         this.numberOfGuests = builder.numberOfGuests;
-        this.created_at = builder.created_at;
-        this.updated_at = builder.updated_at;
     }
 
     public int getBookingId() {
@@ -79,14 +75,6 @@ public class Booking {
         return numberOfGuests;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
-    }
-
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
-    }
-
     public static class Builder {
         private int bookingId;
         private int userId;
@@ -98,8 +86,6 @@ public class Booking {
         private Date cancellationDate;
         private float refundAmount;
         private int numberOfGuests;
-        private LocalDateTime created_at;
-        private LocalDateTime updated_at;
 
         public Builder setBookingId(int bookingId) {
             this.bookingId = bookingId;
@@ -151,18 +137,8 @@ public class Booking {
             return this;
         }
 
-        public Builder setCreated_at(LocalDateTime created_at) {
-            this.created_at = created_at;
-            return this;
-        }
-
-        public Builder setUpdated_at(LocalDateTime updated_at) {
-            this.updated_at = updated_at;
-            return this;
-        }
-
-        public Booking build() {
-            return new Booking(this);
+        public BookingDTO build() {
+            return new BookingDTO(this);
         }
     }
 
@@ -176,8 +152,6 @@ public class Booking {
                 ", totalAmount=" + totalAmount +
                 ", bookingStatus=" + bookingStatus +
                 ", cancellationDate=" + cancellationDate +
-                ", refundAmount=" + refundAmount +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at;
+                ", refundAmount=" + refundAmount;
     }
 }

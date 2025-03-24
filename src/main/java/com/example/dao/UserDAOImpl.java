@@ -5,6 +5,7 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.config.DbConnect;
 import com.example.model.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,9 +57,8 @@ public class UserDAOImpl implements IUserDAO {
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
-        }
-        finally {
-            if(rs != null){
+        } finally {
+            if (rs != null) {
                 try {
                     rs.close();
                 } catch (SQLException e) {
@@ -123,27 +123,18 @@ public class UserDAOImpl implements IUserDAO {
     }
 
     @Override
-    public void updateUserdetails(User user) throws ApplicationException {
-        String find = "Select user_id from user where user_id = ?";
+    public void updateUserdetails(User user) throws DBException {
         String updateQuery = "update user set last_name = ?, contact = ?, gender = ? where user_id = ?";
         ResultSet rs = null;
-        try(Connection connection = DbConnect.instance.getConnection();
-        PreparedStatement pst = connection.prepareStatement(find);
-        PreparedStatement pstUpdate = connection.prepareStatement(updateQuery);) {
-            pst.setInt(1,user.getUserId());
-            rs = pst.executeQuery();
-            if(!rs.next()){
-                throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
-            }
-            pstUpdate.setString(1,user.getLastName());
-            pstUpdate.setString(2,user.getContactNumber());
-            pstUpdate.setString(3,user.getGender());
-            pstUpdate.setInt(4,user.getUserId());
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pstUpdate = connection.prepareStatement(updateQuery);) {
+            pstUpdate.setString(1, user.getLastName());
+            pstUpdate.setString(2, user.getContactNumber());
+            pstUpdate.setString(3, user.getGender());
+            pstUpdate.setInt(4, user.getUserId());
             pstUpdate.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
-        } catch (ApplicationException e) {
-            throw e;
         }
     }
 }

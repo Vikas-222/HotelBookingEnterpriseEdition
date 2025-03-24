@@ -35,10 +35,4 @@ public class DatabaseController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doGet(req, resp);
     }
-
-    private void sendResponse(HttpServletResponse response, String message, Object data, int statusCode) throws IOException {
-        response.setStatus(statusCode);
-        Response apiResponse = new Response(message, data);
-        response.getWriter().write(CustomObjectMapper.toString(apiResponse));
-    }
 }

@@ -9,8 +9,12 @@ import java.util.stream.Collectors;
 public class RoomMapper {
 
     public static Room convertRoomDTOToRoom(RoomDTO roomDTO) {
-        return new Room.Builder().setRoomNumber(roomDTO.getRoomNumber()).setRoomType(roomDTO.getRoomType()).setCapacity(roomDTO.getCapacity())
-                .setPricePerNight(roomDTO.getPricePerNight()).build();
+        return new Room.Builder()
+                .setRoomNumber(roomDTO.getRoomNumber())
+                .setRoomType(roomDTO.getRoomType())
+                .setCapacity(roomDTO.getCapacity())
+                .setPricePerNight(roomDTO.getPricePerNight())
+                .build();
     }
 
     public static List<RoomDTO> convertRoomListToRoomDTOList(List<Room> list) {
@@ -25,7 +29,10 @@ public class RoomMapper {
     }
 
     public static Room convertRoomDTOToUpdateRoom(RoomDTO roomDTO) {
-        return new Room.Builder().setRoomNumber(roomDTO.getRoomNumber()).setActive(roomDTO.getIsActive()).build();
+        return new Room.Builder()
+                .setRoomNumber(roomDTO.getRoomNumber())
+                .setActive(roomDTO.getIsActive())
+                .build();
     }
 
 }

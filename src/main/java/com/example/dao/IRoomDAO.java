@@ -9,9 +9,16 @@ import java.util.List;
 public interface IRoomDAO {
 
     int addRoom(Room room) throws DBException;
+
     boolean isRoomNumberExists(int roomNumber) throws DBException;
-    void updateRoomPrice(int roomNumber,Room room) throws DBException;
-    void updateRoomStatus(int roomNumber,boolean status) throws ApplicationException;
+
+    void updateRoomPrice(int roomNumber, Room room) throws DBException;
+
+    void updateRoomStatus(int roomNumber, boolean status) throws ApplicationException;
+
     List<Room> getAllRooms() throws DBException;
+
     void saveImagePathsToDatabase(List<String> imagePaths, int roomId) throws DBException;
+
+    boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException;
 }

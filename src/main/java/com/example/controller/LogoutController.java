@@ -22,19 +22,22 @@ public class LogoutController extends HttpServlet {
             HttpSession session = request.getSession(false);
             if (session.getAttribute("user") != null) {
                 session.invalidate();
-                sendResponse(response, Messages.LOGOUT_SUCCESSFUL, null, 200);
+                sendResponse(response, Messages.LOGOUT_SUCCESSFUL,null, null, 200);
             } else {
-                sendResponse(response, Messages.Error.USER_NOT_FOUND, null, 400);
+                sendResponse(response, Messages.Error.USER_NOT_FOUND,null, null, 400);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            sendResponse(response, Messages.Error.FAILED, null, 500);
+            sendResponse(response, Messages.Error.FAILED, ex.getMessage(), null, 500);
         }
     }
 
-    private void sendResponse(HttpServletResponse response, String message, Object data, int statusCode) throws IOException {
+    private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {
         response.setStatus(statusCode);
-        Response apiResponse = new Response(message, data);
+        Response apiResponse = new Response();
+        apiResponse.setMessage(message);
+        apiResponse.setTechnicalMessage(technicalMessage);
+        apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

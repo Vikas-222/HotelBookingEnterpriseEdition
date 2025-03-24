@@ -45,13 +45,16 @@ public class UpdateRoomStatusController extends HttpServlet {
             sendResponse(response, e.getMessage(), null, null, 400);
         } catch (Exception e) {
             e.printStackTrace();
-            sendResponse(response,e.getMessage(),null,null,500);
+            sendResponse(response,Messages.Error.FAILED, e.getMessage(),null,500);
         }
     }
 
     private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {
         response.setStatus(statusCode);
-        Response apiResponse = new Response(message, technicalMessage, data);
+        Response apiResponse = new Response();
+        apiResponse.setMessage(message);
+        apiResponse.setTechnicalMessage(technicalMessage);
+        apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

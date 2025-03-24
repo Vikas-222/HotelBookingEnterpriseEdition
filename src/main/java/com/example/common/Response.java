@@ -9,25 +9,6 @@ public class Response {
     private String TechnicalMessage;
     private Object data;
 
-    public Response(String message, Object data) {
-        this.message = message;
-        this.data = data;
-    }
-
-    public Response(String message, String technicalMessage, Object data) {
-        this.message = message;
-        TechnicalMessage = technicalMessage;
-        this.data = data;
-    }
-
-    public Response(Object data) {
-        this.data = data;
-    }
-
-    public Response(String message) {
-        this.message = message;
-    }
-
     public String getMessage() {
         return message;
     }

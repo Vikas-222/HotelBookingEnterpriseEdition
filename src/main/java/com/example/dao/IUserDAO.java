@@ -18,5 +18,5 @@ public interface IUserDAO {
 
     List<User> getAllUser() throws DBException;
 
-    void updateUserdetails(User user) throws ApplicationException;
+    void updateUserdetails(User user) throws DBException;
 }

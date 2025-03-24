@@ -4,6 +4,7 @@ import com.example.common.AppConstant;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
+import com.example.common.utils.SessionValidator;
 import com.example.dto.UserDTO;
 import com.example.common.exception.ApplicationException;
 import jakarta.servlet.*;
@@ -16,17 +17,11 @@ public class FetchLoggedUserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
         try {
-            HttpSession session = request.getSession(false);
-            if (session == null) {
-                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
-            }
-            UserDTO sessionUser = (UserDTO) session.getAttribute("user");
-            sendResponse(response, null, sessionUser, 200);
-
+            UserDTO userDTO = SessionValidator.checkSession(request);
+            sendResponse(response, null,null, userDTO, 200);
         } catch (ApplicationException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
-            sendResponse(response, e.getMessage(), null, 500);
+            sendResponse(response, e.getMessage(),null, null, 500);
         }
     }
 
@@ -35,9 +30,12 @@ public class FetchLoggedUserController extends HttpServlet {
 
     }
 
-    private void sendResponse(HttpServletResponse response, String message, Object data, int statusCode) throws IOException {
+    private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {
         response.setStatus(statusCode);
-        Response apiResponse = new Response(message, data);
+        Response apiResponse = new Response();
+        apiResponse.setMessage(message);
+        apiResponse.setTechnicalMessage(technicalMessage);
+        apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

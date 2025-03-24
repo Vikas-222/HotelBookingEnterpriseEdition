@@ -6,6 +6,7 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
+import com.example.common.utils.SessionValidator;
 import com.example.dao.IRoomDAO;
 import com.example.dao.IUserDAO;
 import com.example.dao.RoomDAOImpl;
@@ -34,10 +35,7 @@ public class UpdateUserController extends HttpServlet {
         UserService userService = new UserService(iUserDAO);
         HttpSession session = request.getSession(false);
         try {
-            if (session == null) {
-                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
-            }
-            UserDTO user =(UserDTO) session.getAttribute("user");
+            UserDTO user = SessionValidator.checkSession(request);
             UserDTO.Builder userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.Builder.class);
             userDTO.setUserId(user.getUserId());
             userService.updateUserDetails(userDTO.build());
@@ -52,7 +50,10 @@ public class UpdateUserController extends HttpServlet {
 
     private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {
         response.setStatus(statusCode);
-        Response apiResponse = new Response(message, technicalMessage, data);
+        Response apiResponse = new Response();
+        apiResponse.setMessage(message);
+        apiResponse.setTechnicalMessage(technicalMessage);
+        apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

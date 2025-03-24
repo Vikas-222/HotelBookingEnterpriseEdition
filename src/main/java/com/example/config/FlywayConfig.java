@@ -9,7 +9,6 @@ public class FlywayConfig implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Driver Loaded");
             Flyway flyway = Flyway.configure()
                     .dataSource("jdbc:mysql://localhost:3306/hotel_db",
                             "root", "password123#")
@@ -19,13 +18,10 @@ public class FlywayConfig implements ServletContextListener {
                     .load();
             flyway.baseline();
             flyway.migrate();
-            System.out.println("success");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            System.out.println("class not found "+e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("flyway exception "+e.getMessage());
         }
     }
 }

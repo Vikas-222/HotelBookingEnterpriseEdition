@@ -1,6 +1,5 @@
 package com.example.config;
 
-import com.example.common.Messages;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import org.flywaydb.core.Flyway;

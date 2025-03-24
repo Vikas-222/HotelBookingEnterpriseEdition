@@ -133,7 +133,6 @@ public class UserDAOImpl implements IUserDAO {
             pst.setInt(1,user.getUserId());
             rs = pst.executeQuery();
             if(!rs.next()){
-                System.out.println(rs.next());
                 throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
             }
             pstUpdate.setString(1,user.getLastName());

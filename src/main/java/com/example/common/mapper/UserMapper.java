@@ -31,6 +31,7 @@ public class UserMapper {
 
     public static User ForUpdateDTOToEntity(UserDTO user) {
         return new User.UserBuilder()
+                .setUserId(user.getUserId())
                 .setLastName(user.getLastName())
                 .setContactNumber(user.getContactNumber())
                 .setGender(user.getGender())

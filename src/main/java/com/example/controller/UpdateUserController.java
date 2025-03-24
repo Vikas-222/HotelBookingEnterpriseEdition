@@ -37,9 +37,10 @@ public class UpdateUserController extends HttpServlet {
             if (session == null) {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-//            UserDTO userdto = (UserDTO) session.getAttribute("user");
-            UserDTO userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
-            userService.updateUserDetails(userDTO);
+            UserDTO user =(UserDTO) session.getAttribute("user");
+            UserDTO.Builder userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.Builder.class);
+            userDTO.setUserId(user.getUserId());
+            userService.updateUserDetails(userDTO.build());
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);

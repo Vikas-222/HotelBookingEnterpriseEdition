@@ -21,6 +21,10 @@ public class BookingService {
         this.roomService = roomService;
     }
 
+    public BookingService(IBookingDAO iBookingDAO) {
+        this.iBookingDAO = iBookingDAO;
+    }
+
     public boolean isValidBookingId(int id) throws ApplicationException {
         if (!iBookingDAO.isValidBookingId(id)) {
             throw new ApplicationException(Messages.BookingError.BOOKING_NOT_FOUND);

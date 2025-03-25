@@ -13,7 +13,7 @@ public class BookingMapper {
     public static Booking convertBookingDTOToEntity(BookingDTO bookingDTO){
         return new Booking.Builder()
                 .setBookingId(bookingDTO.getBookingId())
-                .setUserId(bookingDTO.getUserId())
+//                .setUserId(bookingDTO.getUserId())
                 .setRoomNumber(bookingDTO.getRoomNumber())
                 .setCheckInTime(bookingDTO.getCheckInTime())
                 .setCheckOutTime(bookingDTO.getCheckOutTime())

@@ -1,0 +1,1 @@
+alter table booking modify( booking_status Enum('CONFIRMED','CANCELLATION','COMPLETED') default 'CONFIRMED' not null);

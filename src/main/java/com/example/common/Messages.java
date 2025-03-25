@@ -7,6 +7,7 @@ public class Messages {
     public static final String LOGOUT_SUCCESSFUL = "Logout successful";
     public static final String ROOM_ADDED = "Room added successfully";
     public static final String ROOM_UPDATED = "Room updated successfully";
+    public static final String BOOKING_SUCCESS = "Booking successfully";
 
     public static class Error {
         public static final String ALREADY_EXISTS = "User already exists";
@@ -36,6 +37,7 @@ public class Messages {
     public static class BookingError{
         public static final String BOOKING_NOT_FOUND = "Booking not found!";
         public static final String INVALID_CAPACITY = "Please select one more room. Guest is higher than room capacity";
+        public static final String INVALID_DATE = "Please select correct date";
     }
 
 }

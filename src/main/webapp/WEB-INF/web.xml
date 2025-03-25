@@ -61,16 +61,6 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>HomePageController</servlet-name>
-        <servlet-class>com.example.controller.HomePageController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>HomePageController</servlet-name>
-        <url-pattern>/home</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>LogoutController</servlet-name>
         <servlet-class>com.example.controller.LogoutController</servlet-class>
     </servlet>
@@ -118,6 +108,10 @@
             <max-request-size>1000000</max-request-size>
             <file-size-threshold>1000000</file-size-threshold>
         </multipart-config>
+
+<!--        @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB threshold before writing to disk-->
+<!--        maxFileSize = 1024 * 1024 * 10, // 10MB max file size-->
+<!--        maxRequestSize = 1024 * 1024 * 15) // 15MB max request size-->
     </servlet>
 
     <servlet-mapping>

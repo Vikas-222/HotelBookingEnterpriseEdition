@@ -1,8 +1,6 @@
 package com.example.controller;
 
 import com.example.common.Messages;
-import com.example.common.Response;
-import com.example.common.utils.CustomObjectMapper;
 import com.example.config.DbConnect;
 import com.example.common.exception.ApplicationException;
 import jakarta.servlet.ServletException;

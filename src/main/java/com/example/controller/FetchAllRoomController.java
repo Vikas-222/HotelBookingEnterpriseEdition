@@ -8,14 +8,11 @@ import com.example.common.utils.CustomObjectMapper;
 import com.example.dao.IRoomDAO;
 import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
-import com.example.dto.UserDTO;
-import com.example.model.User;
 import com.example.service.RoomService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +40,10 @@ public class FetchAllRoomController extends HttpServlet {
 
     private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {
         response.setStatus(statusCode);
-        Response apiResponse = new Response(message, technicalMessage, data);
+        Response apiResponse = new Response();
+        apiResponse.setMessage(message);
+        apiResponse.setTechnicalMessage(technicalMessage);
+        apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 }

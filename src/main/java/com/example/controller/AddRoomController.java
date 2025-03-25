@@ -11,11 +11,12 @@ import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.service.RoomService;
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-
+@WebServlet(name = "AddRoomController", value = "/addRoom")
 public class AddRoomController extends HttpServlet {
 
     @Override

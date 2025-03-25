@@ -13,6 +13,7 @@ import com.example.service.UserService;
 import com.example.validation.UserValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+@WebServlet(name = "LoginController", value = "/login")
 public class LoginController extends HttpServlet {
 
     private final IUserDAO iUserDAO = new UserDAOImpl();

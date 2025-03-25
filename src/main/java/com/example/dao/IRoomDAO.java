@@ -21,4 +21,6 @@ public interface IRoomDAO {
     void saveImagePathsToDatabase(List<String> imagePaths, int roomId) throws DBException;
 
     boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException;
+
+    float getRoomPrice(int roomNumber) throws DBException;
 }

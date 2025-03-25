@@ -14,11 +14,11 @@ import java.util.List;
 public class BookingService {
 
     IBookingDAO iBookingDAO;
-    IRoomDAO iRoomDAO;
+    RoomService roomService;
 
-    public BookingService(IBookingDAO iBookingDAO,IRoomDAO iRoomDAO) {
+    public BookingService(IBookingDAO iBookingDAO,RoomService roomService) {
         this.iBookingDAO = iBookingDAO;
-        this.iRoomDAO = iRoomDAO;
+        this.roomService = roomService;
     }
 
     public boolean isValidBookingId(int id) throws ApplicationException {
@@ -28,9 +28,10 @@ public class BookingService {
         return iBookingDAO.isValidBookingId(id);
     }
 
-    public void addBooking(BookingDTO bookingdto) throws DBException {
+    public void addBooking(BookingDTO bookingdto) throws ApplicationException {
         Booking booking = BookingMapper.convertBookingDTOToEntity(bookingdto);
-        iRoomDAO.isCapacityValid(booking.getRoomNumber(),booking.getNumberOfGuests());
+        roomService.isRoomNumberExists(booking.getRoomNumber());
+        roomService.isCapacityValid(booking.getRoomNumber(),booking.getNumberOfGuests());
         iBookingDAO.addBooking(booking);
     }
 
@@ -56,6 +57,23 @@ public class BookingService {
         iBookingDAO.updateBookingStatus(id,status);
     }
 
-
+    /**
+     *
+     * @param bookingDTO
+     * @param id
+     * @return when booking record is going to save in database at that time totalAmount will be calculated. so it's pending
+     */
+    public BookingDTO setUserIdAndTotalAmount(BookingDTO bookingDTO, int id,int roomNumber) throws ApplicationException {
+        return new BookingDTO.Builder()
+                .setUserId(id)
+                .setRoomNumber(bookingDTO.getRoomNumber())
+                .setCheckInTime(bookingDTO.getCheckInTime())
+                .setCheckOutTime(bookingDTO.getCheckOutTime())
+                .setTotalAmount(roomService.getRoomPrice(roomNumber))
+                .setBookingStatus(bookingDTO.getBookingStatus())
+                .setCancellationDate(bookingDTO.getCancellationDate())
+                .setRefundAmount(bookingDTO.getRefundAmount())
+                .setNumberOfGuests(bookingDTO.getNumberOfGuests()).build();
+    }
 
 }

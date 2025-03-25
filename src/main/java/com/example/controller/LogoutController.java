@@ -5,10 +5,12 @@ import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
+@WebServlet(name = "LogoutController", value = "/logout")
 public class LogoutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -22,9 +24,9 @@ public class LogoutController extends HttpServlet {
             HttpSession session = request.getSession(false);
             if (session.getAttribute("user") != null) {
                 session.invalidate();
-                sendResponse(response, Messages.LOGOUT_SUCCESSFUL,null, null, 200);
+                sendResponse(response, Messages.LOGOUT_SUCCESSFUL, null, null, 200);
             } else {
-                sendResponse(response, Messages.Error.USER_NOT_FOUND,null, null, 400);
+                sendResponse(response, Messages.Error.USER_NOT_FOUND, null, null, 400);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

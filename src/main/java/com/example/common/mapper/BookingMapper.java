@@ -1,19 +1,16 @@
 package com.example.common.mapper;
 
-
 import com.example.dto.BookingDTO;
 import com.example.model.Booking;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookingMapper {
 
-    public static Booking convertBookingDTOToEntity(BookingDTO bookingDTO){
+    public static Booking convertBookingDTOToEntity(BookingDTO bookingDTO) {
         return new Booking.Builder()
                 .setBookingId(bookingDTO.getBookingId())
-//                .setUserId(bookingDTO.getUserId())
+                .setUserId(bookingDTO.getUserId())
                 .setRoomNumber(bookingDTO.getRoomNumber())
                 .setCheckInTime(bookingDTO.getCheckInTime())
                 .setCheckOutTime(bookingDTO.getCheckOutTime())
@@ -21,10 +18,11 @@ public class BookingMapper {
                 .setBookingStatus(bookingDTO.getBookingStatus())
                 .setCancellationDate(bookingDTO.getCancellationDate())
                 .setRefundAmount(bookingDTO.getRefundAmount())
+                .setNumberOfGuests(bookingDTO.getNumberOfGuests())
                 .build();
     }
 
-    public static BookingDTO convertEntityToBookingDTO(Booking booking){
+    public static BookingDTO convertEntityToBookingDTO(Booking booking) {
         return new BookingDTO.Builder()
                 .setBookingId(booking.getBookingId())
                 .setUserId(booking.getUserId())
@@ -35,10 +33,11 @@ public class BookingMapper {
                 .setBookingStatus(booking.getBookingStatus())
                 .setCancellationDate(booking.getCancellationDate())
                 .setRefundAmount(booking.getRefundAmount())
+                .setNumberOfGuests(booking.getNumberOfGuests())
                 .build();
     }
 
-    public static List<BookingDTO> convertEntityListToBookingDTOList(List<Booking> list){
+    public static List<BookingDTO> convertEntityListToBookingDTOList(List<Booking> list) {
         return list.stream().map(bookingDTO -> new BookingDTO.Builder()
                 .setBookingId(bookingDTO.getBookingId())
                 .setUserId(bookingDTO.getUserId())
@@ -49,6 +48,7 @@ public class BookingMapper {
                 .setCancellationDate(bookingDTO.getCancellationDate())
                 .setTotalAmount(bookingDTO.getTotalAmount())
                 .setRefundAmount(bookingDTO.getRefundAmount())
+                .setNumberOfGuests(bookingDTO.getNumberOfGuests())
                 .build()).collect(Collectors.toList());
     }
 }

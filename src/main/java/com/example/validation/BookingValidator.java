@@ -23,7 +23,6 @@ public class BookingValidator {
         return  bookingDTO.getCheckInTime() == null ||
                 bookingDTO.getCheckOutTime() == null ||
                 String.valueOf(bookingDTO.getRoomNumber()) == null || bookingDTO.getRoomNumber() <= 0 ||
-                String.valueOf(bookingDTO.getUserId()) == null || bookingDTO.getUserId() <= 0 ||
                 String.valueOf(bookingDTO.getTotalAmount()) == null || bookingDTO.getTotalAmount() <= 0 ||
                 String.valueOf(bookingDTO.getNumberOfGuests()) == null || bookingDTO.getNumberOfGuests() <= 0;
     }

@@ -19,6 +19,7 @@ import java.util.List;
 @WebServlet(name = "AddRoomController", value = "/addRoom")
 public class AddRoomController extends HttpServlet {
 
+    private static final String IMAGE_UPLOAD_DIRECTORY = "D:\\Demo-Git\\HotelBookingEnterpriseEdition\\src\\main\\webapp\\Images\\RoomImages";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -30,18 +31,10 @@ public class AddRoomController extends HttpServlet {
         IRoomDAO iRoomDAO = new RoomDAOImpl();
         RoomService roomService = new RoomService(iRoomDAO);
         try {
-            // Step 1: Parse the request to get Room object and images
             RoomDTO room = ImageHandler.parseRoomFromRequest(request);
-
-            // Step 2: Handle image file upload and save images
             List<String> imagePaths = ImageHandler.handleImageUpload(request);
-
-            // Step 3: Save room to database
             int roomId = roomService.addRoom(room);
-
-            // Step 4: Save image paths to database
             roomService.saveImagePathsToDatabase(imagePaths, roomId);
-
             sendResponse(response, Messages.ROOM_ADDED, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();

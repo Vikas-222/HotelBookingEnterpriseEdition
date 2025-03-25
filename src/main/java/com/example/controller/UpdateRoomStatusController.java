@@ -12,14 +12,15 @@ import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.service.RoomService;
 import com.example.validation.RoomValidator;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+@WebServlet(name = "UpdateRoomStatusController", value = "/updateroomstatus")
 public class UpdateRoomStatusController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,7 +46,7 @@ public class UpdateRoomStatusController extends HttpServlet {
             sendResponse(response, e.getMessage(), null, null, 400);
         } catch (Exception e) {
             e.printStackTrace();
-            sendResponse(response,Messages.Error.FAILED, e.getMessage(),null,500);
+            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
         }
     }
 

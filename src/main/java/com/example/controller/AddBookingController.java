@@ -14,18 +14,22 @@ import com.example.dao.RoomDAOImpl;
 import com.example.dto.BookingDTO;
 import com.example.dto.UserDTO;
 import com.example.service.BookingService;
+import com.example.service.RoomService;
 import com.example.validation.BookingValidator;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+@WebServlet(name = "AddBookingController", value = "/addbooking")
 public class AddBookingController extends HttpServlet {
     IBookingDAO iBookingDAO = new BookingDAOImpl();
     IRoomDAO iRoomDAO = new RoomDAOImpl();
-    BookingService bookingService = new BookingService(iBookingDAO, iRoomDAO);
+    RoomService roomService = new RoomService(iRoomDAO);
+    BookingService bookingService = new BookingService(iBookingDAO, roomService);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +43,7 @@ public class AddBookingController extends HttpServlet {
             UserDTO userDTO = SessionValidator.checkSession(request);
             BookingDTO bookingDTO = CustomObjectMapper.toObject(request.getReader(), BookingDTO.class);
             BookingValidator.validateBooking(bookingDTO);
-            BookingDTO bookingDTO1 = setUserId(bookingDTO, userDTO.getUserId());
+            BookingDTO bookingDTO1 = bookingService.setUserIdAndTotalAmount(bookingDTO, userDTO.getUserId(), bookingDTO.getRoomNumber());
             bookingService.addBooking(bookingDTO1);
             sendResponse(response, Messages.BOOKING_SUCCESS, null, null, 200);
         } catch (DBException e) {
@@ -49,18 +53,6 @@ public class AddBookingController extends HttpServlet {
             e.printStackTrace();
             sendResponse(response, e.getMessage(), null, null, 400);
         }
-    }
-
-    private BookingDTO setUserId(BookingDTO bookingDTO, int id) {
-        return new BookingDTO.Builder()
-                .setUserId(id)
-                .setRoomNumber(bookingDTO.getRoomNumber())
-                .setCheckInTime(bookingDTO.getCheckInTime())
-                .setCheckOutTime(bookingDTO.getCheckOutTime())
-                .setTotalAmount(bookingDTO.getTotalAmount())
-                .setBookingStatus(bookingDTO.getBookingStatus())
-                .setCancellationDate(bookingDTO.getCancellationDate())
-                .setRefundAmount(bookingDTO.getRefundAmount()).build();
     }
 
     private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {

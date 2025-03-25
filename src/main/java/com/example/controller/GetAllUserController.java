@@ -12,11 +12,13 @@ import com.example.dao.UserDAOImpl;
 import com.example.dto.UserDTO;
 import com.example.service.UserService;
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.util.List;
 
+@WebServlet(name = "GetAllUserController", value = "/fetchalluser")
 public class GetAllUserController extends HttpServlet {
     IUserDAO userdao = new UserDAOImpl();
     UserService userService = new UserService(userdao);

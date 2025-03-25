@@ -8,10 +8,12 @@ import com.example.common.utils.SessionValidator;
 import com.example.dto.UserDTO;
 import com.example.common.exception.ApplicationException;
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
+@WebServlet(name = "FetchLoggedUserController", value = "/fetch")
 public class FetchLoggedUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

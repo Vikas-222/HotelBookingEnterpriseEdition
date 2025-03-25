@@ -15,6 +15,7 @@ public class FlywayConfig implements ServletContextListener {
                     .locations("classpath:db/migration")
                     .baselineOnMigrate(true)
                     .baselineVersion("1")
+                    .baselineDescription("flyway baseline")
                     .load();
             flyway.baseline();
             flyway.migrate();

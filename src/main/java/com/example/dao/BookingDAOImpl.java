@@ -12,7 +12,7 @@ public class BookingDAOImpl implements IBookingDAO {
 
     @Override
     public void addBooking(Booking booking) throws DBException {
-        String insert = "insert into booking user_id = ? room_number = ? check_in =? check_out = ? total_amount = ? booking_status = ?";
+        String insert = "insert into booking (user_id,room_number,check_in,check_out,total_amount,numberOfGuests) values (?,?,?,?,?,?)";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(insert);) {
             pst.setInt(1, booking.getUserId());
@@ -20,9 +20,10 @@ public class BookingDAOImpl implements IBookingDAO {
             pst.setTimestamp(3, Timestamp.valueOf(booking.getCheckInTime()));
             pst.setTimestamp(4, Timestamp.valueOf(booking.getCheckOutTime()));
             pst.setFloat(5, booking.getTotalAmount());
-            pst.setString(6, booking.getBookingStatus().toString());
+            pst.setInt(6, booking.getNumberOfGuests());
             pst.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("dao booking "+booking);
             System.out.println("dao " + e.getMessage());
             throw new DBException(e);
         }

@@ -23,8 +23,10 @@ public class RoomService {
         return iRoomDAO.addRoom(room);
     }
 
-    public boolean isRoomNumberExists(int roomNumber) throws DBException {
-        System.out.println(iRoomDAO.isRoomNumberExists(roomNumber));
+    public boolean isRoomNumberExists(int roomNumber) throws ApplicationException {
+        if(iRoomDAO.isRoomNumberExists(roomNumber) == false){
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+        }
         return iRoomDAO.isRoomNumberExists(roomNumber);
     }
 
@@ -60,5 +62,10 @@ public class RoomService {
             throw new ApplicationException(Messages.BookingError.INVALID_CAPACITY);
         }
         return iRoomDAO.isCapacityValid(roomNumber,numberOfGuest);
+    }
+
+    public float getRoomPrice(int roomNumber) throws ApplicationException {
+        isRoomNumberExists(roomNumber);
+        return iRoomDAO.getRoomPrice(roomNumber);
     }
 }

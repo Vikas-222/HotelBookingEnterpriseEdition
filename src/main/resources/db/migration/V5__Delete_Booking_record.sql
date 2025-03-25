@@ -1,0 +1,1 @@
+Delete from booking where booking_id != 0;

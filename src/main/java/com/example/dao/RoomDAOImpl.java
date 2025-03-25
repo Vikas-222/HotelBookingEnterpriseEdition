@@ -100,6 +100,14 @@ public class RoomDAOImpl implements IRoomDAO {
             return roomList;
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(Messages.Error.FAILED);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
         }
     }
 
@@ -122,7 +130,7 @@ public class RoomDAOImpl implements IRoomDAO {
 
     @Override
     public boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException {
-        String sql = "SELECT capacity FROM rooms WHERE room_number = ?";
+        String sql = "SELECT capacity FROM room WHERE room_number = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(sql);) {
             pst.setInt(1, roomNumber);
@@ -136,6 +144,47 @@ public class RoomDAOImpl implements IRoomDAO {
             throw new DBException(e);
         }
         return false;
+    }
+
+    @Override
+    public float getRoomPrice(int roomNumber) throws DBException {
+        String sql = "SELECT PRICE_PER_NIGHT FROM ROOM WHERE ROOM_NUMBER = ?";
+        ResultSet rs = null;
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql);) {
+            pst.setInt(1, roomNumber);
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getFloat("price_per_night");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public String getExistingImagePath(int roomNumber) {
+        String sql = "SELECT image_path FROM room WHERE room_number = ?";
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, roomNumber);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString("image_path");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 

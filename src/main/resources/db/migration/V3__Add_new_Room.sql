@@ -1,0 +1,1 @@
+insert into room(room_number,room_type,capacity,price_per_night) values (101,"SINGLEBED",2,1000);

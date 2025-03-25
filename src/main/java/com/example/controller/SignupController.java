@@ -12,9 +12,11 @@ import com.example.dto.UserDTO;
 import com.example.service.UserService;
 import com.example.validation.UserValidator;
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
+@WebServlet(name = "SignupController", value = "/signup")
 public class SignupController extends HttpServlet {
 
     private final IUserDAO iUserDAO = new UserDAOImpl();

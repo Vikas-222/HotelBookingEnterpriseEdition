@@ -12,7 +12,6 @@
         <listener-class>com.example.config.FlywayConfig</listener-class>
     </listener>
 
-
     <servlet>
         <servlet-name>DatabaseController</servlet-name>
         <servlet-class>com.example.controller.DatabaseController</servlet-class>
@@ -40,65 +39,7 @@
         <url-pattern>/database</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>LoginController</servlet-name>
-        <servlet-class>com.example.controller.LoginController</servlet-class>
-    </servlet>
 
-    <servlet-mapping>
-        <servlet-name>LoginController</servlet-name>
-        <url-pattern>/login</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>SignupController</servlet-name>
-        <servlet-class>com.example.controller.SignupController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>SignupController</servlet-name>
-        <url-pattern>/signup</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>LogoutController</servlet-name>
-        <servlet-class>com.example.controller.LogoutController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>LogoutController</servlet-name>
-        <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>GetAllUserController</servlet-name>
-        <servlet-class>com.example.controller.GetAllUserController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>GetAllUserController</servlet-name>
-        <url-pattern>/getalluser</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>UpdateUserController</servlet-name>
-        <servlet-class>com.example.controller.UpdateUserController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>UpdateUserController</servlet-name>
-        <url-pattern>/updateuser</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>GetOneUserController</servlet-name>
-        <servlet-class>com.example.controller.FetchLoggedUserController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>GetOneUserController</servlet-name>
-        <url-pattern>/fetch</url-pattern>
-    </servlet-mapping>
 
     <servlet>
         <servlet-name>AddRoomController</servlet-name>
@@ -119,22 +60,6 @@
         <url-pattern>/addRoom</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>UpdateRoomStatusController</servlet-name>
-        <servlet-class>com.example.controller.UpdateRoomStatusController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UpdateRoomStatusController</servlet-name>
-        <url-pattern>/updateroom</url-pattern>
-    </servlet-mapping>
 
-    <servlet>
-        <servlet-name>FetchAllRoomController</servlet-name>
-        <servlet-class>com.example.controller.FetchAllRoomController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>FetchAllRoomController</servlet-name>
-        <url-pattern>/fetchallroom</url-pattern>
-    </servlet-mapping>
 
 </web-app>

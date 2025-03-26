@@ -47,11 +47,7 @@ public class RoomService {
     }
 
     public List<RoomDTO> getAllRooms() throws DBException{
-        return RoomMapper.convertRoomListToRoomDTOList(iRoomDAO.getAllRooms());
-    }
-
-    public void saveImagePathsToDatabase(List<String> imagePaths, int roomId) throws DBException {
-        iRoomDAO.saveImagePathsToDatabase(imagePaths,roomId);
+        return iRoomDAO.getAllRoomWithImage();
     }
 
     public boolean isCapacityValid(int roomNumber,int numberOfGuest) throws ApplicationException {

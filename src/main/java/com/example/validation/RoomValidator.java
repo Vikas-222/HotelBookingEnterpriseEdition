@@ -65,7 +65,7 @@ public class RoomValidator {
             System.out.println("isValidRoomNumber");
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        if (roomService.isRoomNumberExists(room.getRoomNumber())) {
+        if (!roomService.isRoomNumberExists(room.getRoomNumber())) {
             System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
             throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
         }

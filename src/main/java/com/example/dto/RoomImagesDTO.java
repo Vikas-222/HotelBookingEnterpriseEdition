@@ -1,15 +1,9 @@
-package com.example.dao;
+package com.example.dto;
 
-public class RoomImages {
-
-    private int id;
-    private String imagePath;
-    private int roomId;
-
-    public RoomImages(String imagePath, int roomId) {
-        this.imagePath = imagePath;
-        this.roomId = roomId;
-    }
+public class RoomImagesDTO {
+        private int id;
+        private String imagePath;
+        private int roomId;
 
     public int getId() {
         return id;

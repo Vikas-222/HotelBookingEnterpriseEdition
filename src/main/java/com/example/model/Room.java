@@ -1,11 +1,8 @@
 package com.example.model;
 
 import com.example.common.enums.RoomType;
-import com.example.dao.RoomImages;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Room {
 
@@ -14,7 +11,6 @@ public class Room {
     private RoomType roomType;
     private int capacity;
     private float pricePerNight;
-    private List<RoomImages> roomImagesList;
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -28,7 +24,6 @@ public class Room {
         this.roomType = builder.roomType;
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
-        this.roomImagesList = builder.roomImagesList;
         this.active = builder.active;
     }
 
@@ -52,10 +47,6 @@ public class Room {
         return pricePerNight;
     }
 
-    public List<RoomImages> getRoomImagesList() {
-        return roomImagesList;
-    }
-
     public boolean getIsActive() {
         return active;
     }
@@ -74,7 +65,6 @@ public class Room {
         private RoomType roomType;
         private int capacity;
         private float pricePerNight;
-        private List<RoomImages> roomImagesList = new ArrayList<>();
         private boolean active;
 
         public Builder setRoomId(int roomId) {
@@ -102,11 +92,6 @@ public class Room {
             return this;
         }
 
-        public Builder setRoomImagesList(List<RoomImages> roomImagesList) {
-            this.roomImagesList = roomImagesList;
-            return this;
-        }
-
         public Builder setActive(boolean active) {
             this.active = active;
             return this;
@@ -124,7 +109,6 @@ public class Room {
                 ", roomType=" + roomType +
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
-                ", roomImagesList=" + roomImagesList +
                 ", isActive=" + active +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt;

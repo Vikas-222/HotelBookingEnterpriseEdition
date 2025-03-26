@@ -1,24 +1,18 @@
 package com.example.dto;
 
 import com.example.common.enums.RoomType;
-import com.example.dao.RoomImages;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-//@JsonInclude(JsonInclude.Include.NON_DEFAULT)
-@JsonDeserialize(builder = RoomDTO.Builder.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonDeserialize(builder = RoomDTO.Builder.class)
 public class RoomDTO {
     private int roomId;
     private int roomNumber;
     private RoomType roomType;
     private int capacity;
     private float pricePerNight;
-    private List<RoomImages> roomImagesList;
-    private boolean active;
+    private String imagePath;
+    private boolean isActive;
 
     public RoomDTO() {
     }
@@ -29,8 +23,8 @@ public class RoomDTO {
         this.roomType = builder.roomType;
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
-        this.roomImagesList = builder.roomImagesList;
-        this.active = builder.active;
+        this.imagePath = builder.imagePath;
+        this.isActive = builder.isActive;
     }
 
     public int getRoomId() {
@@ -53,23 +47,23 @@ public class RoomDTO {
         return pricePerNight;
     }
 
-    public List<RoomImages> getRoomImagesList() {
-        return roomImagesList;
+    public String getImagePath() {
+        return imagePath;
     }
 
     public boolean getIsActive() {
-        return active;
+        return isActive;
     }
 
-    @JsonPOJOBuilder(withPrefix = "set")
+    //    @JsonPOJOBuilder(withPrefix = "set")
     public static class Builder {
         private int roomId;
         private int roomNumber;
         private RoomType roomType;
         private int capacity;
         private float pricePerNight;
-        private List<RoomImages> roomImagesList = new ArrayList<>();
-        private boolean active;
+        private String imagePath;
+        private boolean isActive;
 
         public Builder setRoomId(int roomId) {
             this.roomId = roomId;
@@ -96,13 +90,13 @@ public class RoomDTO {
             return this;
         }
 
-        public Builder setRoomImagesList(List<RoomImages> roomImagesList) {
-            this.roomImagesList = roomImagesList;
+        public Builder setImagePath(String imagePath) {
+            this.imagePath = imagePath;
             return this;
         }
 
-        public Builder setActive(boolean active) {
-            this.active = active;
+        public Builder setIsActive(boolean isActive) {
+            this.isActive = isActive;
             return this;
         }
 
@@ -118,7 +112,7 @@ public class RoomDTO {
                 ", roomType=" + roomType +
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
-                ", roomImagesList=" + roomImagesList +
-                ", active=" + active;
+                ",imagePath=" + imagePath +
+                ", isActive=" + isActive;
     }
 }

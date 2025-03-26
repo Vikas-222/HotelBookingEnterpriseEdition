@@ -13,7 +13,6 @@ public class CustomObjectMapper {
         objectMapper.registerModule(new JavaTimeModule());
     }
 
-
     public static <T> T toObject(BufferedReader reader, Class<T> targetClass) throws IOException {
         return objectMapper.readValue(reader, targetClass);
     }

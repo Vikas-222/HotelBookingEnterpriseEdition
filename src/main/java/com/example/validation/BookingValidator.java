@@ -22,9 +22,9 @@ public class BookingValidator {
     public static boolean isNullCheckUserValues(BookingDTO bookingDTO) {
         return  bookingDTO.getCheckInTime() == null ||
                 bookingDTO.getCheckOutTime() == null ||
-                String.valueOf(bookingDTO.getRoomNumber()) == null || bookingDTO.getRoomNumber() <= 0 ||
-                String.valueOf(bookingDTO.getTotalAmount()) == null || bookingDTO.getTotalAmount() <= 0 ||
-                String.valueOf(bookingDTO.getNumberOfGuests()) == null || bookingDTO.getNumberOfGuests() <= 0;
+                String.valueOf(bookingDTO.getRoomNumber()).isBlank() || bookingDTO.getRoomNumber() <= 0 ||
+                String.valueOf(bookingDTO.getTotalAmount()).isBlank() || bookingDTO.getTotalAmount() <= 0 ||
+                String.valueOf(bookingDTO.getNumberOfGuests()).isBlank() || bookingDTO.getNumberOfGuests() <= 0;
     }
 
     public static boolean isDateValid(LocalDateTime from, LocalDateTime to) {

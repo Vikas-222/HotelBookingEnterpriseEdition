@@ -39,27 +39,4 @@
         <url-pattern>/database</url-pattern>
     </servlet-mapping>
 
-
-
-    <servlet>
-        <servlet-name>AddRoomController</servlet-name>
-        <servlet-class>com.example.controller.AddRoomController</servlet-class>
-        <multipart-config>
-            <max-file-size>1000000</max-file-size>
-            <max-request-size>1000000</max-request-size>
-            <file-size-threshold>1000000</file-size-threshold>
-        </multipart-config>
-
-<!--        @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB threshold before writing to disk-->
-<!--        maxFileSize = 1024 * 1024 * 10, // 10MB max file size-->
-<!--        maxRequestSize = 1024 * 1024 * 15) // 15MB max request size-->
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>AddRoomController</servlet-name>
-        <url-pattern>/addRoom</url-pattern>
-    </servlet-mapping>
-
-
-
 </web-app>

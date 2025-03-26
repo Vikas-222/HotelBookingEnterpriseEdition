@@ -6,6 +6,7 @@ public class Messages {
     public static final String LOGIN_SUCCESSFUL = "Login successful";
     public static final String LOGOUT_SUCCESSFUL = "Logout successful";
     public static final String ROOM_ADDED = "Room added successfully";
+    public static final String IMAGE_UPLOADED = "Image uploaded successfully";
     public static final String ROOM_UPDATED = "Room updated successfully";
     public static final String BOOKING_SUCCESS = "Booking successfully";
 
@@ -32,6 +33,9 @@ public class Messages {
         public static final String INVALID_ROOM_PRICE = "Please enter valid room price";
         public static final String INVALID_ROOM_NUMBER = "Please enter valid room number";
         public static final String INVALID_VALUES = "Please enter valid details";
+        public static final String INVALID_ROOM_ID = "Invalid Room Id";
+        public static final String INVALID_Image_Path = "Invalid Image path";
+        public static final String INVALID_IMAGE = "Image is required";
     }
 
     public static class BookingError{

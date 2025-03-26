@@ -1,0 +1,1 @@
+UPDATE user set roles = 'Admin' where first_name = 'Admin';

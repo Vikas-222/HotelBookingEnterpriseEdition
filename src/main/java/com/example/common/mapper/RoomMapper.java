@@ -24,7 +24,7 @@ public class RoomMapper {
                         .setRoomType(room.getRoomType())
                         .setPricePerNight(room.getPricePerNight())
                         .setCapacity(room.getCapacity())
-                        .setActive(room.getIsActive()).build())
+                        .setIsActive(room.getIsActive()).build())
                 .collect(Collectors.toList());
     }
 

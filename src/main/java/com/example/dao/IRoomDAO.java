@@ -6,6 +6,7 @@ import com.example.dto.RoomDTO;
 import com.example.model.Room;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IRoomDAO {
 
@@ -17,13 +18,11 @@ public interface IRoomDAO {
 
     void updateRoomStatus(int roomNumber, boolean status) throws ApplicationException;
 
-//    List<Room> getAllRooms() throws DBException;
-
     boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException;
 
     float getRoomPrice(int roomNumber) throws DBException;
 
     boolean isValidRoomId(int roomId) throws DBException;
 
-    List<RoomDTO> getAllRoomWithImage() throws DBException;
+    Map<Integer,RoomDTO> getAllRoomWithImage() throws DBException;
 }

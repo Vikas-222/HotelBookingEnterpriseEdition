@@ -3,19 +3,25 @@ package com.example.dto;
 import com.example.common.enums.RoomType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
-//@JsonDeserialize(builder = RoomDTO.Builder.class)
 public class RoomDTO {
     private int roomId;
     private int roomNumber;
     private RoomType roomType;
     private int capacity;
     private float pricePerNight;
-    private String imagePath;
+    private List<String> imagePath;
     private boolean isActive;
 
     public RoomDTO() {
     }
+
+//    public void setRoomNumber(int roomNumber) {
+//        this.roomNumber = roomNumber;
+//    }
 
     private RoomDTO(Builder builder) {
         this.roomId = builder.roomId;
@@ -47,7 +53,7 @@ public class RoomDTO {
         return pricePerNight;
     }
 
-    public String getImagePath() {
+    public List<String> getImagePath() {
         return imagePath;
     }
 
@@ -55,14 +61,13 @@ public class RoomDTO {
         return isActive;
     }
 
-    //    @JsonPOJOBuilder(withPrefix = "set")
     public static class Builder {
         private int roomId;
         private int roomNumber;
         private RoomType roomType;
         private int capacity;
         private float pricePerNight;
-        private String imagePath;
+        private List<String> imagePath = new ArrayList<>();
         private boolean isActive;
 
         public Builder setRoomId(int roomId) {
@@ -90,7 +95,7 @@ public class RoomDTO {
             return this;
         }
 
-        public Builder setImagePath(String imagePath) {
+        public Builder setImagePath(List<String> imagePath) {
             this.imagePath = imagePath;
             return this;
         }

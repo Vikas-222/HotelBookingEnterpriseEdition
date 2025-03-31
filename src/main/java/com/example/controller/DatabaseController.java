@@ -4,11 +4,19 @@ import com.example.common.Messages;
 import com.example.config.DbConnect;
 import com.example.common.exception.ApplicationException;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebInitParam;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@WebServlet(name = "DatabaseController", value = "/database", loadOnStartup = 1, initParams = {
+        @WebInitParam(name = "driver", value = "com.mysql.cj.jdbc.Driver"),
+        @WebInitParam(name = "db_url", value = "jdbc:mysql://localhost:3306/hotel_db"),
+        @WebInitParam(name = "username", value = "root"),
+        @WebInitParam(name = "password", value = "password123#")
+})
 public class DatabaseController extends HttpServlet {
 
     @Override

@@ -19,4 +19,8 @@ public interface IUserDAO {
     List<User> getAllUser() throws DBException;
 
     void updateUserdetails(User user) throws DBException;
+
+    void updateUserActiveStatus(int userId, boolean status) throws DBException;
+
+    boolean isValidUserId(int Id) throws DBException;
 }

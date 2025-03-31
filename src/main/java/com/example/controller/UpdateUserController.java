@@ -16,27 +16,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
 @WebServlet(name = "UpdateUserController", value = "/updateuser")
 public class UpdateUserController extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
         IUserDAO iUserDAO = new UserDAOImpl();
         UserService userService = new UserService(iUserDAO);
         try {
             UserDTO user = SessionValidator.checkSession(request);
-            UserDTO.Builder userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.Builder.class);
+            UserDTO.Builder userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.Builder .class);
             userDTO.setUserId(user.getUserId());
+            userDTO.setEmail(user.getEmail());
             userService.updateUserDetails(userDTO.build());
+            sendResponse(response,null,null,null,200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);

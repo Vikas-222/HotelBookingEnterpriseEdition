@@ -13,6 +13,7 @@ public class Messages {
     public static class Error {
         public static final String ALREADY_EXISTS = "User already exists";
         public static final String INVALID_VALUES = "Please enter all the details";
+        public static final String INVALID_USERID = "Please enter valid UserId";
         public static final String INVALID_EMAIL = "Please enter valid email address";
         public static final String FAILED = "OOPS! Something went wrong! Please try again after some time";
         public static final String WEAK_PASSWORD = "Please enter strong password";
@@ -42,6 +43,11 @@ public class Messages {
         public static final String BOOKING_NOT_FOUND = "Booking not found!";
         public static final String INVALID_CAPACITY = "Please select one more room. Guest is higher than room capacity";
         public static final String INVALID_DATE = "Please select correct date";
+    }
+
+    public static class ReviewError{
+        public static final String FEEDBACK_EMPTY = "Please give us your valuable feedback";
+        public static final String RATING_EMPTY = "Rating is mandatory";
     }
 
 }

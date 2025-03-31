@@ -11,7 +11,7 @@ public class SessionValidator {
     public static UserDTO checkSession(HttpServletRequest request) throws ApplicationException {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
+            throw new ApplicationException(Messages.Error.LOGIN_FIRST);
         }
         UserDTO userDTO = (UserDTO) session.getAttribute("user");
         if (userDTO == null) {

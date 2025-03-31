@@ -1,21 +1,14 @@
 package com.example.validation;
 
 import com.example.common.Messages;
-import com.example.dao.IUserDAO;
-import com.example.dao.UserDAOImpl;
 import com.example.common.exception.ApplicationException;
 import com.example.dto.UserDTO;
-import com.example.service.UserService;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserValidator {
 
     public static void validate(UserDTO user) throws ApplicationException {
-        IUserDAO userDao = new UserDAOImpl();
-        UserService userService = new UserService(userDao);
-
         if (!isNullCheckUserValues(user)) {
             throw new ApplicationException(Messages.Error.INVALID_VALUES);
         }
@@ -27,9 +20,6 @@ public class UserValidator {
         }
         if (!isValidContact(user.getContactNumber())) {
             throw new ApplicationException(Messages.Error.INVALID_CONTACT);
-        }
-        if (userService.isUserExists(user.getEmail())) {
-            throw new ApplicationException(Messages.Error.ALREADY_EXISTS);
         }
         if (!isValidEmailLength(user.getEmail())) {
             throw new ApplicationException(Messages.Error.INVALID_EMAIL_LENGTH);
@@ -46,7 +36,7 @@ public class UserValidator {
 
     }
 
-    public static boolean isNullCheckUserValues(UserDTO user) throws ApplicationException {
+    public static boolean isNullCheckUserValues(UserDTO user){
         return !user.getFirstName().isBlank() && !user.getEmail().isBlank() && !user.getPassword().isBlank()
                 && !user.getContactNumber().isBlank();
     }
@@ -67,7 +57,7 @@ public class UserValidator {
         return password.length() > 6 && password.length() < 15;
     }
 
-    public static boolean isNullCheckLoginValues(String email,String password) throws ApplicationException {
+    public static boolean isNullCheckLoginValues(String email, String password) throws ApplicationException {
         return !email.isBlank() && !password.isBlank();
     }
 
@@ -97,5 +87,15 @@ public class UserValidator {
             return false;
         }
         return p.matcher(email).matches();
+    }
+
+    public static boolean isValidUserId(int id) throws ApplicationException {
+        if(String.valueOf(id).isBlank() || String.valueOf(id) == null){
+            throw new ApplicationException(Messages.Error.INVALID_USERID);
+        }
+        if(id <= 0){
+            throw new ApplicationException(Messages.Error.INVALID_USERID);
+        }
+        return true;
     }
 }

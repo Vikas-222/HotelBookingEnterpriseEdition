@@ -22,16 +22,12 @@ public class SignupController extends HttpServlet {
     private final IUserDAO iUserDAO = new UserDAOImpl();
     private final UserService userService = new UserService(iUserDAO);
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
         try {
             UserDTO user = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
-            UserValidator.validate(user);
             userService.addUser(user);
             sendResponse(response, Messages.ACCOUNT_CREATED,null, null, 200);
         } catch (DBException e) {

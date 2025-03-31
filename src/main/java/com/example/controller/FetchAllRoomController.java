@@ -17,8 +17,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-@WebServlet(name = "FetchAllRoomController", value = "/getallroom")
+@WebServlet(name = "FetchAllRoomController", value = "/fetchallroom")
 public class FetchAllRoomController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,7 +28,7 @@ public class FetchAllRoomController extends HttpServlet {
         RoomService roomService = new RoomService(iRoomDAO);
 
         try {
-            List<RoomDTO> list = roomService.getAllRooms();
+            Map<Integer,RoomDTO> list = roomService.getAllRooms();
             sendResponse(response,null,null,list,200);
         } catch (ApplicationException e) {
             e.printStackTrace();

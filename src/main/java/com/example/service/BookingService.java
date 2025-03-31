@@ -13,8 +13,8 @@ import java.util.List;
 
 public class BookingService {
 
-    IBookingDAO iBookingDAO;
-    RoomService roomService;
+    private IBookingDAO iBookingDAO;
+    private RoomService roomService;
 
     public BookingService(IBookingDAO iBookingDAO,RoomService roomService) {
         this.iBookingDAO = iBookingDAO;

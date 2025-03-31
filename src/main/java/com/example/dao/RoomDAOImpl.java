@@ -8,7 +8,9 @@ import com.example.model.Room;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoomDAOImpl implements IRoomDAO {
 
@@ -79,35 +81,6 @@ public class RoomDAOImpl implements IRoomDAO {
         }
     }
 
-//    @Override
-//    public List<Room> getAllRooms() throws DBException {
-//        String fetch = "select * from room";
-//        ResultSet rs = null;
-//        List<Room> roomList = new ArrayList<>();
-//        try (Connection connection = DbConnect.instance.getConnection();
-//             PreparedStatement pstFind = connection.prepareStatement(fetch)) {
-//            rs = pstFind.executeQuery();
-//            while (rs.next()) {
-//                String roomType = rs.getString("room_type");
-//                Room room = new Room.Builder().setRoomId(rs.getInt("room_id")).setRoomNumber(rs.getInt("room_number"))
-//                        .setRoomType(RoomType.fromString(roomType)).setCapacity(rs.getInt("capacity"))
-//                        .setPricePerNight(rs.getFloat("price_per_night")).setActive(rs.getBoolean("is_active")).build();
-//                roomList.add(room);
-//            }
-//            return roomList;
-//        } catch (SQLException | ClassNotFoundException e) {
-//            throw new DBException(Messages.Error.FAILED);
-//        } finally {
-//            if (rs != null) {
-//                try {
-//                    rs.close();
-//                } catch (SQLException e) {
-//                    throw new DBException(e);
-//                }
-//            }
-//        }
-//    }
-
     @Override
     public boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException {
         String sql = "SELECT capacity FROM room WHERE room_number = ?";
@@ -166,26 +139,35 @@ public class RoomDAOImpl implements IRoomDAO {
     }
 
     @Override
-    public List<RoomDTO> getAllRoomWithImage() throws DBException {
+    public Map<Integer,RoomDTO> getAllRoomWithImage() throws DBException {
         String sql = "select r.room_id,r.room_number,r.room_type,r.capacity,r.price_per_night,r.is_active,im.imagepath from room r, room_images im where r.room_id = im.room_id";
         ResultSet rs = null;
-        RoomDTO roomDTO = null;
-        List<RoomDTO> roomList = new ArrayList<>();
+        Map<Integer, RoomDTO> roomMap = new HashMap<>();
         try (Connection connection = DbConnect.instance.getConnection();
              Statement pst = connection.createStatement()) {
-             rs = pst.executeQuery(sql);
-             while(rs.next()){
-                 roomDTO = new RoomDTO.Builder()
-                         .setRoomId(rs.getInt("room_id"))
-                         .setRoomNumber(rs.getInt("room_number"))
-                         .setRoomType(RoomType.fromString(rs.getString("room_type")))
-                         .setCapacity(rs.getInt("capacity"))
-                         .setPricePerNight(rs.getFloat("price_per_night"))
-                         .setIsActive(rs.getBoolean("is_active"))
-                         .setImagePath(rs.getString("imagepath")).build();
-                 roomList.add(roomDTO);
-             }
-        } catch (SQLException | ClassNotFoundException e) {
+            rs = pst.executeQuery(sql);
+            while (rs.next()) {
+                int roomId = rs.getInt("room_id");
+                String imagePath = rs.getString("imagepath");
+
+                if (roomMap.containsKey(roomId)) {
+                    roomMap.get(roomId).getImagePath().add(imagePath);
+                } else {
+                    List<String> newImagePathList = new ArrayList<>();
+                    newImagePathList.add(imagePath);
+                    RoomDTO roomDTO = new RoomDTO.Builder()
+                            .setRoomId(roomId)
+                            .setRoomNumber(rs.getInt("room_number"))
+                            .setRoomType(RoomType.fromString(rs.getString("room_type")))
+                            .setCapacity(rs.getInt("capacity"))
+                            .setPricePerNight(rs.getFloat("price_per_night"))
+                            .setIsActive(rs.getBoolean("is_active"))
+                            .setImagePath(newImagePathList)
+                            .build();
+                    roomMap.put(roomId, roomDTO);
+                }
+            }
+        }catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }
         finally {
@@ -197,7 +179,7 @@ public class RoomDAOImpl implements IRoomDAO {
                 }
             }
         }
-        return roomList;
+        return roomMap;
     }
 
 }

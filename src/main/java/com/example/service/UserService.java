@@ -7,6 +7,7 @@ import com.example.common.mapper.UserMapper;
 import com.example.dao.IUserDAO;
 import com.example.dto.UserDTO;
 import com.example.model.User;
+import com.example.validation.UserValidator;
 
 import java.util.List;
 
@@ -18,9 +19,20 @@ public class UserService {
         this.iUserDAO = iUserDAO;
     }
 
-    public void addUser(UserDTO userDTO) throws DBException {
-        User user = UserMapper.convertUserDTOToUserForSignup(userDTO);
-        iUserDAO.addUser(user);
+    public void addUser(UserDTO userDTO) throws ApplicationException {
+        try {
+            UserValidator.validate(userDTO);
+            if (isUserExists(userDTO.getEmail())) {
+                throw new ApplicationException(Messages.Error.ALREADY_EXISTS);
+            }
+            User user = UserMapper.convertUserDTOToUserForSignup(userDTO);
+            iUserDAO.addUser(user);
+        }catch(DBException e){
+            throw e;
+        }
+        catch (ApplicationException e) {
+            throw e;
+        }
     }
 
     public boolean isUserExists(String email) throws DBException {
@@ -53,10 +65,21 @@ public class UserService {
 
     public void updateUserDetails(UserDTO userDTO) throws ApplicationException {
         User user = UserMapper.ForUpdateDTOToEntity(userDTO);
-        boolean flag = iUserDAO.isUserExistByEmail(user.getEmail());
-        if(!flag){
+        if(iUserDAO.isUserExistByEmail(user.getEmail()) == false){
             throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
         }
         iUserDAO.updateUserdetails(user);
+    }
+
+    public void updateUserActiveStatus(int userId,boolean status) throws ApplicationException {
+        if(!iUserDAO.isValidUserId(userId)){
+            throw new ApplicationException(Messages.Error.INVALID_USERID);
+        }
+        iUserDAO.updateUserActiveStatus(userId, status);
+    }
+
+    public boolean isValidUserId(int id) throws DBException {
+        System.out.println("user service "+iUserDAO.isValidUserId(id));
+        return iUserDAO.isValidUserId(id);
     }
 }

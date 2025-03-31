@@ -5,16 +5,13 @@ import com.example.dao.IRoomDAO;
 import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.common.exception.ApplicationException;
+import com.example.model.Room;
 import com.example.service.RoomService;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 public class RoomValidator {
-
-    IRoomDAO iRoomDAO = new RoomDAOImpl();
-    RoomService roomService = new RoomService(iRoomDAO);
-
     /**
      * @param room
      * @throws ApplicationException for validation of room object when inserting new room
@@ -41,10 +38,6 @@ public class RoomValidator {
         if (!isValidRoomNumber(room.getRoomNumber())) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        if (roomService.isRoomNumberExists(room.getRoomNumber())) {
-            System.out.println(roomService.isRoomNumberExists(room.getRoomNumber()));
-            throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
-        }
     }
 
 
@@ -52,7 +45,7 @@ public class RoomValidator {
      * @param room
      * @throws ApplicationException for validation of room object when updating room's status
      */
-    public void ValidateForUpdate(RoomDTO room) throws ApplicationException {
+    public boolean ValidateForUpdate(RoomDTO room) throws ApplicationException {
         if (!isNullForUpdateRoomValues(room)) {
             System.out.println("validation " + isNullForUpdateRoomValues(room));
             throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
@@ -62,13 +55,9 @@ public class RoomValidator {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
         if (!isValidRoomNumber(room.getRoomNumber())) {
-            System.out.println("isValidRoomNumber");
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        if (!roomService.isRoomNumberExists(room.getRoomNumber())) {
-            System.out.println(iRoomDAO.isRoomNumberExists(room.getRoomNumber()));
-            throw new ApplicationException(Messages.RoomError.ROOM_EXISTS);
-        }
+        return true;
     }
 
     public static boolean isValidRoomNumber(int roomNumber) {
@@ -95,14 +84,14 @@ public class RoomValidator {
         return roomPrice.chars().allMatch(Character::isDigit);
     }
 
-    public static boolean isNullRoomValues(RoomDTO roomDTO) {
+    public static boolean isNullRoomValues(RoomDTO room) {
 
-        return !String.valueOf(roomDTO.getRoomNumber()).isBlank() && !String.valueOf(roomDTO.getCapacity()).isBlank() &&
-                !String.valueOf(roomDTO.getPricePerNight()).isBlank() && !String.valueOf(roomDTO.getRoomType()).isBlank();
+        return !String.valueOf(room.getRoomNumber()).isBlank() && !String.valueOf(room.getCapacity()).isBlank() &&
+                !String.valueOf(room.getPricePerNight()).isBlank() && !String.valueOf(room.getRoomType()).isBlank();
     }
 
-    public static boolean isNullForUpdateRoomValues(RoomDTO roomDTO) {
-        if (String.valueOf(roomDTO.getRoomNumber()).isBlank() && String.valueOf(roomDTO.getIsActive()).isBlank()) {
+    public static boolean isNullForUpdateRoomValues(RoomDTO room) {
+        if (String.valueOf(room.getRoomNumber()).isBlank() && String.valueOf(room.getIsActive()).isBlank()) {
             System.out.println("roomvalidation ");
             return false;
         }

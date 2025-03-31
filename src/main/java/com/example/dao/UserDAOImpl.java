@@ -1,7 +1,5 @@
 package com.example.dao;
 
-import com.example.common.Messages;
-import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.config.DbConnect;
 import com.example.model.User;
@@ -123,7 +121,6 @@ public class UserDAOImpl implements IUserDAO {
     @Override
     public void updateUserdetails(User user) throws DBException {
         String updateQuery = "update user set last_name = ?, contact = ?, gender = ? where user_id = ?";
-        ResultSet rs = null;
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pstUpdate = connection.prepareStatement(updateQuery);) {
             pstUpdate.setString(1, user.getLastName());
@@ -131,6 +128,32 @@ public class UserDAOImpl implements IUserDAO {
             pstUpdate.setString(3, user.getGender());
             pstUpdate.setInt(4, user.getUserId());
             pstUpdate.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }
+    }
+
+    @Override
+    public void updateUserActiveStatus(int userId, boolean status) throws DBException {
+        String updateQuery = "update user set is_active = ? where user_id = ?";
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pstUpdate = connection.prepareStatement(updateQuery);) {
+            pstUpdate.setBoolean(1,status);
+            pstUpdate.setInt(2, userId);
+            pstUpdate.executeUpdate();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }
+    }
+
+    @Override
+    public boolean isValidUserId(int Id) throws DBException {
+        String foundId = "select count(*) from user where user_id = ?";
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(foundId)) {
+            pst.setInt(1, Id);
+            ResultSet rs = pst.executeQuery();
+            return rs.next();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }

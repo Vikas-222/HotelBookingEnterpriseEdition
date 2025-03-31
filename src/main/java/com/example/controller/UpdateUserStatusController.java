@@ -7,11 +7,11 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
-import com.example.dao.IRoomDAO;
-import com.example.dao.RoomDAOImpl;
-import com.example.dto.RoomDTO;
+import com.example.dao.IUserDAO;
+import com.example.dao.UserDAOImpl;
 import com.example.dto.UserDTO;
-import com.example.service.RoomService;
+import com.example.service.UserService;
+import com.example.validation.UserValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,40 +20,29 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "UpdateRoomStatusController", value = "/updateroomstatus")
-public class UpdateRoomStatusController extends HttpServlet {
+@WebServlet(name = "UpdateUserStatusController", value = "/updateUserStatus")
+public class UpdateUserStatusController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        IRoomDAO iRoomDAO = new RoomDAOImpl();
-        RoomService roomService = new RoomService(iRoomDAO);
+        IUserDAO iUserDAO = new UserDAOImpl();
+        UserService userService = new UserService(iUserDAO);
         try {
             UserDTO user = SessionValidator.checkSession(request);
-            if(!user.getRole().equalsIgnoreCase("admin")){
+            if (!user.getRole().equalsIgnoreCase("admin")) {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-            String roomStr = request.getParameter("roomNumber");
-            if (roomStr == null || roomStr.isBlank()) {
-                throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
-            }
-            int roomNum = Integer.parseInt(roomStr);
-            if (roomNum <= 0) {
-                throw new ApplicationException(Messages.RoomError.INVALID_ROOM_ID);
-            }
-            RoomDTO roomDTO = CustomObjectMapper.toObject(request.getReader(), RoomDTO.class);
-            RoomDTO room = setRoomNumber(roomDTO,roomNum);
-            roomService.updateRoomStatus(room);
-            sendResponse(response, Messages.ROOM_UPDATED, null, null, 200);
+            UserDTO userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
+            UserValidator.isValidUserId(userDTO.getUserId());
+            userService.updateUserActiveStatus(userDTO.getUserId(), userDTO.getIsActive());
+            sendResponse(response, null, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
         } catch (ApplicationException e) {
             e.printStackTrace();
             sendResponse(response, e.getMessage(), null, null, 400);
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
         }
     }
 
@@ -64,12 +53,5 @@ public class UpdateRoomStatusController extends HttpServlet {
         apiResponse.setTechnicalMessage(technicalMessage);
         apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
-    }
-
-    private RoomDTO setRoomNumber(RoomDTO roomDTO,int roomNumber){
-        RoomDTO room = new RoomDTO.Builder()
-                .setRoomNumber(roomNumber)
-                .setIsActive(roomDTO.getIsActive()).build();
-        return room;
     }
 }

@@ -7,7 +7,7 @@ public class ReviewMapper {
 
     public static Review convertReviewDTOToEntity(ReviewDTO reviewDTO)
     {
-        return new Review(reviewDTO.getReviewId(), reviewDTO.getBookingId(), reviewDTO.getUserId(),
+        return new Review(reviewDTO.getReviewId(), reviewDTO.getUserId(), reviewDTO.getBookingId(),
                 reviewDTO.getFeedback(), reviewDTO.getRating());
     }
 }

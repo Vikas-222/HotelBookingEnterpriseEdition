@@ -79,7 +79,6 @@ public class UserService {
     }
 
     public boolean isValidUserId(int id) throws DBException {
-        System.out.println("user service "+iUserDAO.isValidUserId(id));
         return iUserDAO.isValidUserId(id);
     }
 }

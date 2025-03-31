@@ -148,7 +148,7 @@ public class UserDAOImpl implements IUserDAO {
 
     @Override
     public boolean isValidUserId(int Id) throws DBException {
-        String foundId = "select count(*) from user where user_id = ?";
+        String foundId = "select * from user where user_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(foundId)) {
             pst.setInt(1, Id);

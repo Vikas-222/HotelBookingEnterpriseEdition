@@ -10,10 +10,10 @@ public class ReviewDTO {
 
     public ReviewDTO() {}
 
-    public ReviewDTO(int reviewId, int bookingId, int userId, String feedback, int rating) {
+    public ReviewDTO(int reviewId, int userId, int bookingId, String feedback, int rating) {
         this.reviewId = reviewId;
-        this.bookingId = bookingId;
         this.userId = userId;
+        this.bookingId = bookingId;
         this.feedback = feedback;
         this.rating = rating;
     }

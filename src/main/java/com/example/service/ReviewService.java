@@ -21,7 +21,6 @@ public class ReviewService {
 
     public boolean addReview(ReviewDTO reviewDTO) throws ApplicationException {
         Review review = ReviewMapper.convertReviewDTOToEntity(reviewDTO);
-        System.out.println("review service "+userService.isValidUserId(review.getUserId()));
         if(!userService.isValidUserId(review.getUserId())){
             throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
         }

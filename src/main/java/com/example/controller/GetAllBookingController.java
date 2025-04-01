@@ -9,13 +9,9 @@ import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
 import com.example.dao.BookingDAOImpl;
 import com.example.dao.IBookingDAO;
-import com.example.dao.IRoomDAO;
-import com.example.dao.RoomDAOImpl;
 import com.example.dto.BookingDTO;
 import com.example.dto.UserDTO;
 import com.example.service.BookingService;
-import com.example.service.RoomService;
-import com.example.controller.validation.BookingValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -23,24 +19,27 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "AddBookingController", value = "/addbooking")
-public class AddBookingController extends HttpServlet {
-    IBookingDAO iBookingDAO = new BookingDAOImpl();
-    IRoomDAO iRoomDAO = new RoomDAOImpl();
-    RoomService roomService = new RoomService(iRoomDAO);
-    BookingService bookingService = new BookingService(iBookingDAO, roomService);
+@WebServlet(name = "GetAllBookingController", value = "/fetchallbooking")
+public class GetAllBookingController extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
+        IBookingDAO iBookingDAO = new BookingDAOImpl();
+        BookingService bookingService = new BookingService(iBookingDAO);
         try {
             UserDTO userDTO = SessionValidator.checkSession(request);
-            BookingDTO bookingDTO = CustomObjectMapper.toObject(request.getReader(), BookingDTO.class);
-            BookingValidator.validateBooking(bookingDTO);
-            BookingDTO bookingDTO1 = bookingService.setUserIdAndTotalAmount(bookingDTO, userDTO.getUserId(), bookingDTO.getRoomNumber());
-            bookingService.addBooking(bookingDTO1);
-            sendResponse(response, Messages.BOOKING_SUCCESS, null, null, 200);
+            if (!userDTO.getRole().equalsIgnoreCase("Admin")) {
+                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
+            }
+            List<BookingDTO> list = bookingService.getAllBookingDetails();
+            sendResponse(response, null, null, list, 200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);

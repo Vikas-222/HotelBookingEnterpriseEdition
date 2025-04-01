@@ -67,9 +67,8 @@ public class UpdateRoomStatusController extends HttpServlet {
     }
 
     private RoomDTO setRoomNumber(RoomDTO roomDTO,int roomNumber){
-        RoomDTO room = new RoomDTO.Builder()
+       return new RoomDTO.Builder()
                 .setRoomNumber(roomNumber)
                 .setIsActive(roomDTO.getIsActive()).build();
-        return room;
     }
 }

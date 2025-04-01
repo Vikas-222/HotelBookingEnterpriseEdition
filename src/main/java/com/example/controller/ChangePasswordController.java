@@ -7,45 +7,37 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
-import com.example.dao.BookingDAOImpl;
-import com.example.dao.IBookingDAO;
-import com.example.dto.BookingDTO;
+import com.example.dao.IUserDAO;
+import com.example.dao.UserDAOImpl;
 import com.example.dto.UserDTO;
-import com.example.service.BookingService;
+import com.example.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "FetchAllBookingController", value = "/fetchallbooking")
-public class FetchAllBookingController extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
+@WebServlet(name = "ChangePasswordController", value = "/change-password")
+public class ChangePasswordController extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        IBookingDAO iBookingDAO = new BookingDAOImpl();
-        BookingService bookingService = new BookingService(iBookingDAO);
-        try {
+        IUserDAO iUserDAO = new UserDAOImpl();
+        UserService userService = new UserService(iUserDAO);
+        try{
             UserDTO userDTO = SessionValidator.checkSession(request);
-            if (!userDTO.getRole().equalsIgnoreCase("Admin")) {
-                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
-            }
-            List<BookingDTO> list = bookingService.getAllBookingDetails();
-            sendResponse(response, null, null, list, 200);
-        } catch (DBException e) {
+            UserDTO user = CustomObjectMapper.toObject(request.getReader(),UserDTO.class);
+            userService.updatePassword(userDTO.getUserId(),user.getPassword(),user.getNewPassword());
+            sendResponse(response, Messages.PASSWORD_UPDATED,null,null,200);
+        }catch(DBException e){
             e.printStackTrace();
-            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
-        } catch (ApplicationException e) {
+            sendResponse(response, Messages.Error.FAILED,e.getMessage(),null,500);
+        }
+        catch (ApplicationException e) {
             e.printStackTrace();
-            sendResponse(response, e.getMessage(), null, null, 400);
+            sendResponse(response, e.getMessage(),null,null,400);
         }
     }
 
@@ -57,4 +49,5 @@ public class FetchAllBookingController extends HttpServlet {
         apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
+
 }

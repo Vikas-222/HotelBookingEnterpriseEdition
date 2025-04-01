@@ -138,7 +138,7 @@ public class UserDAOImpl implements IUserDAO {
         String updateQuery = "update user set is_active = ? where user_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pstUpdate = connection.prepareStatement(updateQuery);) {
-            pstUpdate.setBoolean(1,status);
+            pstUpdate.setBoolean(1, status);
             pstUpdate.setInt(2, userId);
             pstUpdate.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
@@ -153,6 +153,34 @@ public class UserDAOImpl implements IUserDAO {
              PreparedStatement pst = connection.prepareStatement(foundId)) {
             pst.setInt(1, Id);
             ResultSet rs = pst.executeQuery();
+            return rs.next();
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }
+    }
+
+    @Override
+    public boolean updatePassword(int userId, String password) throws DBException {
+        String sql = "UPDATE user SET passwords = ? WHERE user_id = ?";
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setString(1, password);
+            pst.setInt(2, userId);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }
+    }
+
+    @Override
+    public boolean isValidCurrentPassword(int userId, String password) throws DBException {
+        String sql = "select passwords = ? from user WHERE user_id = ?";
+        ResultSet rs = null;
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setString(1, password);
+            pst.setInt(2, userId);
+            rs = pst.executeQuery();
             return rs.next();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);

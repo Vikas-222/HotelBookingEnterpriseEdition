@@ -20,6 +20,9 @@ public class Review {
         this.rating = rating;
     }
 
+    public Review() {
+    }
+
     public int getReviewId() {
         return reviewId;
     }

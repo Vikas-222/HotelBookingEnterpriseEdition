@@ -14,17 +14,16 @@ import com.example.service.BookingService;
 import com.example.service.ReviewService;
 import com.example.service.RoomService;
 import com.example.service.UserService;
-import com.example.controller.validation.ReviewValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "AddReviewController", value = "/addReview")
-public class AddReviewController extends HttpServlet {
+@WebServlet(name = "GetAllReviewController", value = "/get-all-reviews")
+public class GetAllReviewController extends HttpServlet {
     private IUserDAO iUserDAO = new UserDAOImpl();
     private IBookingDAO iBookingDAO = new BookingDAOImpl();
     private IRoomDAO iRoomDAO = new RoomDAOImpl();
@@ -39,15 +38,11 @@ public class AddReviewController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        try {
-            UserDTO user = SessionValidator.checkSession(request);
-            ReviewDTO reviewDTO = CustomObjectMapper.toObject(request.getReader(), ReviewDTO.class);
-            ReviewDTO review = setUserId(reviewDTO, user.getUserId());
-            ReviewValidator.isValidValues(review);
-            reviewService.addReview(review);
-            sendResponse(response, null,null,null,200);
+        try{
+            List<ReviewDTO> reviewList = reviewService.getReviews();
+            sendResponse(response, null,null,reviewList,200);
         }catch(DBException e){
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED,e.getMessage(),null,500);
@@ -65,14 +60,5 @@ public class AddReviewController extends HttpServlet {
         apiResponse.setTechnicalMessage(technicalMessage);
         apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
-    }
-
-    private ReviewDTO setUserId(ReviewDTO reviewDTO,int id){
-        return new ReviewDTO.Builder()
-                .setUserId(id)
-                .setBookingId(reviewDTO.getBookingId())
-                .setFeedback(reviewDTO.getFeedback())
-                .setRating(reviewDTO.getRating())
-                .build();
     }
 }

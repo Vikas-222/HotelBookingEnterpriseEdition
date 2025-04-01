@@ -61,12 +61,6 @@ public class BookingService {
         iBookingDAO.updateBookingStatus(id,status);
     }
 
-    /**
-     *
-     * @param bookingDTO
-     * @param id
-     * @return when booking record is going to save in database at that time totalAmount will be calculated. so it's pending
-     */
     public BookingDTO setUserIdAndTotalAmount(BookingDTO bookingDTO, int id,int roomNumber) throws ApplicationException {
         return new BookingDTO.Builder()
                 .setUserId(id)

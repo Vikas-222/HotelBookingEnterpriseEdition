@@ -23,4 +23,8 @@ public interface IUserDAO {
     void updateUserActiveStatus(int userId, boolean status) throws DBException;
 
     boolean isValidUserId(int Id) throws DBException;
+
+    boolean updatePassword(int userId, String password) throws DBException;
+
+    boolean isValidCurrentPassword(int userId, String password) throws DBException;
 }

@@ -11,7 +11,7 @@ import com.example.dao.IUserDAO;
 import com.example.dao.UserDAOImpl;
 import com.example.dto.UserDTO;
 import com.example.service.UserService;
-import com.example.validation.UserValidator;
+import com.example.controller.validation.UserValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

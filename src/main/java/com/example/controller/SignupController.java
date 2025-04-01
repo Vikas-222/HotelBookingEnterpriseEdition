@@ -10,7 +10,6 @@ import com.example.dao.UserDAOImpl;
 import com.example.common.exception.ApplicationException;
 import com.example.dto.UserDTO;
 import com.example.service.UserService;
-import com.example.validation.UserValidator;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;

@@ -11,7 +11,11 @@ public interface IReviewDAO {
 
     boolean updateReview(Review review) throws DBException;
 
-    boolean deleteReview(int reviewID) throws DBException;
+    boolean deleteReview(int reviewID, int userId) throws DBException;
 
-    List<Review> getReviewsByBooking(int bookingID) throws DBException;
+    List<Review> getReviews() throws DBException;
+
+    List<Review> getReviewsByUserId(int userId) throws DBException;
+
+    boolean isValidReviewId(int id) throws DBException;
 }

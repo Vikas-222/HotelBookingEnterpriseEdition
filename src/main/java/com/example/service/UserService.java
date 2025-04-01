@@ -7,7 +7,7 @@ import com.example.common.mapper.UserMapper;
 import com.example.dao.IUserDAO;
 import com.example.dto.UserDTO;
 import com.example.model.User;
-import com.example.validation.UserValidator;
+import com.example.controller.validation.UserValidator;
 
 import java.util.List;
 
@@ -80,5 +80,16 @@ public class UserService {
 
     public boolean isValidUserId(int id) throws DBException {
         return iUserDAO.isValidUserId(id);
+    }
+
+    public boolean updatePassword(int userId,String password,String newPassword) throws ApplicationException {
+        UserValidator.checkPassword(password,newPassword);
+        if(iUserDAO.isValidCurrentPassword(userId,password) == false){
+            throw new ApplicationException(Messages.Error.INVALID_CURRENT_PASSWORD);
+        }
+        if(!iUserDAO.isValidUserId(userId)){
+            throw new ApplicationException(Messages.Error.INVALID_USERID);
+        }
+        return iUserDAO.updatePassword(userId,newPassword);
     }
 }

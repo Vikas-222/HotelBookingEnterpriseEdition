@@ -9,6 +9,7 @@ public class UserDTO {
     private String lastName;
     private String email;
     private String contactNumber;
+    private String newPassword;
     private String password;
     private String gender;
     private String profilePic;
@@ -22,6 +23,7 @@ public class UserDTO {
         this.email = builder.email;
         this.contactNumber = builder.contactNumber;
         this.password = builder.password;
+        this.newPassword = builder.newPassword;
         this.gender = builder.gender;
         this.profilePic = builder.profilePic;
         this.role = builder.role;
@@ -71,6 +73,10 @@ public class UserDTO {
         return isActive;
     }
 
+    public String getNewPassword() {
+        return newPassword;
+    }
+
     public static class Builder {
         private int userId;
         private String firstName;
@@ -81,6 +87,7 @@ public class UserDTO {
         private String profilePic;
         private String role;
         private String password;
+        private String newPassword;
         private boolean isActive;
 
         public Builder setUserId(int userId) {
@@ -133,6 +140,11 @@ public class UserDTO {
             return this;
         }
 
+        public Builder setNewPassword(String newPassword){
+            this.newPassword = newPassword;
+            return this;
+        }
+
         public UserDTO build() {
             return new UserDTO(this);
         }
@@ -146,6 +158,7 @@ public class UserDTO {
                 ", email='" + email + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", password='" + password + '\'' +
+                ", newPassword='" + newPassword + '\'' +
                 ", gender='" + gender + '\'' +
                 ", profilePic='" + profilePic + '\'' +
                 ", role='" + role + '\'' +

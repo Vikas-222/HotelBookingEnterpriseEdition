@@ -3,33 +3,85 @@ package com.example.dto;
 public class ReviewDTO {
 
     private int reviewId;
-    private int bookingId;
     private int userId;
+    private int bookingId;
     private String feedback;
     private int rating;
 
-    public ReviewDTO() {}
-
-    public ReviewDTO(int reviewId, int userId, int bookingId, String feedback, int rating) {
-        this.reviewId = reviewId;
-        this.userId = userId;
-        this.bookingId = bookingId;
-        this.feedback = feedback;
-        this.rating = rating;
+    private ReviewDTO(Builder builder) {
+        this.reviewId = builder.reviewId;
+        this.userId = builder.userId;
+        this.bookingId = builder.bookingId;
+        this.feedback = builder.feedback;
+        this.rating = builder.rating;
     }
 
-    public int getReviewId() { return reviewId; }
-    public void setReviewId(int reviewId) { this.reviewId = reviewId; }
+    public ReviewDTO() {
+    }
 
-    public int getBookingId() { return bookingId; }
-    public void setBookingId(int bookingId) { this.bookingId = bookingId; }
+    public int getReviewId() {
+        return reviewId;
+    }
 
-    public int getUserId() { return userId; }
-    public void setUserId(int userId) { this.userId = userId; }
+    public int getBookingId() {
+        return bookingId;
+    }
 
-    public String getFeedback() { return feedback; }
-    public void setFeedback(String feedback) { this.feedback = feedback; }
+    public int getUserId() {
+        return userId;
+    }
 
-    public int getRating() { return rating; }
-    public void setRating(int rating) { this.rating = rating; }
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public static class Builder {
+        private int reviewId;
+        private int userId;
+        private int bookingId;
+        private String feedback;
+        private int rating;
+
+        public Builder setReviewId(int reviewId) {
+            this.reviewId = reviewId;
+            return this;
+        }
+
+        public Builder setBookingId(int bookingId) {
+            this.bookingId = bookingId;
+            return this;
+        }
+
+        public Builder setUserId(int userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder setFeedback(String feedback) {
+            this.feedback = feedback;
+            return this;
+        }
+
+        public Builder setRating(int rating) {
+            this.rating = rating;
+            return this;
+        }
+
+        public ReviewDTO build() {
+            return new ReviewDTO(this);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "reviewId=" + reviewId +
+                ", userId=" + userId +
+                ", bookingId=" + bookingId +
+                ", feedback='" + feedback + '\'' +
+                ", rating=" + rating;
+    }
 }

@@ -7,7 +7,7 @@ import com.example.common.mapper.RoomMapper;
 import com.example.dao.IRoomDAO;
 import com.example.dto.RoomDTO;
 import com.example.model.Room;
-import com.example.validation.RoomValidator;
+import com.example.controller.validation.RoomValidator;
 
 import java.util.Map;
 
@@ -63,7 +63,7 @@ public class RoomService {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
         if (!iRoomDAO.isCapacityValid(roomNumber, numberOfGuest)) {
-            throw new ApplicationException(Messages.BookingError.INVALID_CAPACITY);
+            throw new ApplicationException(Messages.BookingError.CAPACITY_EXCEEDED);
         }
         return iRoomDAO.isCapacityValid(roomNumber, numberOfGuest);
     }

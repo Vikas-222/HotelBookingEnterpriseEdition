@@ -73,7 +73,7 @@ public class AddRoomImageController extends HttpServlet {
         try {
             Part filePart = request.getPart("image");
             if (filePart == null || filePart.getSize() == 0 || filePart.getSubmittedFileName().isEmpty()) {
-                throw new ApplicationException(Messages.RoomError.INVALID_IMAGE);
+                throw new ApplicationException(Messages.RoomError.IMAGE_NOT_FOUND);
             }
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
             String filePath = IMAGE_UPLOAD_DIRECTORY + File.separator + fileName;

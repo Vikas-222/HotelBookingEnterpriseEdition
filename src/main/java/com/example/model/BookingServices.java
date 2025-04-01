@@ -2,11 +2,11 @@ package com.example.model;
 
 public class BookingServices {
     private int bookingId;
-    private int service_Id;
+    private int serviceId;
 
-    public BookingServices(int bookingId, int service_Id) {
+    public BookingServices(int bookingId, int serviceId) {
         this.bookingId = bookingId;
-        this.service_Id = service_Id;
+        this.serviceId = serviceId;
     }
 
     public int getBookingId() {
@@ -17,17 +17,17 @@ public class BookingServices {
         this.bookingId = bookingId;
     }
 
-    public int getService_Id() {
-        return service_Id;
+    public int getServiceId() {
+        return serviceId;
     }
 
-    public void setService_Id(int service_Id) {
-        this.service_Id = service_Id;
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
     }
 
     @Override
     public String toString() {
         return "bookingId=" + bookingId +
-                ", service_Id=" + service_Id;
+                ", serviceId=" + serviceId;
     }
 }

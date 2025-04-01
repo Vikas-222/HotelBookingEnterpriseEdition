@@ -1,15 +1,8 @@
-package com.example.validation;
+package com.example.controller.validation;
 
 import com.example.common.Messages;
-import com.example.dao.IRoomDAO;
-import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.common.exception.ApplicationException;
-import com.example.model.Room;
-import com.example.service.RoomService;
-
-import java.util.Map;
-import java.util.TreeMap;
 
 public class RoomValidator {
     /**

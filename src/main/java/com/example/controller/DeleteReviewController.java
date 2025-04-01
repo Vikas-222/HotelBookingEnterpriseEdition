@@ -8,23 +8,20 @@ import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
 import com.example.dao.*;
-import com.example.dto.ReviewDTO;
 import com.example.dto.UserDTO;
 import com.example.service.BookingService;
 import com.example.service.ReviewService;
 import com.example.service.RoomService;
 import com.example.service.UserService;
-import com.example.controller.validation.ReviewValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
-@WebServlet(name = "AddReviewController", value = "/addReview")
-public class AddReviewController extends HttpServlet {
+@WebServlet(name = "DeleteReviewController", value = "/delete-review")
+public class DeleteReviewController extends HttpServlet {
     private IUserDAO iUserDAO = new UserDAOImpl();
     private IBookingDAO iBookingDAO = new BookingDAOImpl();
     private IRoomDAO iRoomDAO = new RoomDAOImpl();
@@ -39,14 +36,19 @@ public class AddReviewController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        try {
+        try{
             UserDTO user = SessionValidator.checkSession(request);
-            ReviewDTO reviewDTO = CustomObjectMapper.toObject(request.getReader(), ReviewDTO.class);
-            ReviewDTO review = setUserId(reviewDTO, user.getUserId());
-            ReviewValidator.isValidValues(review);
-            reviewService.addReview(review);
+            String id = request.getParameter("reviewId");
+            if (id == null || id.isBlank()) {
+                throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
+            }
+            int reviewId = Integer.parseInt(id);
+            if (reviewId <= 0) {
+                throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
+            }
+            reviewService.deleteReview(reviewId,user.getUserId());
             sendResponse(response, null,null,null,200);
         }catch(DBException e){
             e.printStackTrace();
@@ -67,12 +69,4 @@ public class AddReviewController extends HttpServlet {
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 
-    private ReviewDTO setUserId(ReviewDTO reviewDTO,int id){
-        return new ReviewDTO.Builder()
-                .setUserId(id)
-                .setBookingId(reviewDTO.getBookingId())
-                .setFeedback(reviewDTO.getFeedback())
-                .setRating(reviewDTO.getRating())
-                .build();
-    }
 }

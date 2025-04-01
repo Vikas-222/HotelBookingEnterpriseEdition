@@ -19,6 +19,7 @@ public class BookingDTO {
     private Date cancellationDate;
     private float refundAmount;
     private int numberOfGuests;
+    private String serviceName;
 
     public BookingDTO(){}
 
@@ -33,6 +34,7 @@ public class BookingDTO {
         this.cancellationDate = builder.cancellationDate;
         this.refundAmount = builder.refundAmount;
         this.numberOfGuests = builder.numberOfGuests;
+        this.serviceName = builder.serviceName;
     }
 
     public int getBookingId() {
@@ -75,7 +77,12 @@ public class BookingDTO {
         return numberOfGuests;
     }
 
+    public String getServiceName() {
+        return serviceName;
+    }
+
     public static class Builder {
+        public String serviceName;
         private int bookingId;
         private int userId;
         private int roomNumber;
@@ -137,6 +144,11 @@ public class BookingDTO {
             return this;
         }
 
+        public Builder setServiceName(String serviceName) {
+            this.serviceName = serviceName;
+            return this;
+        }
+
         public BookingDTO build() {
             return new BookingDTO(this);
         }
@@ -152,6 +164,8 @@ public class BookingDTO {
                 ", totalAmount=" + totalAmount +
                 ", bookingStatus=" + bookingStatus +
                 ", cancellationDate=" + cancellationDate +
-                ", refundAmount=" + refundAmount;
+                ", refundAmount=" + refundAmount +
+                ", numberOfGuests=" + numberOfGuests +
+                ", serviceName='" + serviceName;
     }
 }

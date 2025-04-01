@@ -140,12 +140,10 @@ public class BookingDAOImpl implements IBookingDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(find)) {
             preparedStatement.setInt(1, bookingId);
             ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
+           return true;
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }
-        return false;
     }
+
 }

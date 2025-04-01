@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "FetchAllRoomController", value = "/fetchallroom")
-public class FetchAllRoomController extends HttpServlet {
+@WebServlet(name = "GetAllRoomController", value = "/fetchallroom")
+public class GetAllRoomController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);

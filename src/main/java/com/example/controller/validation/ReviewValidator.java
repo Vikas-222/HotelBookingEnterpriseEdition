@@ -1,4 +1,4 @@
-package com.example.validation;
+package com.example.controller.validation;
 
 import com.example.common.Messages;
 import com.example.common.exception.ApplicationException;

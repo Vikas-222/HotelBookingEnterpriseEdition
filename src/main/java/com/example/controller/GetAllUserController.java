@@ -34,7 +34,7 @@ public class GetAllUserController extends HttpServlet {
             }
             List<UserDTO> userList = userService.getAllUser();
             if (userList == null) {
-                sendResponse(response, Messages.Error.NO_USER_EXISTS,null, null, 200);
+                sendResponse(response, Messages.Error.USER_NOT_FOUND,null, null, 200);
             }
             sendResponse(response, null,null, userList, 200);
         } catch (DBException e) {

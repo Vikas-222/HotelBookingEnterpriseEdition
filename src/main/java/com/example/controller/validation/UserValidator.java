@@ -1,4 +1,4 @@
-package com.example.validation;
+package com.example.controller.validation;
 
 import com.example.common.Messages;
 import com.example.common.exception.ApplicationException;
@@ -95,6 +95,13 @@ public class UserValidator {
         }
         if(id <= 0){
             throw new ApplicationException(Messages.Error.INVALID_USERID);
+        }
+        return true;
+    }
+
+    public static boolean checkPassword(String oldPassword,String newPassword) throws ApplicationException {
+        if(oldPassword.equals(newPassword)){
+            throw new ApplicationException(Messages.Error.SAME_PASSWORDS);
         }
         return true;
     }

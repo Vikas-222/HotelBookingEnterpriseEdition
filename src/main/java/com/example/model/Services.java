@@ -4,24 +4,24 @@ import java.time.LocalDateTime;
 
 public class Services {
 
-    private int service_id;
+    private int serviceId;
     private String serviceDescription;
     private float serviceCost;
     private LocalDateTime createdAt;
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 
-    public Services(int service_id, String serviceDescription, float serviceCost) {
-        this.service_id = service_id;
+    public Services(int serviceId, String serviceDescription, float serviceCost) {
+        this.serviceId = serviceId;
         this.serviceDescription = serviceDescription;
         this.serviceCost = serviceCost;
     }
 
-    public int getService_id() {
-        return service_id;
+    public int getServiceId() {
+        return serviceId;
     }
 
-    public void setService_id(int service_id) {
-        this.service_id = service_id;
+    public void setServiceId(int serviceId) {
+        this.serviceId = serviceId;
     }
 
     public String getServiceDescription() {
@@ -48,20 +48,20 @@ public class Services {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
-        return "service_id=" + service_id +
+        return "serviceId=" + serviceId +
                 ", serviceDescription='" + serviceDescription + '\'' +
                 ", serviceCost=" + serviceCost +
                 ", createdAt=" + createdAt +
-                ", updated_at=" + updated_at;
+                ", updatedAt=" + updatedAt;
     }
 }

@@ -1,0 +1,1 @@
+insert into room(room_number,room_type,capacity,price_per_night,room_status) values (102,"DELUXE",4,1000.00,"AVAILABLE");

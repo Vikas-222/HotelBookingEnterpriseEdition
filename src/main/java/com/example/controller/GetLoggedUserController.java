@@ -13,8 +13,8 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "FetchLoggedUserController", value = "/fetch")
-public class FetchLoggedUserController extends HttpServlet {
+@WebServlet(name = "GetLoggedUserController", value = "/get-user")
+public class GetLoggedUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);

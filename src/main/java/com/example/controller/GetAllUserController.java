@@ -18,7 +18,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "GetAllUserController", value = "/fetchalluser")
+@WebServlet(name = "GetAllUserController", value = "/get-all-user")
 public class GetAllUserController extends HttpServlet {
     IUserDAO userdao = new UserDAOImpl();
     UserService userService = new UserService(userdao);

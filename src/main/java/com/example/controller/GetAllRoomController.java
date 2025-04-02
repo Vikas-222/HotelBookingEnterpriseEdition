@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "GetAllRoomController", value = "/fetchallroom")
+@WebServlet(name = "GetAllRoomController", value = "/get-all-room")
 public class GetAllRoomController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -5,6 +5,7 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.UserMapper;
 import com.example.dao.IUserDAO;
+import com.example.dao.impl.UserDAOImpl;
 import com.example.dto.UserDTO;
 import com.example.model.User;
 import com.example.controller.validation.UserValidator;
@@ -13,11 +14,7 @@ import java.util.List;
 
 public class UserService {
 
-    private final IUserDAO iUserDAO;
-
-    public UserService(IUserDAO iUserDAO) {
-        this.iUserDAO = iUserDAO;
-    }
+    private IUserDAO iUserDAO = new UserDAOImpl();
 
     public void addUser(UserDTO userDTO) throws ApplicationException {
         try {

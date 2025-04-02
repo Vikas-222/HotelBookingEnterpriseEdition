@@ -7,7 +7,7 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.dao.IRoomImagesDAO;
-import com.example.dao.RoomImagesDAOImpl;
+import com.example.dao.impl.RoomImagesDAOImpl;
 import com.example.dto.RoomImagesDTO;
 import com.example.model.RoomImages;
 import com.example.service.RoomImagesService;

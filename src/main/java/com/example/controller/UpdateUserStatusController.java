@@ -7,8 +7,6 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
-import com.example.dao.IUserDAO;
-import com.example.dao.UserDAOImpl;
 import com.example.dto.UserDTO;
 import com.example.service.UserService;
 import com.example.controller.validation.UserValidator;
@@ -26,8 +24,7 @@ public class UpdateUserStatusController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        IUserDAO iUserDAO = new UserDAOImpl();
-        UserService userService = new UserService(iUserDAO);
+        UserService userService = new UserService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
             if (!user.getRole().equalsIgnoreCase("admin")) {

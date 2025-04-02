@@ -34,24 +34,18 @@ public class RoomValidator {
     }
 
 
-    /**
-     * @param room
-     * @throws ApplicationException for validation of room object when updating room's status
-     */
-    public boolean ValidateForUpdate(RoomDTO room) throws ApplicationException {
-        if (!isNullForUpdateRoomValues(room)) {
-            System.out.println("validation " + isNullForUpdateRoomValues(room));
-            throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
-        }
-        if (!checkZeros(room.getRoomNumber())) {
-            System.out.println("checkzeros");
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
-        }
-        if (!isValidRoomNumber(room.getRoomNumber())) {
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
-        }
-        return true;
-    }
+//    public boolean ValidateForUpdate(int roomId,String status) throws ApplicationException {
+//        if (!isNullForUpdateRoomValues(roomId,status)) {
+//            throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
+//        }
+//        if (!checkZeros(roomId)) {
+//            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+//        }
+//        if (!isValidRoomNumber(roomId)) {
+//            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+//        }
+//        return true;
+//    }
 
     public static boolean isValidRoomNumber(int roomNumber) {
         String roomNum = String.valueOf(roomNumber);
@@ -81,15 +75,6 @@ public class RoomValidator {
 
         return !String.valueOf(room.getRoomNumber()).isBlank() && !String.valueOf(room.getCapacity()).isBlank() &&
                 !String.valueOf(room.getPricePerNight()).isBlank() && !String.valueOf(room.getRoomType()).isBlank();
-    }
-
-    public static boolean isNullForUpdateRoomValues(RoomDTO room) {
-        if (String.valueOf(room.getRoomNumber()).isBlank() && String.valueOf(room.getIsActive()).isBlank()) {
-            System.out.println("roomvalidation ");
-            return false;
-        }
-
-        return true;
     }
 
     public boolean checkZeros(int number) {

@@ -16,7 +16,7 @@ public interface IRoomDAO {
 
     void updateRoomPrice(int roomNumber, Room room) throws DBException;
 
-    void updateRoomStatus(int roomNumber, boolean status) throws ApplicationException;
+    void updateRoomStatus(int roomNumber, String status) throws ApplicationException;
 
     boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException;
 
@@ -24,5 +24,5 @@ public interface IRoomDAO {
 
     boolean isValidRoomId(int roomId) throws DBException;
 
-    Map<Integer,RoomDTO> getAllRoomWithImage() throws DBException;
+    List<RoomDTO> getAllRoomWithImage() throws DBException;
 }

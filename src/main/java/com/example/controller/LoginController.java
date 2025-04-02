@@ -6,8 +6,6 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.dao.IUserDAO;
-import com.example.dao.UserDAOImpl;
 import com.example.dto.UserDTO;
 import com.example.service.UserService;
 import com.example.controller.validation.UserValidator;
@@ -24,12 +22,10 @@ import java.io.IOException;
 @WebServlet(name = "LoginController", value = "/login")
 public class LoginController extends HttpServlet {
 
-    private final IUserDAO iUserDAO = new UserDAOImpl();
-    private final UserService userService = new UserService(iUserDAO);
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
+        UserService userService = new UserService();
 
         ObjectMapper mapper = new ObjectMapper();
         try {

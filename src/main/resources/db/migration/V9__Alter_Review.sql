@@ -1,1 +1,0 @@
-Alter table review modify column feedback text not null;

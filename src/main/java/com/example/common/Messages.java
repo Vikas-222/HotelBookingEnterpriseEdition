@@ -57,5 +57,17 @@ public class Messages {
         public static final String RATING_EMPTY = "Rating is mandatory";
         public static final String INVALID_REVIEW_ID = "Review not found";
     }
+    public static class CategoryError{
+        public static final String INVALID_CATEGORY_NAME = "Please enter valid category name";
+        public static final String CATEGORY_NOT_FOUND = "Category not found";
+        public static final String INVALID_CATEGORY = "Invalid Category Id";
+        public static final String CATEGORY_LIST_EMPTY = "Category list is empty";
+    }
 
+    public static class AmenityError{
+        public static final String INVALID_VALUES = "Please fill all required fields.";
+        public static final String CATEGORY_NOT_FOUND = "Category not found";
+        public static final String INVALID_CATEGORY = "Invalid Category Id";
+        public static final String CATEGORY_LIST_EMPTY = "Category list is empty";
+    }
 }

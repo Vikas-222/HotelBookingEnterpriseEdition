@@ -5,21 +5,16 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.ReviewMapper;
 import com.example.dao.IReviewDAO;
+import com.example.dao.impl.ReviewDAOImpl;
 import com.example.dto.ReviewDTO;
 import com.example.model.Review;
 
 import java.util.List;
 
 public class ReviewService {
-    private IReviewDAO reviewDAO;
-    private UserService userService;
-    private BookingService bookingService;
-
-    public ReviewService(IReviewDAO reviewDAO, UserService userService, BookingService bookingService) {
-        this.reviewDAO = reviewDAO;
-        this.userService = userService;
-        this.bookingService = bookingService;
-    }
+    private IReviewDAO reviewDAO = new ReviewDAOImpl();
+    private UserService userService = new UserService();
+    private BookingService bookingService = new BookingService();
 
     public boolean addReview(ReviewDTO reviewDTO) throws ApplicationException {
         Review review = ReviewMapper.convertReviewDTOToEntity(reviewDTO);
@@ -37,20 +32,20 @@ public class ReviewService {
         if (userService.isValidUserId(review.getUserId()) == false) {
             throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
         }
-        if(isValidReviewId(reviewDTO.getReviewId()) == false){
+        if (isValidReviewId(reviewDTO.getReviewId()) == false) {
             throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
         }
         return reviewDAO.updateReview(review);
     }
 
-    public boolean deleteReview(int reviewID,int userId) throws ApplicationException {
+    public boolean deleteReview(int reviewID, int userId) throws ApplicationException {
         if (userService.isValidUserId(userId) == false) {
             throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
         }
-        if(reviewDAO.deleteReview(reviewID,userId) == false){
+        if (reviewDAO.deleteReview(reviewID, userId) == false) {
             throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
         }
-        return reviewDAO.deleteReview(reviewID,userId);
+        return reviewDAO.deleteReview(reviewID, userId);
     }
 
     public List<ReviewDTO> getReviewsByUserId(int userId) throws ApplicationException {

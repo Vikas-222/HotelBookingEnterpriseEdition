@@ -11,7 +11,7 @@ public class Booking {
 
     private int bookingId;
     private int userId;
-    private int roomNumber;
+    private int roomId;
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
     private float totalAmount;
@@ -19,15 +19,15 @@ public class Booking {
     private Date cancellationDate;
     private float refundAmount;
     private int numberOfGuests;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Booking(){}
 
     private Booking(Builder builder) {
         this.bookingId = builder.bookingId;
         this.userId = builder.userId;
-        this.roomNumber = builder.roomNumber;
+        this.roomId = builder.roomId;
         this.checkInTime = builder.checkInTime;
         this.checkOutTime = builder.checkOutTime;
         this.totalAmount = builder.totalAmount;
@@ -35,8 +35,8 @@ public class Booking {
         this.cancellationDate = builder.cancellationDate;
         this.refundAmount = builder.refundAmount;
         this.numberOfGuests = builder.numberOfGuests;
-        this.created_at = builder.created_at;
-        this.updated_at = builder.updated_at;
+        this.createdAt = builder.createdAt;
+        this.updatedAt = builder.updatedAt;
     }
 
     public int getBookingId() {
@@ -47,8 +47,8 @@ public class Booking {
         return userId;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public int getRoomId() {
+        return roomId;
     }
 
     public LocalDateTime getCheckInTime() {
@@ -79,18 +79,18 @@ public class Booking {
         return numberOfGuests;
     }
 
-    public LocalDateTime getCreated_at() {
-        return created_at;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public LocalDateTime getUpdated_at() {
-        return updated_at;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public static class Builder {
         private int bookingId;
         private int userId;
-        private int roomNumber;
+        private int roomId;
         private LocalDateTime checkInTime;
         private LocalDateTime checkOutTime;
         private float totalAmount;
@@ -98,8 +98,8 @@ public class Booking {
         private Date cancellationDate;
         private float refundAmount;
         private int numberOfGuests;
-        private LocalDateTime created_at;
-        private LocalDateTime updated_at;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         public Builder setBookingId(int bookingId) {
             this.bookingId = bookingId;
@@ -111,8 +111,8 @@ public class Booking {
             return this;
         }
 
-        public Builder setRoomNumber(int roomNumber) {
-            this.roomNumber = roomNumber;
+        public Builder setRoomId(int roomId) {
+            this.roomId = roomId;
             return this;
         }
 
@@ -151,13 +151,13 @@ public class Booking {
             return this;
         }
 
-        public Builder setCreated_at(LocalDateTime created_at) {
-            this.created_at = created_at;
+        public Builder setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
             return this;
         }
 
-        public Builder setUpdated_at(LocalDateTime updated_at) {
-            this.updated_at = updated_at;
+        public Builder setUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
             return this;
         }
 
@@ -170,14 +170,14 @@ public class Booking {
     public String toString() {
         return  "bookingId=" + bookingId +
                 ", userId=" + userId +
-                ", roomNumber=" + roomNumber +
+                ", roomId=" + roomId +
                 ", checkInTime=" + checkInTime +
                 ", checkOutTime=" + checkOutTime +
                 ", totalAmount=" + totalAmount +
                 ", bookingStatus=" + bookingStatus +
                 ", cancellationDate=" + cancellationDate +
                 ", refundAmount=" + refundAmount +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at;
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt;
     }
 }

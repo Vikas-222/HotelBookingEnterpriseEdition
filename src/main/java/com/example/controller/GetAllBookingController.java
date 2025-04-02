@@ -7,8 +7,6 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
-import com.example.dao.BookingDAOImpl;
-import com.example.dao.IBookingDAO;
 import com.example.dto.BookingDTO;
 import com.example.dto.UserDTO;
 import com.example.service.BookingService;
@@ -23,16 +21,11 @@ import java.util.List;
 
 @WebServlet(name = "GetAllBookingController", value = "/get-all-booking")
 public class GetAllBookingController extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        IBookingDAO iBookingDAO = new BookingDAOImpl();
-        BookingService bookingService = new BookingService(iBookingDAO);
+        BookingService bookingService = new BookingService();
         try {
             UserDTO userDTO = SessionValidator.checkSession(request);
             if (!userDTO.getRole().equalsIgnoreCase("Admin")) {

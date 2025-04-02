@@ -5,11 +5,14 @@ public class AmenitiesDTO {
     private int amenityId;
     private String amenityName;
     private int categoryId;
+    private String categoryName;
 
-    private AmenitiesDTO(Builder builder) {
+
+    public AmenitiesDTO(Builder builder) {
         this.amenityId = builder.amenityId;
         this.amenityName = builder.amenityName;
         this.categoryId = builder.categoryId;
+        this.categoryName = builder.categoryName;
     }
 
     public AmenitiesDTO() {
@@ -27,30 +30,33 @@ public class AmenitiesDTO {
         return categoryId;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public String getCategoryName() {
+        return categoryName;
     }
 
     public static class Builder {
         private int amenityId;
         private String amenityName;
         private int categoryId;
+        private String categoryName;
 
-        private Builder() {
-        }
-
-        public Builder amenityId(int amenityId) {
+        public Builder setAmenityId(int amenityId) {
             this.amenityId = amenityId;
             return this;
         }
 
-        public Builder amenityName(String amenityName) {
+        public Builder setAmenityName(String amenityName) {
             this.amenityName = amenityName;
             return this;
         }
 
-        public Builder categoryId(int categoryId) {
+        public Builder setCategoryId(int categoryId) {
             this.categoryId = categoryId;
+            return this;
+        }
+
+        public Builder setCategoryName(String categoryName) {
+            this.categoryName = categoryName;
             return this;
         }
 
@@ -61,10 +67,9 @@ public class AmenitiesDTO {
 
     @Override
     public String toString() {
-        return "AmenitiesDTO{" +
-                "amenityId=" + amenityId +
+        return  "amenityId=" + amenityId +
                 ", amenityName='" + amenityName + '\'' +
                 ", categoryId=" + categoryId +
-                '}';
+                ", categoryName=" + categoryName;
     }
 }

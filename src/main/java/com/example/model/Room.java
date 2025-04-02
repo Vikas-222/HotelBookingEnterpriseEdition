@@ -1,5 +1,6 @@
 package com.example.model;
 
+import com.example.common.enums.RoomStatus;
 import com.example.common.enums.RoomType;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public class Room {
     private RoomType roomType;
     private int capacity;
     private float pricePerNight;
-    private boolean active;
+    private RoomStatus roomStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -24,7 +25,7 @@ public class Room {
         this.roomType = builder.roomType;
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
-        this.active = builder.active;
+        this.roomStatus = builder.roomStatus;
     }
 
     public int getRoomId() {
@@ -47,8 +48,8 @@ public class Room {
         return pricePerNight;
     }
 
-    public boolean getIsActive() {
-        return active;
+    public RoomStatus getRoomStatus() {
+        return roomStatus;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -65,7 +66,7 @@ public class Room {
         private RoomType roomType;
         private int capacity;
         private float pricePerNight;
-        private boolean active;
+        private RoomStatus roomStatus;
 
         public Builder setRoomId(int roomId) {
             this.roomId = roomId;
@@ -92,8 +93,8 @@ public class Room {
             return this;
         }
 
-        public Builder setActive(boolean active) {
-            this.active = active;
+        public Builder setRoomStatus(RoomStatus roomStatus) {
+            this.roomStatus = roomStatus;
             return this;
         }
 
@@ -109,7 +110,7 @@ public class Room {
                 ", roomType=" + roomType +
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
-                ", isActive=" + active +
+                ", roomStatus=" + roomStatus +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt;
     }

@@ -1,5 +1,6 @@
 package com.example.dto;
 
+import com.example.common.enums.RoomStatus;
 import com.example.common.enums.RoomType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -14,14 +15,11 @@ public class RoomDTO {
     private int capacity;
     private float pricePerNight;
     private List<String> imagePath;
-    private boolean isActive;
+    private RoomStatus roomStatus;
 
     public RoomDTO() {
     }
 
-//    public void setRoomNumber(int roomNumber) {
-//        this.roomNumber = roomNumber;
-//    }
 
     private RoomDTO(Builder builder) {
         this.roomId = builder.roomId;
@@ -30,7 +28,7 @@ public class RoomDTO {
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
         this.imagePath = builder.imagePath;
-        this.isActive = builder.isActive;
+        this.roomStatus = builder.roomStatus;
     }
 
     public int getRoomId() {
@@ -57,18 +55,19 @@ public class RoomDTO {
         return imagePath;
     }
 
-    public boolean getIsActive() {
-        return isActive;
+    public RoomStatus getRoomStatus() {
+        return roomStatus;
     }
 
     public static class Builder {
+
         private int roomId;
         private int roomNumber;
         private RoomType roomType;
         private int capacity;
         private float pricePerNight;
         private List<String> imagePath = new ArrayList<>();
-        private boolean isActive;
+        private RoomStatus roomStatus;
 
         public Builder setRoomId(int roomId) {
             this.roomId = roomId;
@@ -100,8 +99,8 @@ public class RoomDTO {
             return this;
         }
 
-        public Builder setIsActive(boolean isActive) {
-            this.isActive = isActive;
+        public Builder setRoomStatus(RoomStatus roomStatus) {
+            this.roomStatus = roomStatus;
             return this;
         }
 
@@ -118,6 +117,6 @@ public class RoomDTO {
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
                 ",imagePath=" + imagePath +
-                ", isActive=" + isActive;
+                ", roomStatus=" + roomStatus;
     }
 }

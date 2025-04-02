@@ -46,7 +46,7 @@ create table room
     room_type       ENUM('DELUXE','SINGLEBED','DOUBLEBED','TRIPLE','QUEEN','KING') not null,
     capacity        int        not null,
     price_per_night float      not null,
-    is_active       boolean  default true,
+    room_status     ENUM('AVAILABLE', 'OCCUPIED', 'UNDER_MAINTENANCE') not null default 'AVAILABLE',
     created_at      DateTime default current_timestamp,
     updated_at      DateTime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -61,12 +61,11 @@ create table room_images
     foreign key (room_id) references room (room_id)
 );
 
-
 create table booking
 (
     booking_id        int primary key auto_increment,
     user_id           int      not null,
-    room_number       int      not null,
+    room_id           int      not null,
     check_in          DateTime not null,
     check_out         DateTime not null,
     total_amount      float    not null,
@@ -74,14 +73,16 @@ create table booking
     cancellation_date Date,
     refund_amount     float,
     created_at        datetime default current_timestamp,
-    updated_at        datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at        datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    foreign key (user_id) references user(user_id),
+    foreign key (room_id) references room (room_id)
 );
 
 
 create table category
 (
     category_id   int primary key auto_increment,
-    category_name varchar(30) not null unique,
+    category_name ENUM('ROOM','SERVICE','HOTEL') not null,
     created_at    datetime default current_timestamp
 );
 
@@ -106,7 +107,7 @@ create table guest_details
     id_proof_number varchar(18) not null,
     created_at      datetime default current_timestamp,
     updated_at      DateTime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    foreign key (booking_id) references booking (booking_id)
+    foreign key (booking_id) references booking(booking_id) on delete cascade on update cascade
 );
 
 
@@ -117,9 +118,10 @@ create table payment
     bill_amount  float    not null,
     payment_date datetime not null,
     payment_mode Enum('CREDIT CARD','CASH','DEBIT CARD','UPI'),
+    payment_status ENUM('PENDING', 'COMPLETED', 'FAILED', 'REFUNDED') not null,
     created_at   datetime default current_timestamp,
     updated_at   datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (booking_id) REFERENCES booking (booking_id)
+    FOREIGN KEY (booking_id) REFERENCES booking (booking_id) on delete cascade
 );
 
 
@@ -133,32 +135,13 @@ create table room_amenities
 );
 
 
-create table services
-(
-    service_id          int primary key auto_increment,
-    service_description varchar(100) not null,
-    service_cost        float        not null,
-    created_at          datetime default current_timestamp,
-    updated_at          datetime default current_timestamp on update now()
-);
-
-
-create table booking_services
-(
-    booking_Id int not null,
-    service_Id int not null,
-    foreign key (booking_id) references booking (booking_id),
-    foreign key (service_id) references services (service_id)
-);
-
-
 create table review
 (
     review_id  int primary key auto_increment,
     user_id    int          not null,
     booking_id int          not null,
-    feedback   varchar(120) not null,
-    rating     tinyint      not null,
+    feedback   text not null,
+    rating     tinyint check (rating >= 1 and rating <= 5) not null,
     created_at datetime default current_timestamp,
     updated_at datetime default current_timestamp on update now(),
     foreign key (user_id) references user (user_id),

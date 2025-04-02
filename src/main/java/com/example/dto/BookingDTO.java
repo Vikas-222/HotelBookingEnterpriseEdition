@@ -11,7 +11,7 @@ public class BookingDTO {
 
     private int bookingId;
     private int userId;
-    private int roomNumber;
+    private int roomId;
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
     private float totalAmount;
@@ -19,14 +19,13 @@ public class BookingDTO {
     private Date cancellationDate;
     private float refundAmount;
     private int numberOfGuests;
-    private String serviceName;
 
     public BookingDTO(){}
 
     private BookingDTO(Builder builder) {
         this.bookingId = builder.bookingId;
         this.userId = builder.userId;
-        this.roomNumber = builder.roomNumber;
+        this.roomId = builder.roomId;
         this.checkInTime = builder.checkInTime;
         this.checkOutTime = builder.checkOutTime;
         this.totalAmount = builder.totalAmount;
@@ -34,7 +33,6 @@ public class BookingDTO {
         this.cancellationDate = builder.cancellationDate;
         this.refundAmount = builder.refundAmount;
         this.numberOfGuests = builder.numberOfGuests;
-        this.serviceName = builder.serviceName;
     }
 
     public int getBookingId() {
@@ -45,8 +43,8 @@ public class BookingDTO {
         return userId;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public int getRoomId() {
+        return roomId;
     }
 
     public LocalDateTime getCheckInTime() {
@@ -77,15 +75,12 @@ public class BookingDTO {
         return numberOfGuests;
     }
 
-    public String getServiceName() {
-        return serviceName;
-    }
 
     public static class Builder {
         public String serviceName;
         private int bookingId;
         private int userId;
-        private int roomNumber;
+        private int roomId;
         private LocalDateTime checkInTime;
         private LocalDateTime checkOutTime;
         private float totalAmount;
@@ -104,8 +99,8 @@ public class BookingDTO {
             return this;
         }
 
-        public Builder setRoomNumber(int roomNumber) {
-            this.roomNumber = roomNumber;
+        public Builder setRoomId(int roomId) {
+            this.roomId = roomId;
             return this;
         }
 
@@ -144,11 +139,6 @@ public class BookingDTO {
             return this;
         }
 
-        public Builder setServiceName(String serviceName) {
-            this.serviceName = serviceName;
-            return this;
-        }
-
         public BookingDTO build() {
             return new BookingDTO(this);
         }
@@ -158,14 +148,13 @@ public class BookingDTO {
     public String toString() {
         return  "bookingId=" + bookingId +
                 ", userId=" + userId +
-                ", roomNumber=" + roomNumber +
+                ", roomId=" + roomId +
                 ", checkInTime=" + checkInTime +
                 ", checkOutTime=" + checkOutTime +
                 ", totalAmount=" + totalAmount +
                 ", bookingStatus=" + bookingStatus +
                 ", cancellationDate=" + cancellationDate +
                 ", refundAmount=" + refundAmount +
-                ", numberOfGuests=" + numberOfGuests +
-                ", serviceName='" + serviceName;
+                ", numberOfGuests=" + numberOfGuests;
     }
 }

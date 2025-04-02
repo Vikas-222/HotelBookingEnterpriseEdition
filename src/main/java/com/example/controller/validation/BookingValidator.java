@@ -22,7 +22,7 @@ public class BookingValidator {
          if(bookingDTO.getCheckInTime() == null || bookingDTO.getCheckOutTime() == null){
              throw new ApplicationException(Messages.BookingError.INVALID_DATE);
          }
-        if(String.valueOf(bookingDTO.getRoomNumber()).isBlank() || bookingDTO.getRoomNumber() <= 0 ){
+        if(String.valueOf(bookingDTO.getRoomId()).isBlank() || bookingDTO.getRoomId() <= 0 ){
             throw new ApplicationException(Messages.BookingError.INVALID_ROOM_NUMBER);
          }
          if(String.valueOf(bookingDTO.getTotalAmount()).isBlank() || bookingDTO.getTotalAmount() <= 0){

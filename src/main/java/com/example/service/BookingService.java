@@ -4,8 +4,8 @@ import com.example.common.Messages;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.BookingMapper;
+import com.example.dao.impl.BookingDAOImpl;
 import com.example.dao.IBookingDAO;
-import com.example.dao.IRoomDAO;
 import com.example.dto.BookingDTO;
 import com.example.model.Booking;
 
@@ -13,17 +13,8 @@ import java.util.List;
 
 public class BookingService {
 
-    private IBookingDAO iBookingDAO;
-    private RoomService roomService;
-
-    public BookingService(IBookingDAO iBookingDAO,RoomService roomService) {
-        this.iBookingDAO = iBookingDAO;
-        this.roomService = roomService;
-    }
-
-    public BookingService(IBookingDAO iBookingDAO) {
-        this.iBookingDAO = iBookingDAO;
-    }
+    private IBookingDAO iBookingDAO = new BookingDAOImpl();
+    private RoomService roomService = new RoomService();
 
     public boolean isValidBookingId(int id) throws ApplicationException {
         if (!iBookingDAO.isValidBookingId(id)) {
@@ -34,8 +25,8 @@ public class BookingService {
 
     public void addBooking(BookingDTO bookingdto) throws ApplicationException {
         Booking booking = BookingMapper.convertBookingDTOToEntity(bookingdto);
-        roomService.isRoomNumberExists(booking.getRoomNumber());
-        roomService.isCapacityValid(booking.getRoomNumber(),booking.getNumberOfGuests());
+        roomService.isRoomNumberExists(booking.getRoomId());
+        roomService.isCapacityValid(booking.getRoomId(), booking.getNumberOfGuests());
         iBookingDAO.addBooking(booking);
     }
 
@@ -56,15 +47,15 @@ public class BookingService {
         return BookingMapper.convertEntityListToBookingDTOList(iBookingDAO.getAllBookingDetails());
     }
 
-    public void updateBookingStatus(int id,String status) throws ApplicationException {
+    public void updateBookingStatus(int id, String status) throws ApplicationException {
         isValidBookingId(id);
-        iBookingDAO.updateBookingStatus(id,status);
+        iBookingDAO.updateBookingStatus(id, status);
     }
 
-    public BookingDTO setUserIdAndTotalAmount(BookingDTO bookingDTO, int id,int roomNumber) throws ApplicationException {
+    public BookingDTO setUserIdAndTotalAmount(BookingDTO bookingDTO, int id, int roomNumber) throws ApplicationException {
         return new BookingDTO.Builder()
                 .setUserId(id)
-                .setRoomNumber(bookingDTO.getRoomNumber())
+                .setRoomId(bookingDTO.getRoomId())
                 .setCheckInTime(bookingDTO.getCheckInTime())
                 .setCheckOutTime(bookingDTO.getCheckOutTime())
                 .setTotalAmount(roomService.getRoomPrice(roomNumber))

@@ -63,12 +63,10 @@ public class Amenities {
 
         @Override
         public String toString() {
-            return "Builder{" +
-                    "createdAt=" + createdAt +
+            return  "createdAt=" + createdAt +
                     ", amenityId=" + amenityId +
                     ", amenityName='" + amenityName + '\'' +
-                    ", categoryId=" + categoryId +
-                    '}';
+                    ", categoryId=" + categoryId;
         }
     }
 }

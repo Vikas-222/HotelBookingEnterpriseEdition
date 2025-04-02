@@ -7,8 +7,6 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
-import com.example.dao.IRoomDAO;
-import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.dto.UserDTO;
 import com.example.service.RoomService;
@@ -26,24 +24,23 @@ public class UpdateRoomStatusController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        IRoomDAO iRoomDAO = new RoomDAOImpl();
-        RoomService roomService = new RoomService(iRoomDAO);
+        RoomService roomService = new RoomService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
             if(!user.getRole().equalsIgnoreCase("admin")){
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-            String roomStr = request.getParameter("roomNumber");
+            String roomStr = request.getParameter("roomId");
             if (roomStr == null || roomStr.isBlank()) {
                 throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
             }
-            int roomNum = Integer.parseInt(roomStr);
-            if (roomNum <= 0) {
+            int roomId = Integer.parseInt(roomStr);
+            if (roomId <= 0) {
                 throw new ApplicationException(Messages.RoomError.INVALID_ROOM_ID);
             }
             RoomDTO roomDTO = CustomObjectMapper.toObject(request.getReader(), RoomDTO.class);
-            RoomDTO room = setRoomNumber(roomDTO,roomNum);
-            roomService.updateRoomStatus(room);
+            RoomDTO room = setRoomId(roomDTO,roomId);
+            roomService.updateRoomStatus(room.getRoomId(),room.getRoomStatus().toString());
             sendResponse(response, Messages.ROOM_UPDATED, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
@@ -66,9 +63,9 @@ public class UpdateRoomStatusController extends HttpServlet {
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 
-    private RoomDTO setRoomNumber(RoomDTO roomDTO,int roomNumber){
+    private RoomDTO setRoomId(RoomDTO roomDTO,int roomId){
        return new RoomDTO.Builder()
-                .setRoomNumber(roomNumber)
-                .setIsActive(roomDTO.getIsActive()).build();
+                .setRoomId(roomId)
+                .setRoomStatus(roomDTO.getRoomStatus()).build();
     }
 }

@@ -5,8 +5,6 @@ import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.dao.IRoomDAO;
-import com.example.dao.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.service.RoomService;
 import jakarta.servlet.ServletException;
@@ -17,22 +15,20 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet(name = "GetAllRoomController", value = "/get-all-room")
 public class GetAllRoomController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        IRoomDAO iRoomDAO = new RoomDAOImpl();
-        RoomService roomService = new RoomService(iRoomDAO);
+        RoomService roomService = new RoomService();
 
         try {
-            Map<Integer,RoomDTO> list = roomService.getAllRooms();
-            sendResponse(response,null,null,list,200);
+            List<RoomDTO> list = roomService.getAllRooms();
+            sendResponse(response, null, null, list, 200);
         } catch (ApplicationException e) {
             e.printStackTrace();
-            sendResponse(response,Messages.Error.FAILED,e.getMessage(),null,400);
+            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 400);
         }
     }
 

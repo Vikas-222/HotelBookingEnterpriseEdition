@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.common.Messages;
 import com.example.common.exception.ApplicationException;
+import com.example.common.exception.DBException;
 import com.example.controller.validation.CategoryValidator;
 import com.example.dao.impl.CategoryDAOImpl;
 import com.example.dao.ICategoryDAO;
@@ -44,6 +45,19 @@ public class CategoryService {
                 throw new ApplicationException(Messages.CategoryError.CATEGORY_NOT_FOUND);
             }
             iCategoryDAO.deleteCategory(id);
+        } catch (ApplicationException e) {
+            throw e;
+        }
+        return true;
+    }
+
+    public boolean isValidId(int id) throws ApplicationException {
+        try{
+            if(iCategoryDAO.isValidId(id) == false){
+                throw new ApplicationException(Messages.AmenityError.INVALID_CATEGORY);
+            }
+        } catch (DBException e) {
+            throw e;
         } catch (ApplicationException e) {
             throw e;
         }

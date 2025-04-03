@@ -10,6 +10,9 @@ public class Messages {
     public static final String ROOM_UPDATED = "Room updated successfully";
     public static final String BOOKING_SUCCESS = "Booking successful";
     public static final String PASSWORD_UPDATED = "Password updated successful";
+    public static final String AMENITY_ADDED = "Amenity added successfully";
+    public static final String AMENITY_UPDATED = "Amenity updation successful";
+    public static final String AMENITY_DELETED = "Amenity deletion successful";
 
     public static class Error {
         public static final String ALREADY_EXISTS = "A user with this email already exists";

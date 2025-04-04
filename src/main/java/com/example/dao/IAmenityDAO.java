@@ -15,4 +15,6 @@ public interface IAmenityDAO {
     boolean isValidAmenityId(int id) throws DBException;
 
     List<AmenitiesDTO> getAmenitiesWithCategoryName() throws DBException;
+
+    String getCategoryName(int id) throws DBException;
 }

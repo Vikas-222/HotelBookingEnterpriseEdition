@@ -78,7 +78,7 @@ public class AmenityDAOImpl implements IAmenityDAO {
 
     @Override
     public List<AmenitiesDTO> getAmenitiesWithCategoryName() throws DBException {
-        String sql = "select a.amenity_id,a.amenity_name,c.category_name from amenities as a,category as c where a.category_id = c.category_id";
+        String sql = "select a.amenity_id,a.amenity_name,a.category_id,c.category_name from amenities as a,category as c where a.category_id = c.category_id";
         ResultSet rs = null;
         List<AmenitiesDTO> list = new ArrayList<>();
         try (Connection connection = DbConnect.instance.getConnection();
@@ -88,10 +88,37 @@ public class AmenityDAOImpl implements IAmenityDAO {
                 AmenitiesDTO amenitiesDTO = new AmenitiesDTO.Builder()
                         .setAmenityId(rs.getInt("amenity_id"))
                         .setAmenityName(rs.getString("amenity_name"))
+                        .setCategoryId(rs.getInt("category_id"))
                         .setCategoryName(rs.getString("category_name")).build();
                 list.add(amenitiesDTO);
             }
             return list;
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
+        }
+    }
+
+    @Override
+    public String getCategoryName(int id) throws DBException {
+        String sql = "select c.category_name from category c join amenities a on c.category_id = a.category_id where a.amenity_id = ?";
+        ResultSet rs = null;
+        String str = null;
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setInt(1,id);
+            rs = pst.executeQuery();
+            while(rs.next()){
+               str = rs.getString("category_name");
+            }
+            return str;
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         } finally {

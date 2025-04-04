@@ -14,15 +14,9 @@ import java.util.List;
 public class RoomService {
 
     private IRoomDAO iRoomDAO = new RoomDAOImpl();
-    RoomValidator roomValidator = new RoomValidator();
-
-//    public RoomService(IRoomDAO iRoomDAO) {
-//        this.iRoomDAO = iRoomDAO;
-//    }
 
     public int addRoom(RoomDTO roomDTO) throws DBException {
         Room room = RoomMapper.convertRoomDTOToRoom(roomDTO);
-        System.out.println("service " + room);
         return iRoomDAO.addRoom(room);
     }
 
@@ -30,7 +24,7 @@ public class RoomService {
         if (iRoomDAO.isRoomNumberExists(roomNumber) == false) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        return iRoomDAO.isRoomNumberExists(roomNumber);
+        return true;
     }
 
     public void updateRoomPrice(int roomNumber, RoomDTO roomDTO) throws ApplicationException {
@@ -63,7 +57,7 @@ public class RoomService {
         if (iRoomDAO.isCapacityValid(roomId, numberOfGuest) == false) {
             throw new ApplicationException(Messages.BookingError.CAPACITY_EXCEEDED);
         }
-        return iRoomDAO.isCapacityValid(roomId, numberOfGuest);
+        return true;
     }
 
     public float getRoomPrice(int roomNumber) throws ApplicationException {
@@ -75,6 +69,13 @@ public class RoomService {
         if (iRoomDAO.isValidRoomId(roomId) == false) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_ID);
         }
-        return iRoomDAO.isValidRoomId(roomId);
+        return true;
+    }
+
+    public RoomDTO getRoomDetails(int roomId) throws ApplicationException {
+        if (iRoomDAO.isValidRoomId(roomId) == false) {
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_ID);
+        }
+        return RoomMapper.convertRoomToRoomDTO(iRoomDAO.getRoom(roomId));
     }
 }

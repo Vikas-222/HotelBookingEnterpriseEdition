@@ -7,10 +7,9 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.SessionValidator;
-import com.example.dto.BookingDTO;
+import com.example.dto.AdditionalChargesDTO;
 import com.example.dto.UserDTO;
-import com.example.service.BookingService;
-import com.example.controller.validation.BookingValidator;
+import com.example.service.AdditionalChargesService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -19,28 +18,27 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "AddBookingController", value = "/addbooking")
-public class AddBookingController extends HttpServlet {
+@WebServlet(name = "insert-additional-charges", value = "/insert-additional-charges")
+public class InsertAdditionalChargesController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        BookingService bookingService = new BookingService();
-        try {
+        AdditionalChargesService service = new AdditionalChargesService();
+        try{
             UserDTO user = SessionValidator.checkSession(request);
-            BookingDTO bookingDTO = CustomObjectMapper.toObject(request.getReader(), BookingDTO.class);
-            if(user.getIsActive() == false){
-                throw new ApplicationException(Messages.BookingError.ACCOUNT_DEACTIVATE);
+            if(!user.getRole().equalsIgnoreCase("admin")){
+                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-            BookingDTO bookingDTO1 = setUserId(bookingDTO, user.getUserId());
-            bookingService.addBooking(bookingDTO1);
-            sendResponse(response, Messages.BOOKING_SUCCESS, null, null, 200);
-        } catch (DBException e) {
+            AdditionalChargesDTO charges = CustomObjectMapper.toObject(request.getReader(),AdditionalChargesDTO.class);
+            service.addCharges(charges);
+            sendResponse(response,null,null,null,200);
+        }catch (DBException e) {
             e.printStackTrace();
-            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
+            sendResponse(response,Messages.Error.FAILED,e.getMessage(),null,500);
         } catch (ApplicationException e) {
             e.printStackTrace();
-            sendResponse(response, e.getMessage(), null, null, 400);
+            sendResponse(response,e.getMessage(),null,null,400);
         }
     }
 
@@ -53,12 +51,4 @@ public class AddBookingController extends HttpServlet {
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 
-    public BookingDTO setUserId(BookingDTO bookingDTO, int id) throws ApplicationException {
-        return new BookingDTO.Builder()
-                .setUserId(id)
-                .setRoomId(bookingDTO.getRoomId())
-                .setCheckInTime(bookingDTO.getCheckInTime())
-                .setCheckOutTime(bookingDTO.getCheckOutTime())
-                .setNumberOfGuests(bookingDTO.getNumberOfGuests()).build();
-    }
 }

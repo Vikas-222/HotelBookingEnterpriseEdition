@@ -25,4 +25,6 @@ public interface IRoomDAO {
     boolean isValidRoomId(int roomId) throws DBException;
 
     List<RoomDTO> getAllRoomWithImage() throws DBException;
+
+    Room getRoom(int roomId) throws DBException;
 }

@@ -1,13 +1,15 @@
 package com.example.dao;
 
 import com.example.common.exception.DBException;
+import com.example.dto.RoomDTO;
 import com.example.model.Booking;
-
+import java.sql.Date;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IBookingDAO {
 
-    void addBooking(Booking booking) throws DBException;
+    void addBooking(Booking booking, RoomDTO room) throws DBException;
 
     Booking getBookingDetails(int id) throws DBException;
 
@@ -18,4 +20,12 @@ public interface IBookingDAO {
     List<Booking> getAllBookingDetails() throws DBException;
 
     boolean isValidBookingId(int bookingId) throws DBException;
+
+    boolean cancelBooking(int bookingId, Date cancellationDate, float refundAmount) throws SQLException, DBException;
+
+    boolean modifyBooking(Booking booking, RoomDTO room) throws DBException;
+
+    boolean isValidUserIdAndBookingId(int userId, int bookingId) throws DBException;
+
+    List<Booking> getBookingDetailsByUserId(int userId) throws DBException;
 }

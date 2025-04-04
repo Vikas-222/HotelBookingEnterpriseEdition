@@ -1,0 +1,2 @@
+create table AdditionalCharges(id int primary key,chargesName varchar(50) not null, cost float not null,
+ created_at datetime default current_timestamp, updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);

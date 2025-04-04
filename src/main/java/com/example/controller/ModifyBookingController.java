@@ -10,34 +10,32 @@ import com.example.common.utils.SessionValidator;
 import com.example.dto.BookingDTO;
 import com.example.dto.UserDTO;
 import com.example.service.BookingService;
-import com.example.controller.validation.BookingValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
-@WebServlet(name = "AddBookingController", value = "/addbooking")
-public class AddBookingController extends HttpServlet {
+@WebServlet(name = "modify-booking", value = "/modify-booking")
+public class ModifyBookingController extends HttpServlet {
+
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstant.APPLICATION_JSON);
-        BookingService bookingService = new BookingService();
+        BookingService service = new BookingService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
-            BookingDTO bookingDTO = CustomObjectMapper.toObject(request.getReader(), BookingDTO.class);
+            BookingDTO booking = CustomObjectMapper.toObject(request.getReader(), BookingDTO.class);
             if(user.getIsActive() == false){
                 throw new ApplicationException(Messages.BookingError.ACCOUNT_DEACTIVATE);
             }
-            BookingDTO bookingDTO1 = setUserId(bookingDTO, user.getUserId());
-            bookingService.addBooking(bookingDTO1);
-            sendResponse(response, Messages.BOOKING_SUCCESS, null, null, 200);
+            service.modifyBooking(booking);
+            sendResponse(response, Messages.BOOKING_UPDATED, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
-            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
+            sendResponse(response, null, e.getMessage(), null, 500);
         } catch (ApplicationException e) {
             e.printStackTrace();
             sendResponse(response, e.getMessage(), null, null, 400);
@@ -51,14 +49,5 @@ public class AddBookingController extends HttpServlet {
         apiResponse.setTechnicalMessage(technicalMessage);
         apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
-    }
-
-    public BookingDTO setUserId(BookingDTO bookingDTO, int id) throws ApplicationException {
-        return new BookingDTO.Builder()
-                .setUserId(id)
-                .setRoomId(bookingDTO.getRoomId())
-                .setCheckInTime(bookingDTO.getCheckInTime())
-                .setCheckOutTime(bookingDTO.getCheckOutTime())
-                .setNumberOfGuests(bookingDTO.getNumberOfGuests()).build();
     }
 }

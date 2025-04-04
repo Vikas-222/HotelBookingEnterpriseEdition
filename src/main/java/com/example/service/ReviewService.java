@@ -8,7 +8,6 @@ import com.example.dao.IReviewDAO;
 import com.example.dao.impl.ReviewDAOImpl;
 import com.example.dto.ReviewDTO;
 import com.example.model.Review;
-
 import java.util.List;
 
 public class ReviewService {
@@ -18,11 +17,8 @@ public class ReviewService {
 
     public boolean addReview(ReviewDTO reviewDTO) throws ApplicationException {
         Review review = ReviewMapper.convertReviewDTOToEntity(reviewDTO);
-        if (userService.isValidUserId(review.getUserId()) == false) {
-            throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
-        }
-        if (!bookingService.isValidBookingId(review.getBookingId())) {
-            throw new ApplicationException(Messages.BookingError.BOOKING_NOT_FOUND);
+        if(bookingService.isValidUserIdAndBookingId(review.getUserId(),review.getBookingId()) == false){
+            throw new ApplicationException(Messages.ReviewError.INVALID_USERID_BOOKINGID);
         }
         return reviewDAO.addReview(review);
     }
@@ -45,7 +41,7 @@ public class ReviewService {
         if (reviewDAO.deleteReview(reviewID, userId) == false) {
             throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
         }
-        return reviewDAO.deleteReview(reviewID, userId);
+        return true;
     }
 
     public List<ReviewDTO> getReviewsByUserId(int userId) throws ApplicationException {
@@ -62,4 +58,6 @@ public class ReviewService {
     public boolean isValidReviewId(int id) throws DBException {
         return reviewDAO.isValidReviewId(id);
     }
+
+
 }

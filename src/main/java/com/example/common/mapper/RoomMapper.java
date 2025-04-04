@@ -25,4 +25,14 @@ public class RoomMapper {
 //                .collect(Collectors.toList());
 //    }
 
+    public static RoomDTO convertRoomToRoomDTO(Room room) {
+        return new RoomDTO.Builder()
+                .setRoomId(room.getRoomId())
+                .setRoomNumber(room.getRoomNumber())
+                .setRoomType(room.getRoomType())
+                .setCapacity(room.getCapacity())
+                .setPricePerNight(room.getPricePerNight())
+                .setRoomStatus(room.getRoomStatus())
+                .build();
+    }
 }

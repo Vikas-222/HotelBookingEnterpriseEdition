@@ -1,0 +1,1 @@
+Alter table additionalcharges modify column id int AUTO_INCREMENT;

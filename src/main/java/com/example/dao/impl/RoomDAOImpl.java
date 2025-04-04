@@ -142,7 +142,8 @@ public class RoomDAOImpl implements IRoomDAO {
 
     @Override
     public List<RoomDTO> getAllRoomWithImage() throws DBException {
-        String sql = "select r.room_id,r.room_number,r.room_type,r.capacity,r.price_per_night,r.room_status,im.imagepath from room r, room_images im where r.room_id = im.room_id";
+        String sql = "select r.room_id,r.room_number,r.room_type,r.capacity,r.price_per_night,r.room_status,im.imagepath from room r, " +
+                "room_images im where r.room_id = im.room_id and r.room_status = 'AVAILABLE'";
         ResultSet rs = null;
         Map<Integer, RoomDTO> roomMap = new HashMap<>();
         try (Connection connection = DbConnect.instance.getConnection();
@@ -184,5 +185,37 @@ public class RoomDAOImpl implements IRoomDAO {
         return new ArrayList<>(roomMap.values());
     }
 
+    @Override
+    public Room getRoom(int roomId) throws DBException {
+        String sql = "SELECT * FROM room WHERE room_id = ?";
+        ResultSet rs = null;
+        Room room = null;
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql);) {
+            pst.setInt(1, roomId);
+            rs = pst.executeQuery();
+            while(rs.next()){
+                room = new Room.Builder()
+                        .setRoomId(roomId)
+                        .setRoomNumber(rs.getInt("room_number"))
+                        .setRoomType(RoomType.fromString(rs.getString("room_type")))
+                        .setPricePerNight(rs.getFloat("price_per_night"))
+                        .setCapacity(rs.getInt("capacity"))
+                        .setRoomStatus(RoomStatus.fromString(rs.getString("room_status")))
+                        .build();
+            }
+            return room;
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
+        }
+    }
 }
 

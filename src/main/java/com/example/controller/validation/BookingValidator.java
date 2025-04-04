@@ -25,9 +25,6 @@ public class BookingValidator {
         if(String.valueOf(bookingDTO.getRoomId()).isBlank() || bookingDTO.getRoomId() <= 0 ){
             throw new ApplicationException(Messages.BookingError.INVALID_ROOM_NUMBER);
          }
-         if(String.valueOf(bookingDTO.getTotalAmount()).isBlank() || bookingDTO.getTotalAmount() <= 0){
-             throw new ApplicationException(Messages.BookingError.INVALID_TOTAL_AMOUNT);
-         }
          if(String.valueOf(bookingDTO.getNumberOfGuests()).isBlank() || bookingDTO.getNumberOfGuests() <= 0){
              throw new ApplicationException(Messages.BookingError.INVALID_NUMBER_OF_GUEST);
          }
@@ -41,6 +38,19 @@ public class BookingValidator {
         }
         if (from.isAfter(to) || to.isBefore(from)) {
             throw new ApplicationException(Messages.BookingError.CHECK_OUT_BEFORE_CHECK_IN);
+        }
+        return true;
+    }
+
+    public static boolean isValidForModifyBooking(BookingDTO bookingDTO) throws ApplicationException {
+        if(bookingDTO.getCheckInTime() == null || bookingDTO.getCheckOutTime() == null){
+            throw new ApplicationException(Messages.BookingError.INVALID_DATE);
+        }
+        if(String.valueOf(bookingDTO.getTotalAmount()).isBlank() || bookingDTO.getTotalAmount() <= 0){
+            throw new ApplicationException(Messages.BookingError.INVALID_TOTAL_AMOUNT);
+        }
+        if(String.valueOf(bookingDTO.getNumberOfGuests()).isBlank() || bookingDTO.getNumberOfGuests() <= 0){
+            throw new ApplicationException(Messages.BookingError.INVALID_NUMBER_OF_GUEST);
         }
         return true;
     }

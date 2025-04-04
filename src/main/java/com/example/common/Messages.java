@@ -13,6 +13,7 @@ public class Messages {
     public static final String AMENITY_ADDED = "Amenity added successfully";
     public static final String AMENITY_UPDATED = "Amenity updation successful";
     public static final String AMENITY_DELETED = "Amenity deletion successful";
+    public static final String BOOKING_UPDATED = "Booking modify successful";
 
     public static class Error {
         public static final String ALREADY_EXISTS = "A user with this email already exists";
@@ -33,44 +34,54 @@ public class Messages {
         public static final String LOGIN_FIRST = "Please log in to continue";
     }
 
-    public static class RoomError{
+    public static class RoomError {
         public static final String ROOM_NUMBER_EXISTS = "Sorry! Room number already exists";
         public static final String INVALID_CAPACITY = "Please enter valid room capacity";
         public static final String INVALID_ROOM_PRICE = "Please enter valid room price";
         public static final String INVALID_ROOM_NUMBER = "Please enter valid room number";
         public static final String INVALID_VALUES = "Please provide all required room details.";
-        public static final String INVALID_ROOM_ID = "Invalid Room Id";
+        public static final String INVALID_ROOM_ID = "Room not found";
         public static final String INVALID_IMAGE_PATH = "Invalid Image path";
         public static final String IMAGE_NOT_FOUND = "Please upload an image.";
     }
 
-    public static class BookingError{
+    public static class BookingError {
         public static final String BOOKING_NOT_FOUND = "Booking not found!";
         public static final String INVALID_ROOM_NUMBER = "Please enter valid room number";
+        public static final String INVALID_BOOKING_ID = "Invalid Booking ID";
         public static final String CAPACITY_EXCEEDED = "The number of guests exceeds the capacity of the selected room(s)";
         public static final String INVALID_DATE = "Please select correct date";
         public static final String CHECK_OUT_BEFORE_CHECK_IN = "Check-out date cannot be before check-in date.";
         public static final String PAST_DATE_BOOKING_NOT_ALLOWED = "Bookings cannot be made for past dates.";
         public static final String INVALID_TOTAL_AMOUNT = "Total amount value is invalid";
         public static final String INVALID_NUMBER_OF_GUEST = "Please enter valid number of guest";
+        public static final String ACCOUNT_DEACTIVATE = "Your account is deactivated! Please contact to admin";
     }
 
-    public static class ReviewError{
+    public static class ReviewError {
+        public static final String INVALID_USERID_BOOKINGID = "You can only review bookings you have completed.";
         public static final String FEEDBACK_EMPTY = "Please give us your valuable feedback";
         public static final String RATING_EMPTY = "Rating is mandatory";
         public static final String INVALID_REVIEW_ID = "Review not found";
     }
-    public static class CategoryError{
+
+    public static class CategoryError {
         public static final String INVALID_CATEGORY_NAME = "Please enter valid category name";
         public static final String CATEGORY_NOT_FOUND = "Category not found";
         public static final String INVALID_CATEGORY = "Invalid Category Id";
         public static final String CATEGORY_LIST_EMPTY = "Category list is empty";
     }
 
-    public static class AmenityError{
+    public static class AmenityError {
         public static final String INVALID_VALUES = "Please fill all required fields.";
         public static final String CATEGORY_NOT_FOUND = "Category not found";
         public static final String INVALID_CATEGORY = "Invalid Category Id";
         public static final String CATEGORY_LIST_EMPTY = "Category list is empty";
+    }
+
+    public static class ChargesError {
+        public static final String EMPTY_CHARGES_NAME = "Please fill charges name field.";
+        public static final String EMPTY_CHARGES_COST = "Please fill charges cost field.";
+        public static final String INVALID_CHARGES_COST = "Please enter valid charges cost.";
     }
 }

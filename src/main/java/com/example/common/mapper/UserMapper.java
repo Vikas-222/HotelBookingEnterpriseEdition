@@ -26,7 +26,8 @@ public class UserMapper {
                 .setContactNumber(user.getContactNumber())
                 .setGender(user.getGender())
                 .setProfilePic(user.getProfilePic())
-                .setRole(user.getRole()).build();
+                .setRole(user.getRole())
+                .setActive(user.getIsActive()).build();
     }
 
     public static User ForUpdateDTOToEntity(UserDTO user) {

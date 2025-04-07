@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
@@ -23,7 +23,7 @@ public class ModifyBookingController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         BookingService service = new BookingService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
@@ -31,11 +31,11 @@ public class ModifyBookingController extends HttpServlet {
             if(user.getIsActive() == false){
                 throw new ApplicationException(Messages.BookingError.ACCOUNT_DEACTIVATE);
             }
-            service.modifyBooking(booking);
+            service.modifyBooking(booking,user.getUserId());
             sendResponse(response, Messages.BOOKING_UPDATED, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
-            sendResponse(response, null, e.getMessage(), null, 500);
+            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
         } catch (ApplicationException e) {
             e.printStackTrace();
             sendResponse(response, e.getMessage(), null, null, 400);

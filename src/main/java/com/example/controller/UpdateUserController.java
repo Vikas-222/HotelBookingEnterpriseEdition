@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
@@ -22,7 +22,7 @@ public class UpdateUserController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         UserService userService = new UserService();
         try {
             UserDTO user = SessionValidator.checkSession(request);

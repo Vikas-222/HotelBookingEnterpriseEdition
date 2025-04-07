@@ -13,8 +13,6 @@ public interface IBookingDAO {
 
     Booking getBookingDetails(int id) throws DBException;
 
-    void updateBooking(Booking booking) throws DBException;
-
     void updateBookingStatus(int id, String status) throws DBException;
 
     List<Booking> getAllBookingDetails() throws DBException;

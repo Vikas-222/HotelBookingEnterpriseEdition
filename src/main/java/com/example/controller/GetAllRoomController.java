@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
@@ -20,7 +20,7 @@ import java.util.List;
 public class GetAllRoomController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         RoomService roomService = new RoomService();
 
         try {
@@ -30,11 +30,6 @@ public class GetAllRoomController extends HttpServlet {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 400);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 
     private void sendResponse(HttpServletResponse response, String message, String technicalMessage, Object data, int statusCode) throws IOException {

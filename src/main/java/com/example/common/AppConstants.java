@@ -1,6 +1,6 @@
 package com.example.common;
 
-public class AppConstant {
+public class AppConstants {
 
     public final static String APPLICATION_JSON = "application/json";
 }

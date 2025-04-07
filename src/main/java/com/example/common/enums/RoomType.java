@@ -4,7 +4,7 @@ public enum RoomType {
     DELUXE,
     SINGLEBED,
     DOUBLEBED,
-    TRIPLEBED,
+    TRIPLE,
     QUEEN,
     KING;
 

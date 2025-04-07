@@ -9,34 +9,42 @@ import com.example.dto.RoomDTO;
 import com.example.model.Room;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RoomDAOImpl implements IRoomDAO {
 
     @Override
-    public int addRoom(Room room) throws DBException {
+    public boolean addRoom(RoomDTO room) throws DBException {
         String insert = "insert into room(room_number,room_type,capacity,price_per_night) values (?,?,?,?)";
+        String roomImages = "insert into room_images(imagepath,room_id) values (?,?)";
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(insert)) {
+             PreparedStatement pst = connection.prepareStatement(insert,Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement pstImage = connection.prepareStatement(roomImages)) {
             pst.setInt(1, room.getRoomNumber());
             pst.setString(2, room.getRoomType().toString());
             pst.setInt(3, room.getCapacity());
             pst.setFloat(4, room.getPricePerNight());
-            int rows = pst.executeUpdate();
-            if (rows > 0) {
-                System.out.println(pst.getGeneratedKeys());
-                ResultSet rs = pst.getGeneratedKeys();
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
+            pst.executeUpdate();
+            ResultSet rs = pst.getGeneratedKeys();
+//            while (rs.next()) {
+//                int roomId = rs.getInt(1);
+//                for (String path : room.getImagePath()) {
+//                    pstImage.setString(1, path);
+//                    pstImage.setInt(2, roomId);
+//                    pstImage.addBatch();
+//                }
+//                int[] result = pstImage.executeBatch();
+//                return Arrays.stream(result).allMatch(i -> i > 0);
+//            }
+            while (rs.next()) {
+                pstImage.setString(1,room.getImagePaths());
+                pstImage.setInt(2,rs.getInt(1));
+                return pstImage.executeUpdate() > 0;
             }
-            return -1;
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }
+        return false;
     }
 
 
@@ -95,19 +103,18 @@ public class RoomDAOImpl implements IRoomDAO {
                 return numberOfGuests <= capacity;
             }
         } catch (SQLException | ClassNotFoundException e) {
-            System.out.println("dao " + e.getMessage());
             throw new DBException(e);
         }
         return false;
     }
 
     @Override
-    public float getRoomPrice(int roomNumber) throws DBException {
-        String sql = "SELECT PRICE_PER_NIGHT FROM room WHERE ROOM_NUMBER = ?";
+    public float getRoomPriceByRoomId(int roomId) throws DBException {
+        String sql = "SELECT PRICE_PER_NIGHT FROM room WHERE room_id = ?";
         ResultSet rs = null;
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(sql);) {
-            pst.setInt(1, roomNumber);
+            pst.setInt(1, roomId);
             rs = pst.executeQuery();
             if (rs.next()) {
                 return rs.getFloat("price_per_night");
@@ -143,7 +150,7 @@ public class RoomDAOImpl implements IRoomDAO {
     @Override
     public List<RoomDTO> getAllRoomWithImage() throws DBException {
         String sql = "select r.room_id,r.room_number,r.room_type,r.capacity,r.price_per_night,r.room_status,im.imagepath from room r, " +
-                "room_images im where r.room_id = im.room_id and r.room_status = 'AVAILABLE'";
+                "room_images im where r.room_id = im.room_id and r.room_status = 'AVAILABLE' ";
         ResultSet rs = null;
         Map<Integer, RoomDTO> roomMap = new HashMap<>();
         try (Connection connection = DbConnect.instance.getConnection();
@@ -218,8 +225,22 @@ public class RoomDAOImpl implements IRoomDAO {
         }
     }
 
-//    public float getGstRatesByRoomPrice(float price) {
-//        String sql = "SELECT tax_rate FROM gst_rates WHERE min_price <= ?AND(max_price >= ? OR max_price IS NULL)";
-//    }
+    @Override
+    public float getGstRatesByRoomPrice(float price) throws DBException {
+        String sql = "SELECT tax_rate FROM gst_rates WHERE min_price <= ?AND(max_price >= ? OR max_price IS NULL)";
+        ResultSet rs = null;
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql);) {
+            pst.setFloat(1, price);
+            pst.setFloat(2, price);
+            rs = pst.executeQuery();
+            while(rs.next()){
+                return rs.getFloat("tax_rate");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }
+        return 0;
+    }
 }
 

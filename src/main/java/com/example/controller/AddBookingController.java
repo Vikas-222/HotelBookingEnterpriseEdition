@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
@@ -10,7 +10,6 @@ import com.example.common.utils.SessionValidator;
 import com.example.dto.BookingDTO;
 import com.example.dto.UserDTO;
 import com.example.service.BookingService;
-import com.example.controller.validation.BookingValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,7 +23,7 @@ public class AddBookingController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         BookingService bookingService = new BookingService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
@@ -32,8 +31,7 @@ public class AddBookingController extends HttpServlet {
             if(user.getIsActive() == false){
                 throw new ApplicationException(Messages.BookingError.ACCOUNT_DEACTIVATE);
             }
-            BookingDTO bookingDTO1 = setUserId(bookingDTO, user.getUserId());
-            bookingService.addBooking(bookingDTO1);
+            bookingService.addBooking(bookingDTO,user.getUserId());
             sendResponse(response, Messages.BOOKING_SUCCESS, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
@@ -51,14 +49,5 @@ public class AddBookingController extends HttpServlet {
         apiResponse.setTechnicalMessage(technicalMessage);
         apiResponse.setData(data);
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
-    }
-
-    public BookingDTO setUserId(BookingDTO bookingDTO, int id) throws ApplicationException {
-        return new BookingDTO.Builder()
-                .setUserId(id)
-                .setRoomId(bookingDTO.getRoomId())
-                .setCheckInTime(bookingDTO.getCheckInTime())
-                .setCheckOutTime(bookingDTO.getCheckOutTime())
-                .setNumberOfGuests(bookingDTO.getNumberOfGuests()).build();
     }
 }

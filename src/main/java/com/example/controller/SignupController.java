@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
@@ -19,7 +19,7 @@ public class SignupController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         UserService userService = new UserService();
         try {
             UserDTO user = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);

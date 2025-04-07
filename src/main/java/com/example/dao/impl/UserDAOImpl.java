@@ -4,7 +4,6 @@ import com.example.common.exception.DBException;
 import com.example.config.DbConnect;
 import com.example.dao.IUserDAO;
 import com.example.model.User;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,11 +105,16 @@ public class UserDAOImpl implements IUserDAO {
              ResultSet rs = st.executeQuery(sql)) {
             List<User> list = new ArrayList<>();
             while (rs.next()) {
-                User user = new User.UserBuilder().setUserId(rs.getInt("user_id")).setFirstName(rs.getString("first_name"))
-                        .setLastName(rs.getString("last_name")).setEmail(rs.getString("email"))
+                User user = new User.UserBuilder()
+                        .setUserId(rs.getInt("user_id"))
+                        .setFirstName(rs.getString("first_name"))
+                        .setLastName(rs.getString("last_name"))
+                        .setEmail(rs.getString("email"))
                         .setContactNumber(rs.getString("contact"))
-                        .setUserId(rs.getInt("user_id")).setGender(rs.getString("gender"))
-                        .setIsActive(rs.getBoolean("is_active")).setRole(rs.getString("roles")).build();
+                        .setUserId(rs.getInt("user_id"))
+                        .setGender(rs.getString("gender"))
+                        .setIsActive(rs.getBoolean("is_active"))
+                        .setRole(rs.getString("roles")).build();
                 list.add(user);
             }
             return list;

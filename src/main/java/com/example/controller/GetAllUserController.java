@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
@@ -21,7 +21,7 @@ public class GetAllUserController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         UserService userService = new UserService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
@@ -29,9 +29,6 @@ public class GetAllUserController extends HttpServlet {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
             List<UserDTO> userList = userService.getAllUser();
-            if (userList == null) {
-                sendResponse(response, Messages.Error.USER_NOT_FOUND, null, null, 200);
-            }
             sendResponse(response, null, null, userList, 200);
         } catch (DBException e) {
             e.printStackTrace();

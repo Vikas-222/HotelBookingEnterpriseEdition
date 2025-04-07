@@ -83,7 +83,6 @@ public class BookingDTO {
 
 
     public static class Builder {
-        public String serviceName;
         private int bookingId;
         private int userId;
         private int roomId;

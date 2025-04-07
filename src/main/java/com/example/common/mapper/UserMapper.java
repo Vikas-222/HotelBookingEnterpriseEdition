@@ -51,6 +51,7 @@ public class UserMapper {
                         .setContactNumber(user.getContactNumber())
                         .setGender(user.getGender())
                         .setRole(user.getRole())
+                        .setActive(user.getIsActive())
                         .build())
                 .collect(Collectors.toList());
     }

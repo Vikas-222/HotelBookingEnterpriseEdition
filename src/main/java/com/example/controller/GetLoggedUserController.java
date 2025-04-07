@@ -1,8 +1,7 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.utils.SessionValidator;
 import com.example.dto.UserDTO;
@@ -17,7 +16,7 @@ import java.io.IOException;
 public class GetLoggedUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         try {
             UserDTO userDTO = SessionValidator.checkSession(request);
             sendResponse(response, null,null, userDTO, 200);

@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
@@ -23,8 +23,8 @@ import java.util.List;
 public class GetAllBookingController extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType(AppConstants.APPLICATION_JSON);
         BookingService bookingService = new BookingService();
         try {
             UserDTO userDTO = SessionValidator.checkSession(request);

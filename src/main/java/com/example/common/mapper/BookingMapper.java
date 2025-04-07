@@ -15,6 +15,7 @@ public class BookingMapper {
                 .setCheckInTime(bookingDTO.getCheckInTime())
                 .setCheckOutTime(bookingDTO.getCheckOutTime())
                 .setTotalAmount(bookingDTO.getTotalAmount())
+                .setGstRates(bookingDTO.getGstRates())
                 .setBookingStatus(bookingDTO.getBookingStatus())
                 .setCancellationDate(bookingDTO.getCancellationDate())
                 .setRefundAmount(bookingDTO.getRefundAmount())
@@ -30,6 +31,7 @@ public class BookingMapper {
                 .setCheckInTime(booking.getCheckInTime())
                 .setCheckOutTime(booking.getCheckOutTime())
                 .setTotalAmount(booking.getTotalAmount())
+                .setGstRates(booking.getGstRates())
                 .setBookingStatus(booking.getBookingStatus())
                 .setCancellationDate(booking.getCancellationDate())
                 .setRefundAmount(booking.getRefundAmount())
@@ -38,17 +40,18 @@ public class BookingMapper {
     }
 
     public static List<BookingDTO> convertEntityListToBookingDTOList(List<Booking> list) {
-        return list.stream().map(bookingDTO -> new BookingDTO.Builder()
-                .setBookingId(bookingDTO.getBookingId())
-                .setUserId(bookingDTO.getUserId())
-                .setRoomId(bookingDTO.getRoomId())
-                .setBookingStatus(bookingDTO.getBookingStatus())
-                .setCheckInTime(bookingDTO.getCheckInTime())
-                .setCheckOutTime(bookingDTO.getCheckOutTime())
-                .setCancellationDate(bookingDTO.getCancellationDate())
-                .setTotalAmount(bookingDTO.getTotalAmount())
-                .setRefundAmount(bookingDTO.getRefundAmount())
-                .setNumberOfGuests(bookingDTO.getNumberOfGuests())
+        return list.stream().map(booking -> new BookingDTO.Builder()
+                .setBookingId(booking.getBookingId())
+                .setUserId(booking.getUserId())
+                .setRoomId(booking.getRoomId())
+                .setBookingStatus(booking.getBookingStatus())
+                .setCheckInTime(booking.getCheckInTime())
+                .setCheckOutTime(booking.getCheckOutTime())
+                .setCancellationDate(booking.getCancellationDate())
+                .setTotalAmount(booking.getTotalAmount())
+                .setGstRates(booking.getGstRates())
+                .setRefundAmount(booking.getRefundAmount())
+                .setNumberOfGuests(booking.getNumberOfGuests())
                 .build()).collect(Collectors.toList());
     }
 

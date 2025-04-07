@@ -8,16 +8,16 @@ import com.example.dao.IRoomDAO;
 import com.example.dao.impl.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.model.Room;
-import com.example.controller.validation.RoomValidator;
+
 import java.util.List;
 
 public class RoomService {
 
     private IRoomDAO iRoomDAO = new RoomDAOImpl();
 
-    public int addRoom(RoomDTO roomDTO) throws DBException {
-        Room room = RoomMapper.convertRoomDTOToRoom(roomDTO);
-        return iRoomDAO.addRoom(room);
+    public boolean addRoom(RoomDTO roomDTO) throws DBException {
+//        Room room = RoomMapper.convertRoomDTOToRoom(roomDTO);
+        return iRoomDAO.addRoom(roomDTO);
     }
 
     public boolean isRoomNumberExists(int roomNumber) throws ApplicationException {
@@ -60,9 +60,11 @@ public class RoomService {
         return true;
     }
 
-    public float getRoomPrice(int roomNumber) throws ApplicationException {
-        isRoomNumberExists(roomNumber);
-        return iRoomDAO.getRoomPrice(roomNumber);
+    public float getRoomPriceByRoomId(int roomId) throws ApplicationException {
+        if (iRoomDAO.isValidRoomId(roomId) == false) {
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_ID);
+        }
+        return iRoomDAO.getRoomPriceByRoomId(roomId);
     }
 
     public boolean isValidRoomId(int roomId) throws ApplicationException {
@@ -78,4 +80,12 @@ public class RoomService {
         }
         return RoomMapper.convertRoomToRoomDTO(iRoomDAO.getRoom(roomId));
     }
+
+    public float getGstRateByRoomPrice(float price) throws ApplicationException {
+        if(price <= 0){
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE);
+        }
+        return iRoomDAO.getGstRatesByRoomPrice(price);
+    }
+
 }

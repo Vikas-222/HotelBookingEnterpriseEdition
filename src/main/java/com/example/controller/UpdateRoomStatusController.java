@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
@@ -18,12 +18,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "UpdateRoomStatusController", value = "/updateroomstatus")
+@WebServlet(name = "UpdateRoomStatusController", value = "/update-room-status")
 public class UpdateRoomStatusController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
         RoomService roomService = new RoomService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
@@ -41,9 +41,6 @@ public class UpdateRoomStatusController extends HttpServlet {
         } catch (ApplicationException e) {
             e.printStackTrace();
             sendResponse(response, e.getMessage(), null, null, 400);
-        } catch (Exception e) {
-            e.printStackTrace();
-            sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
         }
     }
 

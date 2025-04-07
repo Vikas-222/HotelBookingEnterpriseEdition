@@ -1,62 +1,61 @@
 package com.example.controller;
 
-import com.example.common.AppConstant;
+import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
-import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.common.utils.SessionValidator;
+import com.example.common.utils.ImageHandler;
 import com.example.dao.IRoomDAO;
 import com.example.dao.IRoomImagesDAO;
 import com.example.dao.impl.RoomDAOImpl;
 import com.example.dao.impl.RoomImagesDAOImpl;
+import com.example.dto.RoomDTO;
 import com.example.dto.RoomImagesDTO;
-import com.example.dto.UserDTO;
 import com.example.service.RoomImagesService;
+import com.example.service.RoomService;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet(name = "AddRoomImageController", value = "/addroomimage")
 @MultipartConfig(maxFileSize = 1024 * 1024 * 50, maxRequestSize = 1024 * 1024 * 100, fileSizeThreshold = 1024 * 1024 * 5)
 public class AddRoomImageController extends HttpServlet {
 
-    private static final String IMAGE_UPLOAD_DIRECTORY = "D:\\Demo-Git\\HotelBookingEnterpriseEdition\\src\\main\\webapp\\Images\\RoomImages";
-    IRoomImagesDAO roomImage = new RoomImagesDAOImpl();
-    IRoomDAO iRoomDAO = new RoomDAOImpl();
-    RoomImagesService imagesService = new RoomImagesService(roomImage, iRoomDAO);
-    RoomImagesDTO roomImagesDTO = new RoomImagesDTO();
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType(AppConstant.APPLICATION_JSON);
+        response.setContentType(AppConstants.APPLICATION_JSON);
+        RoomService roomService = new RoomService();
+
+//        try{
+//        Part roomDetails = request.getPart("roomDetails");
+//        RoomDTO roomDTO = CustomObjectMapper.toObject(roomDetails.getInputStream(), RoomDTO.class);
+//        List<String> imagePaths = new ArrayList<>();
+//        for (Part part : request.getParts()) {
+//            if (part.getName().equals("images") && part.getSize() > 0) {
+//                String imagePath = ImageHandler.getFilePath("RoomImages", part);
+//                imagePaths.add(imagePath);
+//            }
+//        }
+//
+//        RoomDTO room = setImagePathsToDTO(roomDTO,imagePaths);
+//        roomService.addRoom(room);
+//        sendResponse(response, null, null, null, 200);
         try {
-            UserDTO userDTO = SessionValidator.checkSession(request);
-            if (!userDTO.getRole().equalsIgnoreCase("Admin")) {
-                throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
-            }
-            imageHandler(request);
-            sendResponse(response, Messages.IMAGE_UPLOADED, null, null, 200);
+            Part roomDetails = request.getPart("roomDetails");
+            Part imagePart = request.getPart("image");
+            RoomDTO roomDTO = CustomObjectMapper.toObject(roomDetails.getInputStream(), RoomDTO.class);
+            RoomDTO room = setImagePathsToDTO(roomDTO, ImageHandler.getFilePath("RoomImages", imagePart));
+            roomService.addRoom(room);
+            sendResponse(response, null, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);
-        } catch (ApplicationException e) {
-            e.printStackTrace();
-            sendResponse(response, e.getMessage(), null, null, 500);
         }
     }
 
@@ -69,39 +68,22 @@ public class AddRoomImageController extends HttpServlet {
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 
-    private void imageHandler(HttpServletRequest request) throws ApplicationException, IOException, ServletException {
-        try {
-            Part filePart = request.getPart("image");
-            if (filePart == null || filePart.getSize() == 0 || filePart.getSubmittedFileName().isEmpty()) {
-                throw new ApplicationException(Messages.RoomError.IMAGE_NOT_FOUND);
-            }
-            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            String filePath = IMAGE_UPLOAD_DIRECTORY + File.separator + fileName;
-            InputStream fileContent = filePart.getInputStream();
-            Files.copy(fileContent, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
 
-            roomImagesDTO.setImagePath(filePath);
-            String roomIdStr = request.getParameter("roomId");
-            if (roomIdStr == null || roomIdStr.isBlank()) {
-                throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
-            }
-            int roomId = Integer.parseInt(roomIdStr);
-            if (roomId <= 0) {
-                throw new ApplicationException(Messages.RoomError.INVALID_ROOM_ID);
-            }
-            roomImagesDTO.setRoomId(roomId);
+//    private RoomDTO setImagePathsToDTO(RoomDTO roomDTO, List<String> list) {
+//        return new RoomDTO.Builder().setRoomId(roomDTO.getRoomId())
+//                .setRoomNumber(roomDTO.getRoomNumber())
+//                .setRoomType(roomDTO.getRoomType())
+//                .setPricePerNight(roomDTO.getPricePerNight())
+//                .setCapacity(roomDTO.getCapacity())
+//                .setImagePath(list).build();
+//    }
 
-            imagesService.saveRoomImage(roomImagesDTO);
-            CustomObjectMapper.toString(roomImagesDTO);
-        } catch (DBException e) {
-             throw e;
-        } catch (ApplicationException e) {
-            throw e;
-        } catch (IOException e) {
-            throw e;
-        } catch (ServletException e) {
-            throw e;
-        }
+    private RoomDTO setImagePathsToDTO(RoomDTO roomDTO, String str) {
+        return new RoomDTO.Builder().setRoomId(roomDTO.getRoomId())
+                .setRoomNumber(roomDTO.getRoomNumber())
+                .setRoomType(roomDTO.getRoomType())
+                .setPricePerNight(roomDTO.getPricePerNight())
+                .setCapacity(roomDTO.getCapacity())
+                .setImagePaths(str).build();
     }
-
 }

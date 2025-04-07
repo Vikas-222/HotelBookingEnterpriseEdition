@@ -26,7 +26,7 @@ public class Messages {
         public static final String INVALID_CURRENT_PASSWORD = "Current password is wrong.";
         public static final String INVALID_CONTACT = "Please enter a valid contact number";
         public static final String INVALID_CREDENTIALS = "Invalid credentials";
-        public static final String UNAUTHORIZED_ACCESS = "You are unauthorized to access";
+        public static final String UNAUTHORIZED_ACCESS = "Access denied";
         public static final String USER_NOT_FOUND = "User not found";
         public static final String INVALID_EMAIL_LENGTH = "Email address is too long.";
         public static final String INVALID_NAME_LENGTH = "Name is too long.";

@@ -1,6 +1,6 @@
 //package com.example.controller;
 //
-//import com.example.common.AppConstant;
+//import com.example.common.AppConstants;
 //import com.example.common.utils.CustomObjectMapper;
 //import com.example.model.Room;
 //import jakarta.servlet.ServletException;
@@ -25,7 +25,7 @@
 //
 //    @Override
 //    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        response.setContentType(AppConstant.APPLICATION_JSON);
+//        response.setContentType(AppConstants.APPLICATION_JSON);
 //        Room room = CustomObjectMapper.toObject(request.getReader(), Room.class);
 //        String existingImagePath = getExistingImagePath(room.getRoomNumber());
 //        Part filePart = request.getPart("image");

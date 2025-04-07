@@ -18,6 +18,7 @@ public class BookingDTO {
     private BookingStatus bookingStatus;
     private Date cancellationDate;
     private float refundAmount;
+    private float gstRates;
     private int numberOfGuests;
 
     public BookingDTO(){}
@@ -32,6 +33,7 @@ public class BookingDTO {
         this.bookingStatus = builder.bookingStatus;
         this.cancellationDate = builder.cancellationDate;
         this.refundAmount = builder.refundAmount;
+        this.gstRates = builder.gstRates;
         this.numberOfGuests = builder.numberOfGuests;
     }
 
@@ -71,6 +73,10 @@ public class BookingDTO {
         return refundAmount;
     }
 
+    public float getGstRates() {
+        return gstRates;
+    }
+
     public int getNumberOfGuests() {
         return numberOfGuests;
     }
@@ -87,6 +93,7 @@ public class BookingDTO {
         private BookingStatus bookingStatus;
         private Date cancellationDate;
         private float refundAmount;
+        private float gstRates;
         private int numberOfGuests;
 
         public Builder setBookingId(int bookingId) {
@@ -134,6 +141,11 @@ public class BookingDTO {
             return this;
         }
 
+        public Builder setGstRates(float gstRates) {
+            this.gstRates = gstRates;
+            return this;
+        }
+
         public Builder setNumberOfGuests(int numberOfGuests) {
             this.numberOfGuests = numberOfGuests;
             return this;
@@ -146,7 +158,7 @@ public class BookingDTO {
 
     @Override
     public String toString() {
-        return  "bookingId=" + bookingId +
+        return "BookingId=" + bookingId +
                 ", userId=" + userId +
                 ", roomId=" + roomId +
                 ", checkInTime=" + checkInTime +
@@ -155,6 +167,7 @@ public class BookingDTO {
                 ", bookingStatus=" + bookingStatus +
                 ", cancellationDate=" + cancellationDate +
                 ", refundAmount=" + refundAmount +
+                ", gstRates=" + gstRates +
                 ", numberOfGuests=" + numberOfGuests;
     }
 }

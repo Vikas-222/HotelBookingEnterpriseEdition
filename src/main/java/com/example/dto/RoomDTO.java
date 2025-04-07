@@ -15,6 +15,7 @@ public class RoomDTO {
     private int capacity;
     private float pricePerNight;
     private List<String> imagePath;
+//    private float gstRates;
     private RoomStatus roomStatus;
 
     public RoomDTO() {

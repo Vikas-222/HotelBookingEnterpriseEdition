@@ -242,8 +242,6 @@ public class BookingDAOImpl implements IBookingDAO {
         return list;
     }
 
-//    public Float calculateAmount(float price,int numberOfDays){
-//        float roomAmount = price * numberOfDays;
-//        charges. rs.getString("serviceName")
-//    }
+
+
 }

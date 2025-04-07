@@ -217,5 +217,9 @@ public class RoomDAOImpl implements IRoomDAO {
             }
         }
     }
+
+//    public float getGstRatesByRoomPrice(float price) {
+//        String sql = "SELECT tax_rate FROM gst_rates WHERE min_price <= ?AND(max_price >= ? OR max_price IS NULL)";
+//    }
 }
 

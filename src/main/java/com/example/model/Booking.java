@@ -18,6 +18,7 @@ public class Booking {
     private BookingStatus bookingStatus;
     private Date cancellationDate;
     private float refundAmount;
+    private float gstRates;
     private int numberOfGuests;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -34,6 +35,7 @@ public class Booking {
         this.bookingStatus = builder.bookingStatus;
         this.cancellationDate = builder.cancellationDate;
         this.refundAmount = builder.refundAmount;
+        this.gstRates = builder.gstRates;
         this.numberOfGuests = builder.numberOfGuests;
         this.createdAt = builder.createdAt;
         this.updatedAt = builder.updatedAt;
@@ -75,6 +77,10 @@ public class Booking {
         return refundAmount;
     }
 
+    public float getGstRates() {
+        return gstRates;
+    }
+
     public int getNumberOfGuests() {
         return numberOfGuests;
     }
@@ -97,6 +103,7 @@ public class Booking {
         private BookingStatus bookingStatus;
         private Date cancellationDate;
         private float refundAmount;
+        private float gstRates;
         private int numberOfGuests;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -146,6 +153,11 @@ public class Booking {
             return this;
         }
 
+        public Builder setGstRates(float gstRates) {
+            this.gstRates = gstRates;
+            return this;
+        }
+
         public Builder setNumberOfGuests(int numberOfGuests) {
             this.numberOfGuests = numberOfGuests;
             return this;
@@ -177,6 +189,8 @@ public class Booking {
                 ", bookingStatus=" + bookingStatus +
                 ", cancellationDate=" + cancellationDate +
                 ", refundAmount=" + refundAmount +
+                ", gstRates=" + gstRates +
+                ", numberOfGuests=" + numberOfGuests +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt;
     }

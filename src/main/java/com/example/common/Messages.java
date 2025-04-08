@@ -14,6 +14,7 @@ public class Messages {
     public static final String AMENITY_UPDATED = "Amenity updation successful";
     public static final String AMENITY_DELETED = "Amenity deletion successful";
     public static final String BOOKING_UPDATED = "Booking modify successful";
+    public static final String BOOKING_CANCELLATION = "Booking cancellation successful";
 
     public static class Error {
         public static final String ALREADY_EXISTS = "A user with this email already exists";
@@ -56,6 +57,7 @@ public class Messages {
         public static final String INVALID_TOTAL_AMOUNT = "Total amount value is invalid";
         public static final String INVALID_NUMBER_OF_GUEST = "Please enter valid number of guest";
         public static final String ACCOUNT_DEACTIVATE = "Your account is deactivated! Please contact to admin";
+        public static final String CANNOT_CANCEL_PREVIOUS_BOOKING = "Bookings cannot be cancelled once completed";
     }
 
     public static class ReviewError {

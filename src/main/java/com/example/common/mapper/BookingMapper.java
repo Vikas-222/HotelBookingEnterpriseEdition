@@ -54,12 +54,4 @@ public class BookingMapper {
                 .setNumberOfGuests(booking.getNumberOfGuests())
                 .build()).collect(Collectors.toList());
     }
-
-//    public static Booking convertBookingDTOToEntity(BookingDTO booking) {
-//        return new Booking.Builder()
-//                .setBookingId(booking.getBookingId())
-//                .setCheckInTime(booking.getCheckInTime())
-//                .setCheckOutTime(booking.getCheckOutTime())
-//                .setNumberOfGuests(booking.getNumberOfGuests()).build();
-//    }
 }

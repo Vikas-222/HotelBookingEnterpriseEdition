@@ -19,11 +19,13 @@ public interface IBookingDAO {
 
     boolean isValidBookingId(int bookingId) throws DBException;
 
-    boolean cancelBooking(int bookingId, Date cancellationDate, float refundAmount) throws SQLException, DBException;
+    boolean cancelBooking(int bookingId, Date cancellationDate, float refundAmount) throws DBException;
 
     boolean modifyBooking(Booking booking, RoomDTO room) throws DBException;
 
     boolean isValidUserIdAndBookingId(int userId, int bookingId) throws DBException;
 
     List<Booking> getBookingDetailsByUserId(int userId) throws DBException;
+
+    float calculateRevenue() throws DBException;
 }

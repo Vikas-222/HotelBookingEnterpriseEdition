@@ -4,13 +4,10 @@ import com.example.common.enums.BookingStatus;
 import com.example.common.exception.DBException;
 import com.example.config.DbConnect;
 import com.example.dao.IBookingDAO;
-import com.example.dao.IRoomDAO;
 import com.example.dto.RoomDTO;
-import com.example.model.AdditionalCharges;
 import com.example.model.Booking;
+
 import java.sql.*;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +18,14 @@ public class BookingDAOImpl implements IBookingDAO {
         String insert = "insert into booking (user_id,room_id,check_in,check_out,total_amount,numberOfGuests,gstRate) values (?,?,?,?,?,?,?)";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(insert);) {
-            System.out.println("dao "+booking);
+            System.out.println("dao " + booking);
             pst.setInt(1, booking.getUserId());
             pst.setInt(2, booking.getRoomId());
-            pst.setTimestamp(3,Timestamp.valueOf(booking.getCheckInTime()));
+            pst.setTimestamp(3, Timestamp.valueOf(booking.getCheckInTime()));
             pst.setTimestamp(4, Timestamp.valueOf(booking.getCheckOutTime()));
             pst.setFloat(5, booking.getTotalAmount());
             pst.setInt(6, booking.getNumberOfGuests());
-            pst.setFloat(7,booking.getGstRates());
+            pst.setFloat(7, booking.getGstRates());
             pst.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
@@ -44,7 +41,7 @@ public class BookingDAOImpl implements IBookingDAO {
              PreparedStatement pst = connection.prepareStatement(fetch)) {
             pst.setInt(1, id);
             rs = pst.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
                 booking = new Booking.Builder()
                         .setBookingId(rs.getInt("booking_id"))
                         .setUserId(rs.getInt("user_id"))
@@ -52,7 +49,7 @@ public class BookingDAOImpl implements IBookingDAO {
                         .setCheckInTime(rs.getTimestamp("check_in").toLocalDateTime())
                         .setCheckOutTime(rs.getTimestamp("check_out").toLocalDateTime())
                         .setTotalAmount(rs.getFloat("total_amount"))
-                        .setGstRates(rs.getFloat("tax_rate"))
+                        .setGstRates(rs.getFloat("gstRate"))
                         .setBookingStatus(BookingStatus.fromString(rs.getString("booking_status")))
                         .setCancellationDate(rs.getDate("cancellation_date"))
                         .setRefundAmount(rs.getFloat("refund_amount")).build();
@@ -93,8 +90,9 @@ public class BookingDAOImpl implements IBookingDAO {
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(fetch);) {
             rs = pst.executeQuery();
-            while(rs.next()) {
-                Booking booking = new Booking.Builder().setBookingId(rs.getInt("booking_id"))
+            while (rs.next()) {
+                Booking booking = new Booking.Builder()
+                        .setBookingId(rs.getInt("booking_id"))
                         .setUserId(rs.getInt("user_id"))
                         .setRoomId(rs.getInt("room_id"))
                         .setCheckInTime(rs.getTimestamp("check_in").toLocalDateTime())
@@ -130,10 +128,18 @@ public class BookingDAOImpl implements IBookingDAO {
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(find)) {
             preparedStatement.setInt(1, bookingId);
-             rs = preparedStatement.executeQuery();
-           return rs.next();
+            rs = preparedStatement.executeQuery();
+            return rs.next();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
         }
     }
 
@@ -162,14 +168,14 @@ public class BookingDAOImpl implements IBookingDAO {
             pst.setInt(3, booking.getNumberOfGuests());
             pst.setFloat(4, booking.getTotalAmount());
             pst.setInt(5, booking.getBookingId());
-            if(pst.executeUpdate() > 0){
+            if (pst.executeUpdate() > 0) {
                 connection.commit();
                 return true;
-            }else{
+            } else {
                 connection.rollback();
                 return false;
             }
-        }catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             throw new DBException(e);
         }
     }
@@ -180,12 +186,20 @@ public class BookingDAOImpl implements IBookingDAO {
         ResultSet rs = null;
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(sql)) {
-            pst.setInt(1,userId);
-            pst.setInt(2,bookingId);
+            pst.setInt(1, userId);
+            pst.setInt(2, bookingId);
             rs = pst.executeQuery();
             return rs.next();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
         }
     }
 
@@ -198,7 +212,7 @@ public class BookingDAOImpl implements IBookingDAO {
              PreparedStatement pst = connection.prepareStatement(fetch)) {
             pst.setInt(1, userId);
             rs = pst.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Booking booking = new Booking.Builder()
                         .setBookingId(rs.getInt("booking_id"))
                         .setUserId(rs.getInt("user_id"))
@@ -206,7 +220,7 @@ public class BookingDAOImpl implements IBookingDAO {
                         .setCheckInTime(rs.getTimestamp("check_in").toLocalDateTime())
                         .setCheckOutTime(rs.getTimestamp("check_out").toLocalDateTime())
                         .setTotalAmount(rs.getFloat("total_amount"))
-                        .setGstRates(rs.getFloat("tax_rate"))
+                        .setGstRates(rs.getFloat("gstRate"))
                         .setBookingStatus(BookingStatus.fromString(rs.getString("booking_status")))
                         .setCancellationDate(rs.getDate("cancellation_date"))
                         .setRefundAmount(rs.getFloat("refund_amount"))
@@ -226,5 +240,32 @@ public class BookingDAOImpl implements IBookingDAO {
         }
         return list;
     }
+
+    @Override
+    public float calculateRevenue() throws DBException {
+        String sql = "SELECT (SELECT COALESCE(SUM(total_amount), 0) FROM booking WHERE booking_status = 'COMPLETED') - " +
+                "(SELECT COALESCE(SUM(refund_amount), 0) FROM booking WHERE booking_status = 'CANCELLATION') AS net_revenue";
+        ResultSet rs = null;
+        try (Connection conn = DbConnect.instance.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);) {
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getFloat("net_revenue");
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
+        }
+        return 0;
+    }
+
 
 }

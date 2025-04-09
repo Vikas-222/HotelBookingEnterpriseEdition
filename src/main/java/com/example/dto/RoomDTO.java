@@ -15,12 +15,10 @@ public class RoomDTO {
     private int capacity;
     private float pricePerNight;
     private List<String> imagePath;
-    private String imagePaths;
     private RoomStatus roomStatus;
 
     public RoomDTO() {
     }
-
 
     private RoomDTO(Builder builder) {
         this.roomId = builder.roomId;
@@ -29,7 +27,6 @@ public class RoomDTO {
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
         this.imagePath = builder.imagePath;
-        this.imagePaths = builder.imagePaths;
         this.roomStatus = builder.roomStatus;
     }
 
@@ -61,10 +58,6 @@ public class RoomDTO {
         return roomStatus;
     }
 
-    public String getImagePaths() {
-        return imagePaths;
-    }
-
     public static class Builder {
 
         private int roomId;
@@ -73,7 +66,6 @@ public class RoomDTO {
         private int capacity;
         private float pricePerNight;
         private List<String> imagePath = new ArrayList<>();
-        private String imagePaths;
         private RoomStatus roomStatus;
 
         public Builder setRoomId(int roomId) {
@@ -106,11 +98,6 @@ public class RoomDTO {
             return this;
         }
 
-        public Builder setImagePaths(String imagePaths) {
-            this.imagePaths = imagePaths;
-            return this;
-        }
-
         public Builder setRoomStatus(RoomStatus roomStatus) {
             this.roomStatus = roomStatus;
             return this;
@@ -129,7 +116,6 @@ public class RoomDTO {
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
                 ",imagePath=" + imagePath +
-                ",imagePaths=" + imagePaths +
                 ", roomStatus=" + roomStatus;
     }
 }

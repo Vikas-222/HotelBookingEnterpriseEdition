@@ -33,12 +33,10 @@ public class UserMapper {
     public static User ForUpdateDTOToEntity(UserDTO user) {
         return new User.UserBuilder()
                 .setUserId(user.getUserId())
-                .setEmail(user.getEmail())
                 .setLastName(user.getLastName())
                 .setContactNumber(user.getContactNumber())
                 .setGender(user.getGender())
-//                .setProfilePic(user.getProfilePic())
-                .setRole(user.getRole()).build();
+                .setProfilePic(user.getProfilePic()).build();
     }
 
     public static List<UserDTO> convertUserToUserDTOList(List<User> list) {

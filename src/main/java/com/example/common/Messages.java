@@ -19,7 +19,7 @@ public class Messages {
     public static class Error {
         public static final String ALREADY_EXISTS = "A user with this email already exists";
         public static final String INVALID_VALUES = "Please fill all required fields";
-        public static final String INVALID_USERID = "Please enter valid UserId";
+        public static final String INVALID_USER_ID = "Invalid UserId";
         public static final String INVALID_EMAIL = "Please enter a valid email address.";
         public static final String FAILED = "Oops! Something went wrong! Please try again later.";
         public static final String WEAK_PASSWORD = "Password must meet the strength requirements.";
@@ -41,7 +41,7 @@ public class Messages {
         public static final String INVALID_ROOM_PRICE = "Please enter valid room price";
         public static final String INVALID_ROOM_NUMBER = "Please enter valid room number";
         public static final String INVALID_VALUES = "Please provide all required room details.";
-        public static final String INVALID_ROOM_ID = "Room not found";
+        public static final String ROOM_ID_NOT_FOUND = "Room not found";
         public static final String INVALID_IMAGE_PATH = "Invalid Image path";
         public static final String IMAGE_NOT_FOUND = "Please upload an image.";
     }

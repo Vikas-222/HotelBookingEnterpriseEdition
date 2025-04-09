@@ -91,10 +91,10 @@ public class UserValidator {
 
     public static boolean isValidUserId(int id) throws ApplicationException {
         if(String.valueOf(id).isBlank() || String.valueOf(id) == null){
-            throw new ApplicationException(Messages.Error.INVALID_USERID);
+            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
         }
         if(id <= 0){
-            throw new ApplicationException(Messages.Error.INVALID_USERID);
+            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
         }
         return true;
     }

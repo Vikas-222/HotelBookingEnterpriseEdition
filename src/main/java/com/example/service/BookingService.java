@@ -29,8 +29,7 @@ public class BookingService {
 
     private IBookingDAO iBookingDAO = new BookingDAOImpl();
     private RoomService roomService = new RoomService();
-    private IUserDAO iUserDAO = new UserDAOImpl();
-    private IRoomDAO iRoomDAO = new RoomDAOImpl();
+    private UserService userService = new UserService();
 
     public boolean isValidBookingId(int id) throws ApplicationException {
         if (iBookingDAO.isValidBookingId(id) == false) {
@@ -44,8 +43,9 @@ public class BookingService {
         roomService.isValidRoomId(bookingdto.getRoomId());
         RoomDTO room = roomService.getRoomDetails(bookingdto.getRoomId());
         roomService.isCapacityValid(room.getRoomId(), bookingdto.getNumberOfGuests());
+        roomService.updateRoomStatus(room.getRoomId(),"OCCUPIED");
         long days = Duration.between(bookingdto.getCheckInTime(), bookingdto.getCheckOutTime()).toDays();
-        float gstRate = iRoomDAO.getGstRatesByRoomPrice(room.getPricePerNight());
+        float gstRate = roomService.getGstRatesByRoomPrice(room.getPricePerNight());
         float gstAmount = calculateGSTByRoomPrice(room.getPricePerNight(), gstRate);
         float TotalAmount = calculateTotalAmount(room.getPricePerNight(), gstAmount, days);
         BookingDTO booking1 = setTotalAmountToBookingId(bookingdto, userId, TotalAmount, gstRate);
@@ -80,8 +80,9 @@ public class BookingService {
     public void modifyBooking(BookingDTO bookingDTO, int userId) throws ApplicationException {
         isValidBookingId(bookingDTO.getBookingId());
         RoomDTO room = roomService.getRoomDetails(bookingDTO.getRoomId());
+        roomService.updateRoomStatus(room.getRoomId(),"OCCUPIED");
         long days = Duration.between(bookingDTO.getCheckInTime(), bookingDTO.getCheckOutTime()).toDays();
-        float gstRate = iRoomDAO.getGstRatesByRoomPrice(room.getPricePerNight());
+        float gstRate = roomService.getGstRatesByRoomPrice(room.getPricePerNight());
         float gstAmount = calculateGSTByRoomPrice(room.getPricePerNight(), gstRate);
         float TotalAmount = calculateTotalAmount(room.getPricePerNight(), gstAmount, days);
         BookingDTO booking1 = setTotalAmountToBookingId(bookingDTO, userId, TotalAmount, gstRate);
@@ -101,12 +102,12 @@ public class BookingService {
 
     public boolean isValidUserIdAndBookingId(int userId, int bookingId) throws ApplicationException {
         isValidBookingId(bookingId);
-        iUserDAO.isValidUserId(userId);
+        userService.isValidUserId(userId);
         return iBookingDAO.isValidUserIdAndBookingId(userId, bookingId);
     }
 
-    public List<BookingDTO> pastBookings(int userId) throws DBException {
-        iUserDAO.isValidUserId(userId);
+    public List<BookingDTO> pastBookings(int userId) throws ApplicationException {
+        userService.isValidUserId(userId);
         return BookingMapper.convertEntityListToBookingDTOList(iBookingDAO.getBookingDetailsByUserId(userId));
     }
 
@@ -145,6 +146,7 @@ public class BookingService {
             throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
         }
         RoomDTO room = roomService.getRoomDetails(booking.getRoomId());
+        roomService.updateRoomStatus(room.getRoomId(),"AVAILABLE");
         if(cancelDate.isAfter(booking.getCheckOutTime())){
             throw new ApplicationException(Messages.BookingError.CANNOT_CANCEL_PREVIOUS_BOOKING);
         }

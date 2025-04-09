@@ -19,29 +19,29 @@ public class UserService {
     public void addUser(UserDTO userDTO) throws ApplicationException {
         try {
             UserValidator.validate(userDTO);
-            if (isUserExists(userDTO.getEmail())) {
+            if (iUserDAO.isUserEmailExists(userDTO.getEmail()) == true) {
                 throw new ApplicationException(Messages.Error.ALREADY_EXISTS);
             }
             User user = UserMapper.convertUserDTOToUserForSignup(userDTO);
             iUserDAO.addUser(user);
-        }catch(DBException e){
+        } catch (DBException e) {
             throw e;
-        }
-        catch (ApplicationException e) {
+        } catch (ApplicationException e) {
             throw e;
         }
     }
 
-    public boolean isUserExists(String email) throws DBException {
-        return iUserDAO.isUserExistByEmail(email);
-    }
+//    public boolean isUserEmailExists(String email) throws ApplicationException {
+//        if(iUserDAO.isUserEmailExists(email) == true){
+//            throw new ApplicationException(Messages.Error.ALREADY_EXISTS);
+//        }
+//        return true;
+//    }
 
     public UserDTO userLogin(UserDTO userDTO) throws ApplicationException {
-        try{
+        try {
             User user = UserMapper.convertUserDTOToUserForLogin(userDTO);
-            if(!iUserDAO.isUserExistByEmail(user.getEmail())){
-                throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
-            }
+            iUserDAO.isUserEmailExists(user.getEmail());
             if (iUserDAO.isValidUser(user) == false) {
                 throw new ApplicationException(Messages.Error.INVALID_CREDENTIALS);
             }
@@ -61,32 +61,35 @@ public class UserService {
     }
 
     public void updateUserDetails(UserDTO userDTO) throws ApplicationException {
-        User user = UserMapper.ForUpdateDTOToEntity(userDTO);
-        if(iUserDAO.isUserExistByEmail(user.getEmail()) == false){
-            throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
+        if (iUserDAO.isValidUserId(userDTO.getUserId()) == false) {
+            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
         }
+        User user = UserMapper.ForUpdateDTOToEntity(userDTO);
         iUserDAO.updateUserdetails(user);
     }
 
-    public void updateUserActiveStatus(int userId,boolean status) throws ApplicationException {
-        if(!iUserDAO.isValidUserId(userId)){
-            throw new ApplicationException(Messages.Error.INVALID_USERID);
+    public void updateUserActiveStatus(int userId, boolean status) throws ApplicationException {
+        if (!iUserDAO.isValidUserId(userId)) {
+            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
         }
         iUserDAO.updateUserActiveStatus(userId, status);
     }
 
-    public boolean isValidUserId(int id) throws DBException {
-        return iUserDAO.isValidUserId(id);
+    public boolean isValidUserId(int id) throws ApplicationException {
+        if (iUserDAO.isValidUserId(id) == false) {
+            throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
+        }
+        return true;
     }
 
-    public boolean updatePassword(int userId,String password,String newPassword) throws ApplicationException {
-        UserValidator.checkPassword(password,newPassword);
-        if(iUserDAO.isValidCurrentPassword(userId,password) == false){
+    public boolean updatePassword(int userId, String password, String newPassword) throws ApplicationException {
+        UserValidator.checkPassword(password, newPassword);
+        if (iUserDAO.isValidCurrentPassword(userId, password) == false) {
             throw new ApplicationException(Messages.Error.INVALID_CURRENT_PASSWORD);
         }
-        if(!iUserDAO.isValidUserId(userId)){
-            throw new ApplicationException(Messages.Error.INVALID_USERID);
+        if (!iUserDAO.isValidUserId(userId)) {
+            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
         }
-        return iUserDAO.updatePassword(userId,newPassword);
+        return iUserDAO.updatePassword(userId, newPassword);
     }
 }

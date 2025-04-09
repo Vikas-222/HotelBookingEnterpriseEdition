@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IUserDAO {
 
-    boolean isUserExistByEmail(String emailId) throws DBException;
+    boolean isUserEmailExists(String emailId) throws DBException;
 
     void addUser(User user) throws DBException;
 

@@ -12,7 +12,7 @@ import java.util.List;
 public class UserDAOImpl implements IUserDAO {
 
     @Override
-    public boolean isUserExistByEmail(String emailId) throws DBException {
+    public boolean isUserEmailExists(String emailId) throws DBException {
         String foundEmail = "select email from user where email = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(foundEmail)) {
@@ -125,13 +125,14 @@ public class UserDAOImpl implements IUserDAO {
 
     @Override
     public void updateUserdetails(User user) throws DBException {
-        String updateQuery = "update user set last_name = ?, contact = ?, gender = ? where user_id = ?";
+        String updateQuery = "update user set last_name = ?, contact = ?, gender = ?,profilePic = ? where user_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pstUpdate = connection.prepareStatement(updateQuery);) {
             pstUpdate.setString(1, user.getLastName());
             pstUpdate.setString(2, user.getContactNumber());
             pstUpdate.setString(3, user.getGender());
-            pstUpdate.setInt(4, user.getUserId());
+            pstUpdate.setString(4, user.getProfilePic());
+            pstUpdate.setInt(5, user.getUserId());
             pstUpdate.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
@@ -191,4 +192,5 @@ public class UserDAOImpl implements IUserDAO {
             throw new DBException(e);
         }
     }
+
 }

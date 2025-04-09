@@ -5,11 +5,8 @@ import com.example.dto.RoomDTO;
 import com.example.common.exception.ApplicationException;
 
 public class RoomValidator {
-    /**
-     * @param room
-     * @throws ApplicationException for validation of room object when inserting new room
-     */
-    public void roomValidate(RoomDTO room) throws ApplicationException {
+
+    public static void roomValidate(RoomDTO room) throws ApplicationException {
         if (!isNullRoomValues(room)) {
             throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
         }
@@ -28,27 +25,27 @@ public class RoomValidator {
         if (!isValidRoomPrice(room.getPricePerNight())) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE);
         }
-        if (!isValidRoomNumber(room.getRoomNumber())) {
+        if (!isValidNumber(room.getRoomNumber())) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
     }
 
 
-//    public boolean ValidateForUpdate(int roomId,String status) throws ApplicationException {
-//        if (!isNullForUpdateRoomValues(roomId,status)) {
-//            throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
-//        }
-//        if (!checkZeros(roomId)) {
-//            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
-//        }
-//        if (!isValidRoomNumber(roomId)) {
-//            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
-//        }
-//        return true;
-//    }
+    public static boolean isValidForUpdate(int roomId,String status) throws ApplicationException {
+        if (!isNullForUpdateRoomValues(roomId,status)) {
+            throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
+        }
+        if (!checkZeros(roomId)) {
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+        }
+        if (!isValidNumber(roomId)) {
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+        }
+        return true;
+    }
 
-    public static boolean isValidRoomNumber(int roomNumber) {
-        String roomNum = String.valueOf(roomNumber);
+    public static boolean isValidNumber(int number) {
+        String roomNum = String.valueOf(number);
         if (roomNum.length() > 5) {
             return false;
         }
@@ -57,7 +54,7 @@ public class RoomValidator {
 
     public static boolean isValidCapacity(int capacity) {
         String cap = String.valueOf(capacity);
-        if (cap.length() > 5) {
+        if (cap.length() > 2) {
             return false;
         }
         return cap.chars().allMatch(Character::isDigit);
@@ -72,12 +69,15 @@ public class RoomValidator {
     }
 
     public static boolean isNullRoomValues(RoomDTO room) {
-
         return !String.valueOf(room.getRoomNumber()).isBlank() && !String.valueOf(room.getCapacity()).isBlank() &&
                 !String.valueOf(room.getPricePerNight()).isBlank() && !String.valueOf(room.getRoomType()).isBlank();
     }
 
-    public boolean checkZeros(int number) {
+    public static boolean isNullForUpdateRoomValues(int roomId,String status) {
+        return !String.valueOf(roomId).isBlank() && !String.valueOf(status).isBlank();
+    }
+
+    public static boolean checkZeros(int number) {
         while (number > 0) {
             int digit = number % 10;
             if (digit != 0) {
@@ -87,7 +87,7 @@ public class RoomValidator {
         return false;
     }
 
-    public boolean checkZeros(float number) {
+    public static boolean checkZeros(float number) {
         while (number > 0) {
             float digit = number % 10;
             if (digit != 0) {

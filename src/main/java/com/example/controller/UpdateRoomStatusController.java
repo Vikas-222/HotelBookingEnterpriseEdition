@@ -30,9 +30,9 @@ public class UpdateRoomStatusController extends HttpServlet {
             if(!user.getRole().equalsIgnoreCase("admin")){
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-            String roomStr = request.getParameter("roomId");
+            String roomId = request.getParameter("roomId");
             RoomDTO roomDTO = CustomObjectMapper.toObject(request.getReader(), RoomDTO.class);
-            RoomDTO room = setRoomId(roomDTO,roomStr);
+            RoomDTO room = setRoomId(roomDTO,roomId);
             roomService.updateRoomStatus(room.getRoomId(),room.getRoomStatus().toString());
             sendResponse(response, Messages.ROOM_UPDATED, null, null, 200);
         } catch (DBException e) {
@@ -54,12 +54,12 @@ public class UpdateRoomStatusController extends HttpServlet {
     }
 
     private RoomDTO setRoomId(RoomDTO roomDTO,String roomStr) throws ApplicationException {
-        if (roomStr == null || roomStr.isBlank()) {
+        if (roomStr.isBlank()) {
             throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
         }
         int roomId = Integer.parseInt(roomStr);
         if (roomId <= 0) {
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_ID);
+            throw new ApplicationException(Messages.RoomError.ROOM_ID_NOT_FOUND);
         }
        return new RoomDTO.Builder()
                 .setRoomId(roomId)

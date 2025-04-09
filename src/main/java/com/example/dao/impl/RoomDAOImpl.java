@@ -15,38 +15,35 @@ public class RoomDAOImpl implements IRoomDAO {
 
     @Override
     public boolean addRoom(RoomDTO room) throws DBException {
-        String insert = "insert into room(room_number,room_type,capacity,price_per_night) values (?,?,?,?)";
-        String roomImages = "insert into room_images(imagepath,room_id) values (?,?)";
+        String insert = "INSERT INTO room(room_number, room_type, capacity, price_per_night) VALUES (?, ?, ?, ?)";
+        String roomImages = "INSERT INTO room_images(imagepath, room_id) VALUES (?, ?)";
+
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(insert,Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement pst = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
              PreparedStatement pstImage = connection.prepareStatement(roomImages)) {
+
             pst.setInt(1, room.getRoomNumber());
             pst.setString(2, room.getRoomType().toString());
             pst.setInt(3, room.getCapacity());
             pst.setFloat(4, room.getPricePerNight());
             pst.executeUpdate();
+
             ResultSet rs = pst.getGeneratedKeys();
-//            while (rs.next()) {
-//                int roomId = rs.getInt(1);
-//                for (String path : room.getImagePath()) {
-//                    pstImage.setString(1, path);
-//                    pstImage.setInt(2, roomId);
-//                    pstImage.addBatch();
-//                }
-//                int[] result = pstImage.executeBatch();
-//                return Arrays.stream(result).allMatch(i -> i > 0);
-//            }
-            while (rs.next()) {
-                pstImage.setString(1,room.getImagePaths());
-                pstImage.setInt(2,rs.getInt(1));
-                return pstImage.executeUpdate() > 0;
+            if (rs.next()) {
+                int roomId = rs.getInt(1);
+                for (String imagePath : room.getImagePath()) {
+                    pstImage.setString(1, imagePath);
+                    pstImage.setInt(2, roomId);
+                    pstImage.addBatch();
+                }
+                int[] result = pstImage.executeBatch();
+                return Arrays.stream(result).allMatch(i -> i > 0);
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }
         return false;
     }
-
 
     @Override
     public boolean isRoomNumberExists(int roomNumber) throws DBException {
@@ -55,13 +52,10 @@ public class RoomDAOImpl implements IRoomDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(findRoom)) {
             preparedStatement.setInt(1, roomNumber);
             ResultSet rs = preparedStatement.executeQuery();
-            if (rs.next()) {
-                return true;
-            }
+            return rs.next();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         }
-        return false;
     }
 
     @Override
@@ -79,12 +73,12 @@ public class RoomDAOImpl implements IRoomDAO {
     }
 
     @Override
-    public void updateRoomStatus(int roomNumber, String status) throws DBException {
-        String updateStatus = "update room set room_status = ? where room_number = ?";
+    public void updateRoomStatus(int roomId, String status) throws DBException {
+        String updateStatus = "update room set room_status = ? where room_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pstUpdate = connection.prepareStatement(updateStatus)) {
-            pstUpdate.setString(1,status);
-            pstUpdate.setInt(2, roomNumber);
+            pstUpdate.setString(1, status);
+            pstUpdate.setInt(2, roomId);
             pstUpdate.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
@@ -109,31 +103,6 @@ public class RoomDAOImpl implements IRoomDAO {
     }
 
     @Override
-    public float getRoomPriceByRoomId(int roomId) throws DBException {
-        String sql = "SELECT PRICE_PER_NIGHT FROM room WHERE room_id = ?";
-        ResultSet rs = null;
-        try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(sql);) {
-            pst.setInt(1, roomId);
-            rs = pst.executeQuery();
-            if (rs.next()) {
-                return rs.getFloat("price_per_night");
-            }
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DBException(e);
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    throw new DBException(e);
-                }
-            }
-        }
-        return 0;
-    }
-
-    @Override
     public boolean isValidRoomId(int roomId) throws DBException {
         String sql = "Select * from room where room_id = ?";
         ResultSet rs = null;
@@ -150,7 +119,7 @@ public class RoomDAOImpl implements IRoomDAO {
     @Override
     public List<RoomDTO> getAllRoomWithImage() throws DBException {
         String sql = "select r.room_id,r.room_number,r.room_type,r.capacity,r.price_per_night,r.room_status,im.imagepath from room r, " +
-                "room_images im where r.room_id = im.room_id and r.room_status = 'AVAILABLE' ";
+                "room_images im where r.room_id = im.room_id and r.room_status = 'AVAILABLE'";
         ResultSet rs = null;
         Map<Integer, RoomDTO> roomMap = new HashMap<>();
         try (Connection connection = DbConnect.instance.getConnection();
@@ -177,10 +146,9 @@ public class RoomDAOImpl implements IRoomDAO {
                     roomMap.put(roomId, roomDTO);
                 }
             }
-        }catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
-        }
-        finally {
+        } finally {
             if (rs != null) {
                 try {
                     rs.close();
@@ -193,25 +161,33 @@ public class RoomDAOImpl implements IRoomDAO {
     }
 
     @Override
-    public Room getRoom(int roomId) throws DBException {
-        String sql = "SELECT * FROM room WHERE room_id = ?";
+    public RoomDTO getRoom(int roomId) throws DBException {
+        String sql = "SELECT r.room_number,r.room_type,r.capacity,r.price_per_night,r.room_status,img.imagepath " +
+                "FROM room as r, room_images as img where r.room_id = img.room_id and r.room_id = ?";
         ResultSet rs = null;
-        Room room = null;
+        RoomDTO.Builder room = null;
+        List<String> imageList = new ArrayList<>();
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(sql);) {
             pst.setInt(1, roomId);
             rs = pst.executeQuery();
-            while(rs.next()){
-                room = new Room.Builder()
-                        .setRoomId(roomId)
-                        .setRoomNumber(rs.getInt("room_number"))
-                        .setRoomType(RoomType.fromString(rs.getString("room_type")))
-                        .setPricePerNight(rs.getFloat("price_per_night"))
-                        .setCapacity(rs.getInt("capacity"))
-                        .setRoomStatus(RoomStatus.fromString(rs.getString("room_status")))
-                        .build();
+            while (rs.next()) {
+                if (room == null) {
+                    room = new RoomDTO.Builder()
+                            .setRoomId(roomId)
+                            .setRoomNumber(rs.getInt("room_number"))
+                            .setRoomType(RoomType.fromString(rs.getString("room_type")))
+                            .setPricePerNight(rs.getFloat("price_per_night"))
+                            .setCapacity(rs.getInt("capacity"))
+                            .setRoomStatus(RoomStatus.fromString(rs.getString("room_status")));
+                }
+                imageList.add(rs.getString("imagepath"));
             }
-            return room;
+            RoomDTO roomDTO = null;
+            if (room != null) {
+                roomDTO = room.setImagePath(imageList).build();
+            }
+            return roomDTO;
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
         } finally {
@@ -234,13 +210,74 @@ public class RoomDAOImpl implements IRoomDAO {
             pst.setFloat(1, price);
             pst.setFloat(2, price);
             rs = pst.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 return rs.getFloat("tax_rate");
             }
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
+        }finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DBException(e);
+                }
+            }
         }
         return 0;
+    }
+
+    @Override
+    public boolean updateRoom(RoomDTO room) throws DBException {
+        String update = "UPDATE room SET room_number = ?, room_type = ?, capacity = ?, price_per_night = ?, room_status = ? WHERE room_id = ?";
+        String deleteRoomImages = "DELETE FROM room_images WHERE room_id = ?";
+        String insertRoomImages = "INSERT INTO room_images(imagepath, room_id) VALUES (?, ?)";
+
+
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pstUpdate = connection.prepareStatement(update);
+             PreparedStatement pstDeleteImages = connection.prepareStatement(deleteRoomImages);
+             PreparedStatement pstInsertImages = connection.prepareStatement(insertRoomImages)) {
+            connection.setAutoCommit(false);
+            pstUpdate.setInt(1, room.getRoomNumber());
+            pstUpdate.setString(2, room.getRoomType().toString());
+            pstUpdate.setInt(3, room.getCapacity());
+            pstUpdate.setFloat(4, room.getPricePerNight());
+            pstUpdate.setString(5, room.getRoomStatus().toString());
+            pstUpdate.setInt(6, room.getRoomId());
+            int roomUpdateResult = pstUpdate.executeUpdate();
+
+            if (roomUpdateResult > 0) {
+                pstDeleteImages.setInt(1, room.getRoomId());
+                pstDeleteImages.executeUpdate();
+
+                if (room.getImagePath() != null && !room.getImagePath().isEmpty()) {
+                    for (String imagePath : room.getImagePath()) {
+                        pstInsertImages.setString(1, imagePath);
+                        pstInsertImages.setInt(2, room.getRoomId());
+                        pstInsertImages.addBatch();
+                    }
+                    int[] imageInsertResult = pstInsertImages.executeBatch();
+                    boolean allImagesInserted = Arrays.stream(imageInsertResult).allMatch(i -> i >= 0);
+                    if (allImagesInserted) {
+                        connection.commit();
+                        return true;
+                    } else {
+                        connection.rollback();
+                        return false;
+                    }
+                } else {
+                    connection.commit();
+                    return true;
+                }
+            } else {
+                connection.rollback();
+                return false;
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }
     }
 }
 

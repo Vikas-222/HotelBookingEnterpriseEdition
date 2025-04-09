@@ -6,18 +6,22 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
+import com.example.common.utils.ImageHandler;
 import com.example.common.utils.SessionValidator;
 import com.example.dto.UserDTO;
 import com.example.service.UserService;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 
-@WebServlet(name = "UpdateUserController", value = "/updateuser")
+@MultipartConfig
+@WebServlet(name = "UpdateUserController", value = "/update-user")
 public class UpdateUserController extends HttpServlet {
 
     @Override
@@ -26,10 +30,12 @@ public class UpdateUserController extends HttpServlet {
         UserService userService = new UserService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
-            UserDTO.Builder userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.Builder.class);
-            userDTO.setUserId(user.getUserId());
-            userDTO.setEmail(user.getEmail());
-            userService.updateUserDetails(userDTO.build());
+            Part userDetails = request.getPart("userDetails");
+            Part imagePart = request.getPart("image");
+            UserDTO.Builder userData = CustomObjectMapper.toObject(userDetails.getInputStream(), UserDTO.Builder.class);
+            userData.setProfilePic(ImageHandler.getFilePath("UserImages", imagePart));
+            userData.setUserId(user.getUserId());
+            userService.updateUserDetails(userData.build());
             sendResponse(response, null, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();

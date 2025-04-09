@@ -13,26 +13,4 @@ public class RoomMapper {
                 .setPricePerNight(roomDTO.getPricePerNight())
                 .build();
     }
-
-//    public static List<RoomDTO> convertRoomListToRoomDTOList(List<Room> list) {
-//        return list.stream().map(room -> new RoomDTO.Builder()
-//                        .setRoomId(room.getRoomId())
-//                        .setRoomNumber(room.getRoomNumber())
-//                        .setRoomType(room.getRoomType())
-//                        .setPricePerNight(room.getPricePerNight())
-//                        .setCapacity(room.getCapacity())
-//                        .setRoomStatus(room.getRoomStatus()).build())
-//                .collect(Collectors.toList());
-//    }
-
-    public static RoomDTO convertRoomToRoomDTO(Room room) {
-        return new RoomDTO.Builder()
-                .setRoomId(room.getRoomId())
-                .setRoomNumber(room.getRoomNumber())
-                .setRoomType(room.getRoomType())
-                .setCapacity(room.getCapacity())
-                .setPricePerNight(room.getPricePerNight())
-                .setRoomStatus(room.getRoomStatus())
-                .build();
-    }
 }

@@ -26,10 +26,8 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
         UserService userService = new UserService();
-
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            UserDTO user = mapper.readValue(request.getReader(), UserDTO.class);
+            UserDTO user = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
             if (!UserValidator.isNullCheckLoginValues(user.getEmail(), user.getPassword())) {
                 throw new ApplicationException(Messages.Error.INVALID_CREDENTIALS);
             }
@@ -37,7 +35,8 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(5 * 60);
             session.setAttribute("user", userDTO);
-            sendResponse(response, Messages.LOGIN_SUCCESSFUL, null, null, 200);
+            UserDTO user1 = new UserDTO.Builder().setUserId(userDTO.getUserId()).setEmail(userDTO.getEmail()).setRole(userDTO.getRole()).build();
+            sendResponse(response, Messages.LOGIN_SUCCESSFUL, null, user1, 200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);

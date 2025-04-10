@@ -31,13 +31,6 @@ public class UserService {
         }
     }
 
-//    public boolean isUserEmailExists(String email) throws ApplicationException {
-//        if(iUserDAO.isUserEmailExists(email) == true){
-//            throw new ApplicationException(Messages.Error.ALREADY_EXISTS);
-//        }
-//        return true;
-//    }
-
     public UserDTO userLogin(UserDTO userDTO) throws ApplicationException {
         try {
             User user = UserMapper.convertUserDTOToUserForLogin(userDTO);
@@ -45,14 +38,14 @@ public class UserService {
             if (iUserDAO.isValidUser(user) == false) {
                 throw new ApplicationException(Messages.Error.INVALID_CREDENTIALS);
             }
-            return fetchLoggedInUserDetails(userDTO.getEmail());
+            return fetchLoggedInUserDetails(user.getEmail());
         } catch (DBException ex) {
             throw ex;
         }
     }
 
     public UserDTO fetchLoggedInUserDetails(String email) throws DBException {
-        UserDTO userDTO = UserMapper.ToUserDTO(iUserDAO.fetchLoggedInUserDetails(email));
+        UserDTO userDTO = UserMapper.toUserDTO(iUserDAO.fetchLoggedInUserDetails(email));
         return userDTO;
     }
 
@@ -64,7 +57,7 @@ public class UserService {
         if (iUserDAO.isValidUserId(userDTO.getUserId()) == false) {
             throw new ApplicationException(Messages.Error.INVALID_USER_ID);
         }
-        User user = UserMapper.ForUpdateDTOToEntity(userDTO);
+        User user = UserMapper.forUpdateDTOToEntity(userDTO);
         iUserDAO.updateUserdetails(user);
     }
 

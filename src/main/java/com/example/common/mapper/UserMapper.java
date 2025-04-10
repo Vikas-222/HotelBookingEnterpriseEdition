@@ -17,7 +17,7 @@ public class UserMapper {
         return new User.UserBuilder().setEmail(userDTO.getEmail()).setPassword(userDTO.getPassword()).build();
     }
 
-    public static UserDTO ToUserDTO(User user) {
+    public static UserDTO toUserDTO(User user) {
         return new UserDTO.Builder()
                 .setUserId(user.getUserId())
                 .setFirstName(user.getFirstName())
@@ -30,7 +30,7 @@ public class UserMapper {
                 .setActive(user.getIsActive()).build();
     }
 
-    public static User ForUpdateDTOToEntity(UserDTO user) {
+    public static User forUpdateDTOToEntity(UserDTO user) {
         return new User.UserBuilder()
                 .setUserId(user.getUserId())
                 .setLastName(user.getLastName())

@@ -130,7 +130,7 @@ public class BookingService {
     }
 
     public float cancelBooking(String id, UserDTO user) throws ApplicationException {
-        if (id == null || id.isBlank()) {
+        if (id.isBlank()) {
             throw new ApplicationException(Messages.BookingError.INVALID_BOOKING_ID);
         }
         int bookingId = Integer.parseInt(id);

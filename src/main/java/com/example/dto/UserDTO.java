@@ -14,6 +14,7 @@ public class UserDTO {
     private String gender;
     private String profilePic;
     private String role;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean isActive;
 
     public UserDTO(Builder builder) {

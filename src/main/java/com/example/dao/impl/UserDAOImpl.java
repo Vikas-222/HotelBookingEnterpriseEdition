@@ -77,11 +77,16 @@ public class UserDAOImpl implements IUserDAO {
             pst.setString(1, email);
             rs = pst.executeQuery();
             if (rs.next()) {
-                user = new User.UserBuilder().setUserId(rs.getInt("user_id")).setFirstName(rs.getString("first_name"))
-                        .setLastName(rs.getString("last_name")).setEmail(rs.getString("email"))
+                user = new User.UserBuilder()
+                        .setUserId(rs.getInt("user_id"))
+                        .setFirstName(rs.getString("first_name"))
+                        .setLastName(rs.getString("last_name"))
+                        .setEmail(rs.getString("email"))
                         .setContactNumber(rs.getString("contact"))
-                        .setUserId(rs.getInt("user_id")).setGender(rs.getString("gender"))
-                        .setIsActive(rs.getBoolean("is_active")).setRole(rs.getString("roles")).build();
+                        .setGender(rs.getString("gender"))
+                        .setProfilePic(rs.getString("profilePic"))
+                        .setIsActive(rs.getBoolean("is_active"))
+                        .setRole(rs.getString("roles")).build();
             }
             return user;
         } catch (SQLException | ClassNotFoundException e) {

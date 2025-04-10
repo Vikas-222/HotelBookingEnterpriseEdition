@@ -15,17 +15,17 @@ public class BookingDAOImpl implements IBookingDAO {
 
     @Override
     public void addBooking(Booking booking, RoomDTO room) throws DBException {
-        String insert = "insert into booking (user_id,room_id,check_in,check_out,total_amount,numberOfGuests,gstRate) values (?,?,?,?,?,?,?)";
+        String insert = "insert into booking (user_id,room_id,check_in,check_out,total_amount,numberOfGuests,refund_amount,gstRate) values (?,?,?,?,?,?,?,?)";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(insert);) {
-            System.out.println("dao " + booking);
             pst.setInt(1, booking.getUserId());
             pst.setInt(2, booking.getRoomId());
             pst.setTimestamp(3, Timestamp.valueOf(booking.getCheckInTime()));
             pst.setTimestamp(4, Timestamp.valueOf(booking.getCheckOutTime()));
             pst.setFloat(5, booking.getTotalAmount());
             pst.setInt(6, booking.getNumberOfGuests());
-            pst.setFloat(7, booking.getGstRates());
+            pst.setFloat(7, booking.getRefundAmount());
+            pst.setFloat(8, booking.getGstRates());
             pst.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
@@ -159,7 +159,7 @@ public class BookingDAOImpl implements IBookingDAO {
 
     @Override
     public boolean modifyBooking(Booking booking, RoomDTO room) throws DBException {
-        String sql = "UPDATE booking SET check_in = ?, check_out = ?, numberOfGuests = ?,total_amount = ?, updated_at = CURRENT_TIMESTAMP WHERE booking_id = ?";
+        String sql = "UPDATE booking SET check_in = ?, check_out = ?, numberOfGuests = ?,total_amount = ?,refund_amount = 0, updated_at = CURRENT_TIMESTAMP WHERE booking_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(sql)) {
             connection.setAutoCommit(false);

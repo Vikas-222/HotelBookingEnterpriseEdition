@@ -84,7 +84,7 @@ public class RoomService {
 
     public RoomDTO getRoomDetails(int roomId) throws ApplicationException {
         isValidRoomId(roomId);
-        return iRoomDAO.getRoom(roomId);
+        return iRoomDAO.getRoomById(roomId);
     }
 
     public float getGstRatesByRoomPrice(float price) throws ApplicationException {

@@ -25,7 +25,9 @@ public interface IRoomDAO {
 
     List<RoomDTO> getAllRoomWithImage() throws DBException;
 
-    RoomDTO getRoom(int roomId) throws DBException;
+//    RoomDTO getRoom(int roomId) throws DBException;
 
     float getGstRatesByRoomPrice(float price) throws DBException;
+
+    RoomDTO getRoomById(int roomId) throws DBException;
 }

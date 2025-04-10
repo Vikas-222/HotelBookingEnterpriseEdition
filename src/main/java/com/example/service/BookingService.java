@@ -47,7 +47,8 @@ public class BookingService {
         long days = Duration.between(bookingdto.getCheckInTime(), bookingdto.getCheckOutTime()).toDays();
         float gstRate = roomService.getGstRatesByRoomPrice(room.getPricePerNight());
         float gstAmount = calculateGSTByRoomPrice(room.getPricePerNight(), gstRate);
-        float TotalAmount = calculateTotalAmount(room.getPricePerNight(), gstAmount, days);
+        float serviceCharge = room.getRoomServiceCharge();
+        float TotalAmount = calculateTotalAmount(room.getPricePerNight(), gstAmount,serviceCharge, days);
         BookingDTO booking1 = setTotalAmountToBookingId(bookingdto, userId, TotalAmount, gstRate);
         Booking booking = BookingMapper.convertBookingDTOToEntity(booking1);
         iBookingDAO.addBooking(booking, room);
@@ -62,6 +63,7 @@ public class BookingService {
                 .setCheckOutTime(bookingDTO.getCheckOutTime())
                 .setNumberOfGuests(bookingDTO.getNumberOfGuests())
                 .setTotalAmount(amount)
+                .setRefundAmount(0)
                 .setGstRates(gstRate).build();
     }
 
@@ -84,7 +86,8 @@ public class BookingService {
         long days = Duration.between(bookingDTO.getCheckInTime(), bookingDTO.getCheckOutTime()).toDays();
         float gstRate = roomService.getGstRatesByRoomPrice(room.getPricePerNight());
         float gstAmount = calculateGSTByRoomPrice(room.getPricePerNight(), gstRate);
-        float TotalAmount = calculateTotalAmount(room.getPricePerNight(), gstAmount, days);
+        float serviceCharge = room.getRoomServiceCharge();
+        float TotalAmount = calculateTotalAmount(room.getPricePerNight(), gstAmount,serviceCharge, days);
         BookingDTO booking1 = setTotalAmountToBookingId(bookingDTO, userId, TotalAmount, gstRate);
         Booking booking = BookingMapper.convertBookingDTOToEntity(booking1);
         iBookingDAO.modifyBooking(booking, room);
@@ -115,15 +118,15 @@ public class BookingService {
         return (roomPrice * gstRate) / 100;
     }
 
-    public float calculateTotalAmount(float roomPrice, float gstAmount, long numberOfDays) {
-        return (roomPrice * numberOfDays) + gstAmount;
+    public float calculateTotalAmount(float roomPrice, float gstAmount,float serviceCharge, long numberOfDays) {
+        return (roomPrice * numberOfDays) + gstAmount + (numberOfDays * serviceCharge);
     }
 
-    public float calculateTotalRefundAmount(float totalAmount, float gstAmount, long numberOfDays) {
+    public float calculateTotalRefundAmount(float totalAmount, float gstAmount,float serviceCharge, long numberOfDays) {
         if (Math.abs(numberOfDays) >= 2) {
-            return totalAmount - gstAmount;
+            return totalAmount - (gstAmount + serviceCharge);
         } else if (Math.abs(numberOfDays) == 1) {
-            return (totalAmount - gstAmount) - 100;
+            return (totalAmount - (gstAmount + serviceCharge)) - 100;
         } else {
             return 0;
         }
@@ -152,7 +155,8 @@ public class BookingService {
         }
         long days = Duration.between(booking.getCheckInTime(), cancelDate).toDays();
         float gstAmount = calculateGSTByRoomPrice(room.getPricePerNight(), booking.getGstRates());
-        float refundAmount = calculateTotalRefundAmount(booking.getTotalAmount(), gstAmount, days);
+        float serviceCharge = room.getRoomServiceCharge();
+        float refundAmount = calculateTotalRefundAmount(booking.getTotalAmount(), gstAmount,serviceCharge, days);
         Date todayDate = Date.valueOf(cancelDate.toLocalDate());
         iBookingDAO.cancelBooking(bookingId, todayDate, refundAmount);
         return refundAmount;

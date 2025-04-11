@@ -58,6 +58,7 @@ public class Messages {
         public static final String INVALID_NUMBER_OF_GUEST = "Please enter valid number of guest";
         public static final String ACCOUNT_DEACTIVATE = "Your account is deactivated! Please contact to admin";
         public static final String CANNOT_CANCEL_PREVIOUS_BOOKING = "Bookings cannot be cancelled once completed";
+        public static final String CANNOT_MODIFY_CANCELLED_BOOKING = "Bookings cannot be modified once cancelled.";
     }
 
     public static class ReviewError {

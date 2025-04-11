@@ -1,6 +1,7 @@
 package com.example.service;
 
 import com.example.common.Messages;
+import com.example.common.enums.BookingStatus;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.BookingMapper;
@@ -81,6 +82,10 @@ public class BookingService {
 
     public void modifyBooking(BookingDTO bookingDTO, int userId) throws ApplicationException {
         isValidBookingId(bookingDTO.getBookingId());
+        Booking booking = iBookingDAO.getBookingDetails(bookingDTO.getBookingId());
+        if(booking.getBookingStatus().toString() == "CANCELLATION"){
+            throw new ApplicationException(Messages.BookingError.CANNOT_MODIFY_CANCELLED_BOOKING);
+        }
         RoomDTO room = roomService.getRoomDetails(bookingDTO.getRoomId());
         roomService.updateRoomStatus(room.getRoomId(),"OCCUPIED");
         long days = Duration.between(bookingDTO.getCheckInTime(), bookingDTO.getCheckOutTime()).toDays();
@@ -89,8 +94,8 @@ public class BookingService {
         float serviceCharge = room.getRoomServiceCharge();
         float TotalAmount = calculateTotalAmount(room.getPricePerNight(), gstAmount,serviceCharge, days);
         BookingDTO booking1 = setTotalAmountToBookingId(bookingDTO, userId, TotalAmount, gstRate);
-        Booking booking = BookingMapper.convertBookingDTOToEntity(booking1);
-        iBookingDAO.modifyBooking(booking, room);
+        Booking bookingObj = BookingMapper.convertBookingDTOToEntity(booking1);
+        iBookingDAO.modifyBooking(bookingObj, room);
     }
 
 

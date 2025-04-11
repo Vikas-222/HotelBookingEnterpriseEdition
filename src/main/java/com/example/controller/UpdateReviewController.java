@@ -21,11 +21,11 @@ import java.io.IOException;
 
 @WebServlet(name = "UpdateReviewController", value = "/update-review")
 public class UpdateReviewController extends HttpServlet {
+    private ReviewService reviewService = new ReviewService();
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
-        ReviewService reviewService = new ReviewService();
         try {
             UserDTO user = SessionValidator.checkSession(request);
             ReviewDTO reviewDTO = CustomObjectMapper.toObject(request.getReader(), ReviewDTO.class);

@@ -243,7 +243,8 @@ public class BookingDAOImpl implements IBookingDAO {
 
     @Override
     public float calculateRevenue() throws DBException {
-        String sql = "SELECT (SELECT COALESCE(SUM(total_amount), 0) FROM booking WHERE booking_status = 'COMPLETED') - " +
+        String sql = "SELECT (SELECT COALESCE(SUM(total_amount), 0) FROM booking WHERE booking_status ='CONFIRMED') + " +
+                "(SELECT (SELECT COALESCE(SUM(total_amount), 0) FROM booking WHERE booking_status ='COMPLETED')) -" +
                 "(SELECT COALESCE(SUM(refund_amount), 0) FROM booking WHERE booking_status = 'CANCELLATION') AS net_revenue";
         ResultSet rs = null;
         try (Connection conn = DbConnect.instance.getConnection();

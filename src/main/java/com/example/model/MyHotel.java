@@ -1,40 +1,19 @@
 package com.example.model;
 
-import jakarta.persistence.*;
+import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
-@Entity
-@Table(name = "hotel")
-public class Hotel {
+public class MyHotel {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hotel_id")
     private int hotelId;
-
-    @Column(name = "hotel_name", nullable = false, length = 50)
-      private String hotelName;
-
-    @Column(name = "address", nullable = false, length = 120)
+    private String hotelName;
     private String address;
-
-    @Column(name = "contact", nullable = false, length = 15)
     private String contactNumber;
-
-    @Column(name = "email", nullable = false, length = 50)
     private String email;
-
-    @Column(name = "check_in_time", columnDefinition = "TIME")
-    private LocalTime checkInTime;
-
-    @Column(name = "check_out_time", columnDefinition = "TIME")
-    private LocalTime checkOutTime;
-
-    @Column(name = "created_at")
+    private Time checkInTime;
+    private Time checkOutTime;
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public int getHotelId() {
@@ -77,19 +56,19 @@ public class Hotel {
         this.email = email;
     }
 
-    public LocalTime getCheckInTime() {
+    public Time getCheckInTime() {
         return checkInTime;
     }
 
-    public void setCheckInTime(LocalTime checkInTime) {
+    public void setCheckInTime(Time checkInTime) {
         this.checkInTime = checkInTime;
     }
 
-    public LocalTime getCheckOutTime() {
+    public Time getCheckOutTime() {
         return checkOutTime;
     }
 
-    public void setCheckOutTime(LocalTime checkOutTime) {
+    public void setCheckOutTime(Time checkOutTime) {
         this.checkOutTime = checkOutTime;
     }
 
@@ -97,7 +76,7 @@ public class Hotel {
         return createdAt;
     }
 
-    public void setCreated_at(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -105,13 +84,14 @@ public class Hotel {
         return updatedAt;
     }
 
-    public void setUpdated_at(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
     @Override
     public String toString() {
-        return  "hotelId=" + hotelId +
+        return "MyHotel{" +
+                "hotelId=" + hotelId +
                 ", hotelName='" + hotelName + '\'' +
                 ", address='" + address + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
@@ -119,6 +99,7 @@ public class Hotel {
                 ", checkInTime=" + checkInTime +
                 ", checkOutTime=" + checkOutTime +
                 ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt;
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

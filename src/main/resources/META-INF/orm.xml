@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence/orm https://jakarta.ee/xml/ns/persistence/orm_3_1.xsd"
+                 version="3.1">
+
+    <entity class="com.example.model.Hotel">
+        <table name="Hotel"/>
+        <attributes>
+            <id name="hotelId">
+                <column name="hotel_id" nullable="false"/>
+                <generated-value strategy="IDENTITY"></generated-value>
+            </id>
+            <basic name="hotelName">
+                <column name="hotel_name" nullable="false"></column>
+            </basic>
+            <basic name="address">
+                <column name="address" nullable="false" length="120"/>
+            </basic>
+            <basic name="contactNumber">
+                <column name="contact" nullable="false" length="15"/>
+            </basic>
+            <basic name="email">
+                <column name="email" nullable="false" length="50"/>
+            </basic>
+            <basic name="checkInTime">
+                <column name="check_in_time"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="checkOutTime">
+                <column name="check_out_time"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            <basic name="createdAt">
+                <column name="created_at"/>
+            </basic>
+            <basic name="updatedAt">
+                <column name="updated_at"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>

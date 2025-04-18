@@ -16,20 +16,6 @@ public class UserService {
 
     private IUserDAO iUserDAO = new UserDAOImpl();
 
-    public void addUser(UserDTO userDTO) throws ApplicationException {
-        try {
-            UserValidator.validate(userDTO);
-            if (iUserDAO.isUserEmailExists(userDTO.getEmail()) == true) {
-                throw new ApplicationException(Messages.Error.ALREADY_EXISTS);
-            }
-            User user = UserMapper.convertUserDTOToUserForSignup(userDTO);
-            iUserDAO.addUser(user);
-        } catch (DBException e) {
-            throw e;
-        } catch (ApplicationException e) {
-            throw e;
-        }
-    }
 
     public UserDTO userLogin(UserDTO userDTO) throws ApplicationException {
         try {

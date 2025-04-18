@@ -3,12 +3,14 @@ package com.example.controller.validation;
 import com.example.common.Messages;
 import com.example.common.exception.ApplicationException;
 import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UserValidator {
 
-    public static void validate(UserDTO user) throws ApplicationException {
+    public static void validate(UsersDTO user) throws ApplicationException {
         if (!isNullCheckUserValues(user)) {
             throw new ApplicationException(Messages.Error.INVALID_VALUES);
         }
@@ -36,7 +38,7 @@ public class UserValidator {
 
     }
 
-    public static boolean isNullCheckUserValues(UserDTO user){
+    public static boolean isNullCheckUserValues(UsersDTO user){
         return !user.getFirstName().isBlank() && !user.getEmail().isBlank() && !user.getPassword().isBlank()
                 && !user.getContactNumber().isBlank();
     }

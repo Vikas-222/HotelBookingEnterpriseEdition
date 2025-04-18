@@ -87,4 +87,18 @@ public class Messages {
         public static final String EMPTY_CHARGES_COST = "Please fill charges cost field.";
         public static final String INVALID_CHARGES_COST = "Please enter valid charges cost.";
     }
+
+    public static class HotelError {
+        public static final String INVALID_VALUES = "Please fill all required fields.";
+        public static final String INVALID_TIMES = "Invalid check-in-time/check-out-time.";
+        public static final String INVALID_HOTEL_EMAIL = "Please fill valid email.";
+        public static final String INVALID_HOTEL_CONTACT = "Please fill valid contact number.";
+        public static final String HOTEL_ID_NOT_FOUND = "Hotel not found";
+        public static final String INVALID_HOTEL_ID = "Invalid Hotel ID";
+        public static final String HOTEL_NAME_SIZE_EXCEEDED = "Hotel name size cannot exceeds 50 characters";
+        public static final String HOTEL_ADDRESS_SIZE_EXCEEDED = "Hotel Address size cannot exceeds 120 characters";
+        public static final String HOTEL_EMAIL_SIZE_EXCEEDED = "Hotel Name size cannot exceeds 50 characters";
+        public static final String HOTEL_CONTACT_SIZE_EXCEEDED = "Contact number should be of 12 digits";
+    }
 }
+

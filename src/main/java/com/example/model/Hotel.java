@@ -14,7 +14,7 @@ public class Hotel {
     private int hotelId;
 
     @Column(name = "hotel_name", nullable = false, length = 50)
-      private String hotelName;
+    private String hotelName;
 
     @Column(name = "address", nullable = false, length = 120)
     private String address;
@@ -25,17 +25,21 @@ public class Hotel {
     @Column(name = "email", nullable = false, length = 50)
     private String email;
 
-    @Column(name = "check_in_time", columnDefinition = "TIME")
+    @Column(name = "check_in_time")
     private LocalTime checkInTime;
 
-    @Column(name = "check_out_time", columnDefinition = "TIME")
+    @Column(name = "check_out_time")
+//    @Convert(converter = LocalTimeAttributeConverter.class)
     private LocalTime checkOutTime;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Hotel() {
+    }
 
     public int getHotelId() {
         return hotelId;
@@ -93,6 +97,14 @@ public class Hotel {
         this.checkOutTime = checkOutTime;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -111,7 +123,7 @@ public class Hotel {
 
     @Override
     public String toString() {
-        return  "hotelId=" + hotelId +
+        return "hotelId=" + hotelId +
                 ", hotelName='" + hotelName + '\'' +
                 ", address='" + address + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +

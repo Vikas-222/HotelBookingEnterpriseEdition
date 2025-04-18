@@ -6,8 +6,8 @@ import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
-import com.example.dto.UserDTO;
-import com.example.service.UserService;
+import com.example.dto.UsersDTO;
+import com.example.service.UserServices;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -20,9 +20,9 @@ public class SignupController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
-        UserService userService = new UserService();
+        UserServices userService = new UserServices();
         try {
-            UserDTO user = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
+            UsersDTO user = CustomObjectMapper.toObject(request.getReader(), UsersDTO.class);
             userService.addUser(user);
             sendResponse(response, Messages.ACCOUNT_CREATED, null, null, 200);
         } catch (DBException e) {

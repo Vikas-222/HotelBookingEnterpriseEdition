@@ -7,8 +7,10 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
 import com.example.service.UserService;
 import com.example.controller.validation.UserValidator;
+import com.example.service.UserServices;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,17 +27,17 @@ public class LoginController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
-        UserService userService = new UserService();
+        UserServices userService = new UserServices();
         try {
-            UserDTO user = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
+            UsersDTO user = CustomObjectMapper.toObject(request.getReader(), UsersDTO.class);
             if (!UserValidator.isNullCheckLoginValues(user.getEmail(), user.getPassword())) {
                 throw new ApplicationException(Messages.Error.INVALID_CREDENTIALS);
             }
-            UserDTO userDTO = userService.userLogin(user);
+            UsersDTO userDTO = userService.userLogin(user);
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(5 * 60);
             session.setAttribute("user", userDTO);
-            UserDTO user1 = new UserDTO.Builder().setUserId(userDTO.getUserId()).setEmail(userDTO.getEmail()).setRole(userDTO.getRole()).build();
+            UsersDTO user1 = new UsersDTO.Builder().setUserId(userDTO.getUserId()).setEmail(userDTO.getEmail()).setRole(userDTO.getRole()).build();
             sendResponse(response, Messages.LOGIN_SUCCESSFUL, null, user1, 200);
         } catch (DBException e) {
             e.printStackTrace();

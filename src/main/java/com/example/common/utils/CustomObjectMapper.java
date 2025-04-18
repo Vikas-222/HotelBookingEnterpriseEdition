@@ -2,38 +2,41 @@ package com.example.common.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Time;
+
 
 public class CustomObjectMapper {
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String TIME_FORMAT = "HH:mm:ss";
 
     static {
         objectMapper.registerModule(new JavaTimeModule());
+
+//        SimpleModule timeModule = new SimpleModule();
+//        timeModule.addSerializer(Time.class, new JsonSerializer<>() {
+//            @Override
+//            public void serialize(Time value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+//                gen.writeString(DateTimeFormatter.ofPattern(TIME_FORMAT).format(value.toLocalTime()));
+//            }
+//        });
+//        timeModule.addDeserializer(Time.class, new JsonDeserializer<Time>() {
+//            @Override
+//            public Time deserialize(com.fasterxml.jackson.core.JsonParser p, DeserializationContext ctxt) throws IOException {
+//                return Time.valueOf(java.time.LocalTime.parse(p.getValueAsString(), DateTimeFormatter.ofPattern(TIME_FORMAT)));
+//            }
+//        });
+//
+//        // Register the module
+//        objectMapper.registerModule(timeModule);
     }
 
-//    public static <T> T toObject(String json, Class<T> clazz) {
-//        try {
-//            ObjectMapper localMapper = objectMapper.copy();
-//            if (clazz == Time.class) {
-//                SimpleModule module = new SimpleModule();
-//                module.addDeserializer(Time.class, new DateDeserializers.SqlTimeDeserializer());
-//                localMapper.registerModule(module);
-//            }
-//            return localMapper.readValue(json, clazz);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
     public static <T> T toObject(BufferedReader reader, Class<T> targetClass) throws IOException {
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return objectMapper.readValue(reader, targetClass);
     }
 

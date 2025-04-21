@@ -55,7 +55,7 @@ public class UserDAO {
         EntityManager em = null;
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-            String jpql = "select u.email,u.password from user u where email = :email and password = :password";
+            String jpql = "select new user(u.email,u.password) from user u where email = :email and password = :password";
             TypedQuery<User> query = em.createQuery(jpql, User.class);
             query.setParameter("email", user.getEmail());
             query.setParameter("password", user.getPassword());

@@ -30,7 +30,7 @@ public class User {
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
-    private Gender gender = Gender.MALE;  //Default Male
+    private Gender gender;
 
     @Column(name = "passwords", length = 15)
     private String password;
@@ -54,6 +54,11 @@ public class User {
 
     //Public constructor for Hibernate
     public User() {
+    }
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
     }
 
     // Private constructor for Builder pattern

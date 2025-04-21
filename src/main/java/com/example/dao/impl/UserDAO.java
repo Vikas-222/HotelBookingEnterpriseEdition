@@ -7,6 +7,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserDAO {
 
     public boolean isUserEmailExists(String emailId) throws DBException {
@@ -76,11 +79,23 @@ public class UserDAO {
     public User fetchLoggedInUserDetails(String email) throws DBException {
         User user = null;
         try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
-            String jpql = "select u from user u where email = :email";
+            String jpql = "select new user(u.userId, u.email,u.role) from user u where email = :email";
             TypedQuery<User> query = em.createQuery(jpql, User.class).setParameter("email", email);
             user = query.getSingleResult();
             return user;
         }catch (PersistenceException e) {
+            throw new DBException(e);
+        }
+    }
+
+    public List<User> getAllUser() throws DBException {
+        List<User> list = new ArrayList<>();
+        try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
+            String fetch = "SELECT u FROM user u";
+            TypedQuery<User> query = em.createQuery(fetch, User.class);
+            list = query.getResultList();
+            return list;
+        } catch (PersistenceException e) {
             throw new DBException(e);
         }
     }

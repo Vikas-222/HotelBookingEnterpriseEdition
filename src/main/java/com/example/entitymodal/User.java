@@ -61,6 +61,12 @@ public class User {
         this.password = password;
     }
 
+    public User(int id,String email, Role role) {
+        this.userId = id;
+        this.email = email;
+        this.role = role;
+    }
+
     // Private constructor for Builder pattern
     private User(Builder builder) {
         this.userId = builder.userId;

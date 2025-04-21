@@ -1,14 +1,18 @@
 package com.example.controller;
 
 import com.example.common.AppConstants;
+import com.example.common.enums.Role;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Messages;
 import com.example.common.Response;
+import com.example.common.utils.SessionChecker;
 import com.example.common.utils.SessionValidator;
 import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
 import com.example.service.UserService;
+import com.example.service.UserServices;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -22,13 +26,13 @@ public class GetAllUserController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
-        UserService userService = new UserService();
+        UserServices userService = new UserServices();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
-            if (!user.getRole().equalsIgnoreCase("Admin")) {
+            UsersDTO user = SessionChecker.checkSession(request);
+            if (!user.getRole().equals(Role.ADMIN)) {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-            List<UserDTO> userList = userService.getAllUser();
+            List<UsersDTO> userList = userService.getAllUser();
             sendResponse(response, null, null, userList, 200);
         } catch (DBException e) {
             e.printStackTrace();

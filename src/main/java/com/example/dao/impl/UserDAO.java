@@ -7,7 +7,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
@@ -82,13 +81,13 @@ public class UserDAO {
             TypedQuery<User> query = em.createQuery(jpql, User.class).setParameter("userId", id);
             user = query.getSingleResult();
             return user;
-        }catch (PersistenceException e) {
+        } catch (PersistenceException e) {
             throw new DBException(e);
         }
     }
 
     public List<User> getAllUser() throws DBException {
-        List<User> list = new ArrayList<>();
+        List<User> list;
         try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
             String fetch = "SELECT u FROM user u";
             TypedQuery<User> query = em.createQuery(fetch, User.class);
@@ -96,6 +95,54 @@ public class UserDAO {
             return list;
         } catch (PersistenceException e) {
             throw new DBException(e);
+        }
+    }
+
+    public boolean isValidUserId(int Id) throws DBException {
+        try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
+            User existingUser = em.find(User.class, Id);
+            return existingUser != null;
+        } catch (jakarta.persistence.NoResultException e) {
+            return false;
+        } catch (PersistenceException e) {
+            throw new DBException(e);
+        }
+    }
+
+    public void updateUserDetails(User user) throws DBException {
+        EntityManager em = null;
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            em.getTransaction().begin();
+            User existingUser = em.find(User.class, user.getUserId());
+            if (existingUser != null) {
+                User updatedUser = new User.Builder()
+                        .setUserId(existingUser.getUserId())
+                        .setLastName(user.getLastName() != null ? user.getLastName() : existingUser.getLastName())
+                        .setContactNumber(user.getContactNumber() != null ? user.getContactNumber() : existingUser.getContactNumber())
+                        .setGender(user.getGender() != null ? user.getGender() : existingUser.getGender())
+                        .setProfilePic(user.getProfilePic() != null ? user.getProfilePic() : existingUser.getProfilePic())
+                        .setFirstName(existingUser.getFirstName())
+                        .setEmail(existingUser.getEmail())
+                        .setPassword(existingUser.getPassword())
+                        .setRole(existingUser.getRole())
+                        .setIsActive(existingUser.getIsActive())
+                        .build();
+                em.merge(updatedUser);
+                em.getTransaction().commit();
+            } else {
+                throw new DBException("User with id " + user.getUserId() + " not found");
+            }
+
+        } catch (PersistenceException e) {
+            if (em != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DBException(e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
     }
 

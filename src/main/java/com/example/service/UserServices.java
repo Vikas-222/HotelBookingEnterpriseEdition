@@ -5,8 +5,10 @@ import com.example.common.enums.Role;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.UserMap;
+import com.example.common.mapper.UserMapper;
 import com.example.controller.validation.UserValidator;
 import com.example.dao.impl.UserDAO;
+import com.example.dto.UserDTO;
 import com.example.dto.UsersDTO;
 import com.example.entitymodal.User;
 
@@ -62,6 +64,19 @@ public class UserServices {
 
     public List<UsersDTO> getAllUser() throws DBException {
         return UserMap.convertUserToUserDTOList(userDAO.getAllUser());
+    }
+
+    public void updateUserDetails(UsersDTO userDTO) throws ApplicationException {
+        isValidUserId(userDTO.getUserId());
+        User user = UserMap.forUpdateDTOToEntity(userDTO);
+        userDAO.updateUserDetails(user);
+    }
+
+    public boolean isValidUserId(int id) throws ApplicationException {
+        if (userDAO.isValidUserId(id) == false) {
+            throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
+        }
+        return true;
     }
 
 

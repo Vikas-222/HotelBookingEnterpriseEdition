@@ -3,23 +3,27 @@ package com.example.controller;
 import com.example.common.AppConstants;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.Response;
-import com.example.common.utils.SessionValidator;
-import com.example.dto.UserDTO;
+import com.example.common.utils.SessionChecker;
 import com.example.common.exception.ApplicationException;
+import com.example.dto.UsersDTO;
+import com.example.service.UserServices;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "GetLoggedUserController", value = "/get-user")
-public class GetLoggedUserController extends HttpServlet {
+@WebServlet(name = "GetUserDetailsController", value = "/get-user")
+public class GetUserDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
+        UserServices userService = new UserServices();
         try {
-            UserDTO userDTO = SessionValidator.checkSession(request);
-            sendResponse(response, null,null, userDTO, 200);
+            UsersDTO loggedUser = SessionChecker.checkSession(request);
+            String id = request.getParameter("userId");
+            UsersDTO user = userService.fetchUserDetailsById(id,loggedUser);
+            sendResponse(response, null,null, user, 200);
         } catch (ApplicationException e) {
             e.printStackTrace();
             sendResponse(response, e.getMessage(),null, null, 500);

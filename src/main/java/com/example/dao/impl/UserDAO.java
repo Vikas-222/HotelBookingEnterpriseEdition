@@ -54,18 +54,17 @@ public class UserDAO {
     }
 
 
-    public boolean isValidUser(User user) throws DBException {
+    public User loggedInUser(String email, String password) throws DBException {
         EntityManager em = null;
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-            String jpql = "select new user(u.email,u.password) from user u where email = :email and password = :password";
+            String jpql = "select u from user u where email = :email and password = :password";
             TypedQuery<User> query = em.createQuery(jpql, User.class);
-            query.setParameter("email", user.getEmail());
-            query.setParameter("password", user.getPassword());
-            User users = query.getSingleResult();
-            return users != null;    //return true, if user exists
+            query.setParameter("email", email);
+            query.setParameter("password", password);
+            return query.getSingleResult();
         } catch (jakarta.persistence.NoResultException e) {
-            return false;   //return false, if user does not exists
+            return null;   //return null, if user does not exists
         } catch (PersistenceException e) {
             throw new DBException(e);
         } finally {
@@ -76,11 +75,11 @@ public class UserDAO {
     }
 
 
-    public User fetchLoggedInUserDetails(String email) throws DBException {
+    public User fetchUserDetailsById(int id) throws DBException {
         User user = null;
         try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
-            String jpql = "select new user(u.userId, u.email,u.role) from user u where email = :email";
-            TypedQuery<User> query = em.createQuery(jpql, User.class).setParameter("email", email);
+            String jpql = "select u from user u where userId = :userId";
+            TypedQuery<User> query = em.createQuery(jpql, User.class).setParameter("userId", id);
             user = query.getSingleResult();
             return user;
         }catch (PersistenceException e) {

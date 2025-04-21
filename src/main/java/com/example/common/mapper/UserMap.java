@@ -14,15 +14,16 @@ public class UserMap {
                 .setEmail(userDTO.getEmail()).setPassword(userDTO.getPassword()).setContactNumber(userDTO.getContactNumber()).build();
     }
 
-    public static User convertUserDTOToUserForLogin(UsersDTO userDTO) {
-        return new User.Builder().setEmail(userDTO.getEmail()).setPassword(userDTO.getPassword()).build();
-    }
-
     public static UsersDTO toUserDTO(User user) {
         return new UsersDTO.Builder()
                 .setUserId(user.getUserId())
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName())
                 .setEmail(user.getEmail())
-                .setRole(user.getRole()).build();
+                .setContactNumber(user.getContactNumber())
+                .setGender(user.getGender())
+                .setRole(user.getRole())
+                .setActive(user.getIsActive()).build();
     }
 
     public static List<UsersDTO> convertUserToUserDTOList(List<User> list) {

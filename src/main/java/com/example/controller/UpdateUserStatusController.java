@@ -3,13 +3,17 @@ package com.example.controller;
 import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
+import com.example.common.enums.Role;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
+import com.example.common.utils.SessionChecker;
 import com.example.common.utils.SessionValidator;
 import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
 import com.example.service.UserService;
 import com.example.controller.validation.UserValidator;
+import com.example.service.UserServices;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,22 +22,21 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "UpdateUserStatusController", value = "/updateUserStatus")
+@WebServlet(name = "UpdateUserStatusController", value = "/update-user-status")
 public class UpdateUserStatusController extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
-        UserService userService = new UserService();
+        UserServices userService = new UserServices();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
-            if (!user.getRole().equalsIgnoreCase("admin")) {
+            UsersDTO user = SessionChecker.checkSession(request);
+            if (user.getRole() != Role.ADMIN) {
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
-            UserDTO userDTO = CustomObjectMapper.toObject(request.getReader(), UserDTO.class);
-            UserValidator.isValidUserId(userDTO.getUserId());
+            UsersDTO userDTO = CustomObjectMapper.toObject(request.getReader(), UsersDTO.class);
             userService.updateUserActiveStatus(userDTO.getUserId(), userDTO.getIsActive());
-            sendResponse(response, null, null, null, 200);
+            sendResponse(response, Messages.STATUS_UPDATION_SUCCESSFUL, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);

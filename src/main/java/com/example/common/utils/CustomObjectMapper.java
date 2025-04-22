@@ -15,23 +15,6 @@ public class CustomObjectMapper {
 
     static {
         objectMapper.registerModule(new JavaTimeModule());
-
-//        SimpleModule timeModule = new SimpleModule();
-//        timeModule.addSerializer(Time.class, new JsonSerializer<>() {
-//            @Override
-//            public void serialize(Time value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-//                gen.writeString(DateTimeFormatter.ofPattern(TIME_FORMAT).format(value.toLocalTime()));
-//            }
-//        });
-//        timeModule.addDeserializer(Time.class, new JsonDeserializer<Time>() {
-//            @Override
-//            public Time deserialize(com.fasterxml.jackson.core.JsonParser p, DeserializationContext ctxt) throws IOException {
-//                return Time.valueOf(java.time.LocalTime.parse(p.getValueAsString(), DateTimeFormatter.ofPattern(TIME_FORMAT)));
-//            }
-//        });
-//
-//        // Register the module
-//        objectMapper.registerModule(timeModule);
     }
 
 

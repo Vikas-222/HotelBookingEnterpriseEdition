@@ -5,6 +5,7 @@ import com.example.common.utils.ManagerFactory;
 import com.example.entitymodal.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
@@ -141,6 +142,76 @@ public class UserDAO {
             throw new DBException(e);
         } finally {
             if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+
+    public void updateUserActiveStatus(int userId, boolean status) throws DBException {
+        EntityManager em = null;
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            em.getTransaction().begin();
+            Query query = em.createQuery("UPDATE user u SET u.isActive = :status WHERE u.userId = :userId");
+            query.setParameter("status", status);
+            query.setParameter("userId", userId);
+            int updatedCount = query.executeUpdate();
+            em.getTransaction().commit();
+            if (updatedCount == 0) {
+                throw new DBException("No user found with ID: " + userId);
+            }
+        } catch (PersistenceException e) {
+            if (em != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DBException(e);
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
+
+    public boolean isValidCurrentPassword(int userId, String password) throws DBException {
+        EntityManager em = null;
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            Query query = em.createQuery("SELECT u.password FROM user u WHERE u.userId = :userId");
+            query.setParameter("userId", userId);
+            String storedPassword = (String) query.getSingleResult();
+            if (!storedPassword.isEmpty()) {
+                return storedPassword.equals(password);
+            }
+            return false;
+        } catch (PersistenceException e) {
+            throw new DBException(e);
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
+    public boolean updatePassword(int userId, String password) throws DBException {
+        EntityManager em = null;
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            em.getTransaction().begin();
+            Query query = em.createQuery("UPDATE user u SET u.password = :password WHERE u.userId = :userId");
+            query.setParameter("password", password);
+            query.setParameter("userId", userId);
+            int updatedCount = query.executeUpdate();
+            em.getTransaction().commit();
+            return updatedCount > 0;
+        } catch (PersistenceException e) {
+            if (em != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DBException("Error updating user password", e);
+        } finally {
+            if (em != null && em.isOpen()) {
                 em.close();
             }
         }

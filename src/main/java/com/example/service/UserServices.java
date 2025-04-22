@@ -79,5 +79,18 @@ public class UserServices {
         return true;
     }
 
+    public void updateUserActiveStatus(int userId, boolean status) throws ApplicationException {
+        isValidUserId(userId);
+        userDAO.updateUserActiveStatus(userId, status);
+    }
+
+    public boolean updatePassword(int userId, String password, String newPassword) throws ApplicationException {
+        UserValidator.checkPassword(password, newPassword);
+        isValidUserId(userId);
+        if (userDAO.isValidCurrentPassword(userId, password) == false) {
+            throw new ApplicationException(Messages.Error.INVALID_CURRENT_PASSWORD);
+        }
+        return userDAO.updatePassword(userId, newPassword);
+    }
 
 }

@@ -48,9 +48,7 @@ public class UserService {
     }
 
     public void updateUserActiveStatus(int userId, boolean status) throws ApplicationException {
-        if (!iUserDAO.isValidUserId(userId)) {
-            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
-        }
+        isValidUserId(userId);
         iUserDAO.updateUserActiveStatus(userId, status);
     }
 

@@ -6,9 +6,12 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
+import com.example.common.utils.SessionChecker;
 import com.example.common.utils.SessionValidator;
 import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
 import com.example.service.UserService;
+import com.example.service.UserServices;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,10 +25,10 @@ public class ChangePasswordController extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
-        UserService userService = new UserService();
+        UserServices userService = new UserServices();
         try{
-            UserDTO userDTO = SessionValidator.checkSession(request);
-            UserDTO user = CustomObjectMapper.toObject(request.getReader(),UserDTO.class);
+            UsersDTO userDTO = SessionChecker.checkSession(request);
+            UsersDTO user = CustomObjectMapper.toObject(request.getReader(),UsersDTO.class);
             userService.updatePassword(userDTO.getUserId(),user.getPassword(),user.getNewPassword());
             sendResponse(response, Messages.PASSWORD_UPDATED,null,null,200);
         }catch(DBException e){

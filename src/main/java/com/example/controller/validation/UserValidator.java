@@ -2,7 +2,6 @@ package com.example.controller.validation;
 
 import com.example.common.Messages;
 import com.example.common.exception.ApplicationException;
-import com.example.dto.UserDTO;
 import com.example.dto.UsersDTO;
 
 import java.util.regex.Matcher;
@@ -38,7 +37,7 @@ public class UserValidator {
 
     }
 
-    public static boolean isNullCheckUserValues(UsersDTO user){
+    public static boolean isNullCheckUserValues(UsersDTO user) {
         return !user.getFirstName().isBlank() && !user.getEmail().isBlank() && !user.getPassword().isBlank()
                 && !user.getContactNumber().isBlank();
     }
@@ -91,18 +90,8 @@ public class UserValidator {
         return p.matcher(email).matches();
     }
 
-    public static boolean isValidUserId(int id) throws ApplicationException {
-        if(String.valueOf(id).isBlank() || String.valueOf(id) == null){
-            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
-        }
-        if(id <= 0){
-            throw new ApplicationException(Messages.Error.INVALID_USER_ID);
-        }
-        return true;
-    }
-
-    public static boolean checkPassword(String oldPassword,String newPassword) throws ApplicationException {
-        if(oldPassword.equals(newPassword)){
+    public static boolean checkPassword(String oldPassword, String newPassword) throws ApplicationException {
+        if (oldPassword.equals(newPassword)) {
             throw new ApplicationException(Messages.Error.SAME_PASSWORDS);
         }
         return true;

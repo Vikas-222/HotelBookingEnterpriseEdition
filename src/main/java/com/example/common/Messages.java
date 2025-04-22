@@ -15,6 +15,7 @@ public class Messages {
     public static final String AMENITY_DELETED = "Amenity deletion successful";
     public static final String BOOKING_UPDATED = "Booking modify successful";
     public static final String BOOKING_CANCELLATION = "Booking cancellation successful";
+    public static final String STATUS_UPDATION_SUCCESSFUL = "Status updation successful";
 
     public static class Error {
         public static final String ALREADY_EXISTS = "A user with this email already exists";

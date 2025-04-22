@@ -6,9 +6,11 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
+import com.example.common.utils.SessionChecker;
 import com.example.common.utils.SessionValidator;
 import com.example.dto.BookingDTO;
 import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
 import com.example.service.BookingService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -27,7 +29,7 @@ public class PastBookingController extends HttpServlet {
         response.setContentType(AppConstants.APPLICATION_JSON);
         BookingService service = new BookingService();
         try{
-            UserDTO userDTO = SessionValidator.checkSession(request);
+            UsersDTO userDTO = SessionChecker.checkSession(request);
             List<BookingDTO> list = service.pastBookings(userDTO.getUserId());
             sendResponse(response, null,null,list,200);
         } catch (DBException e) {

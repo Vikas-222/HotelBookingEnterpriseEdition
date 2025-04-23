@@ -82,7 +82,7 @@ create table booking
 create table category
 (
     category_id   int primary key auto_increment,
-    category_name ENUM('ROOM','SERVICE','HOTEL') not null,
+    category_name varchar(50) not null,
     created_at    datetime default current_timestamp
 );
 

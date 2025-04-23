@@ -6,7 +6,7 @@ import com.example.common.exception.DBException;
 import com.example.common.mapper.RoomMapper;
 import com.example.controller.validation.RoomValidator;
 import com.example.dao.IRoomDAO;
-import com.example.dao.impl.RoomDAOImpl;
+import com.example.dao.entity.RoomDAO;
 import com.example.dto.RoomDTO;
 import com.example.model.Room;
 
@@ -14,7 +14,7 @@ import java.util.List;
 
 public class RoomService {
 
-    private IRoomDAO iRoomDAO = new RoomDAOImpl();
+    private IRoomDAO iRoomDAO = new RoomDAO();
 
     public boolean addRoom(RoomDTO roomDTO) throws ApplicationException {
         RoomValidator.roomValidate(roomDTO);

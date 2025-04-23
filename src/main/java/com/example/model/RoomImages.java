@@ -1,18 +1,37 @@
 package com.example.model;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class RoomImages {
-    private int id;
-    private String imagePath;
-    private int roomId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+@Entity
+@Table(name = "room_images")
+public class RoomImages implements Serializable {
 
-    public RoomImages(String imagepath, int roomId) {
-        this.imagePath = imagepath;
-        this.roomId = roomId;
-    }
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private int id;
+
+    @Column(name = "imagepath", columnDefinition = "TEXT", nullable = false)
+    private String imagePath;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     public RoomImages() {
     }
@@ -33,12 +52,12 @@ public class RoomImages {
         this.imagePath = imagePath;
     }
 
-    public int getRoomId() {
-        return roomId;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -61,7 +80,7 @@ public class RoomImages {
     public String toString() {
         return "id=" + id +
                 ", imagepath='" + imagePath + '\'' +
-                ", room_id=" + roomId +
+
                 ", created_at=" + createdAt +
                 ", updated_at=" + updatedAt;
     }

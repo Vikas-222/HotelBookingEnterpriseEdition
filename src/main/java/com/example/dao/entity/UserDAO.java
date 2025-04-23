@@ -1,4 +1,4 @@
-package com.example.dao.impl;
+package com.example.dao.entity;
 
 import com.example.common.exception.DBException;
 import com.example.common.utils.ManagerFactory;
@@ -16,7 +16,7 @@ public class UserDAO {
         EntityManager em = null;
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-            String jpql = "SELECT u.email FROM user u WHERE u.email = :email";
+            String jpql = "SELECT u.email FROM User u WHERE u.email = :email";
             TypedQuery<String> query = em.createQuery(jpql, String.class);
             query.setParameter("email", emailId);
             String result = query.getSingleResult();
@@ -58,7 +58,7 @@ public class UserDAO {
         EntityManager em = null;
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-            String jpql = "select u from user u where email = :email and password = :password";
+            String jpql = "select u from User u where email = :email and password = :password";
             TypedQuery<User> query = em.createQuery(jpql, User.class);
             query.setParameter("email", email);
             query.setParameter("password", password);
@@ -78,7 +78,7 @@ public class UserDAO {
     public User fetchUserDetailsById(int id) throws DBException {
         User user = null;
         try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
-            String jpql = "select u from user u where userId = :userId";
+            String jpql = "select u from User u where userId = :userId";
             TypedQuery<User> query = em.createQuery(jpql, User.class).setParameter("userId", id);
             user = query.getSingleResult();
             return user;
@@ -90,7 +90,7 @@ public class UserDAO {
     public List<User> getAllUser() throws DBException {
         List<User> list;
         try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
-            String fetch = "SELECT u FROM user u";
+            String fetch = "SELECT u FROM User u";
             TypedQuery<User> query = em.createQuery(fetch, User.class);
             list = query.getResultList();
             return list;
@@ -153,7 +153,7 @@ public class UserDAO {
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
             em.getTransaction().begin();
-            Query query = em.createQuery("UPDATE user u SET u.isActive = :status WHERE u.userId = :userId");
+            Query query = em.createQuery("UPDATE User u SET u.isActive = :status WHERE u.userId = :userId");
             query.setParameter("status", status);
             query.setParameter("userId", userId);
             int updatedCount = query.executeUpdate();
@@ -178,7 +178,7 @@ public class UserDAO {
         EntityManager em = null;
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-            Query query = em.createQuery("SELECT u.password FROM user u WHERE u.userId = :userId");
+            Query query = em.createQuery("SELECT u.password FROM User u WHERE u.userId = :userId");
             query.setParameter("userId", userId);
             String storedPassword = (String) query.getSingleResult();
             if (!storedPassword.isEmpty()) {
@@ -199,7 +199,7 @@ public class UserDAO {
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
             em.getTransaction().begin();
-            Query query = em.createQuery("UPDATE user u SET u.password = :password WHERE u.userId = :userId");
+            Query query = em.createQuery("UPDATE User u SET u.password = :password WHERE u.userId = :userId");
             query.setParameter("password", password);
             query.setParameter("userId", userId);
             int updatedCount = query.executeUpdate();

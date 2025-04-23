@@ -2,30 +2,61 @@ package com.example.model;
 
 import com.example.common.enums.RoomStatus;
 import com.example.common.enums.RoomType;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
-public class Room {
+@Entity
+@Table(name = "room")
+public class Room implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id", unique = true)
     private int roomId;
+
+    @Column(name = "room_number", unique = true, nullable = false)
     private int roomNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "room_type", nullable = false)
     private RoomType roomType;
+
+    @Column(name = "capacity", nullable = false)
     private int capacity;
+
+    @Column(name = "price_per_night", nullable = false)
     private float pricePerNight;
-    private RoomStatus roomStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "room_status", nullable = false)
+    private RoomStatus roomStatus = RoomStatus.AVAILABLE;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomImages> roomImages;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public Room() {
     }
 
     public Room(Builder builder) {
-        this.roomId = builder.roomId;
         this.roomNumber = builder.roomNumber;
         this.roomType = builder.roomType;
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
-        this.roomStatus = builder.roomStatus;
     }
 
     public int getRoomId() {
@@ -52,6 +83,10 @@ public class Room {
         return roomStatus;
     }
 
+    public List<RoomImages> getRoomImages() {
+        return roomImages;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -67,6 +102,7 @@ public class Room {
         private int capacity;
         private float pricePerNight;
         private RoomStatus roomStatus;
+        private List<RoomImages> roomImages;
 
         public Builder setRoomId(int roomId) {
             this.roomId = roomId;
@@ -96,6 +132,10 @@ public class Room {
         public Builder setRoomStatus(RoomStatus roomStatus) {
             this.roomStatus = roomStatus;
             return this;
+        }
+
+        public void setRoomImages(List<RoomImages> roomImages) {
+            this.roomImages = roomImages;
         }
 
         public Room build() {

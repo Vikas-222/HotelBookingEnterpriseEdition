@@ -2,25 +2,56 @@ package com.example.model;
 
 import com.example.common.enums.BookingStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@Entity
+@Table(name = "booking")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Booking {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "booking_id")
     private int bookingId;
+
+    @Column(name = "user_id")
     private int userId;
+
+    @Column(name = "room_id")
     private int roomId;
+
+    @Column(name = "check_in")
     private LocalDateTime checkInTime;
+
+    @Column(name = "check_out")
     private LocalDateTime checkOutTime;
+
+    @Column(name = "total_amount")
     private float totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "booking_status")
     private BookingStatus bookingStatus;
+
+    @Column(name = "cancellation_date", columnDefinition = "DATE")
     private Date cancellationDate;
+
+    @Column(name = "refund_amount")
     private float refundAmount;
+
+    @Column(name = "gstRate")
     private float gstRates;
+
+    @Column(name = "numberOfGuests")
     private int numberOfGuests;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public Booking(){}

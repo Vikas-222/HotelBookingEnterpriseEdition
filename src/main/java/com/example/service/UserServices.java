@@ -5,10 +5,8 @@ import com.example.common.enums.Role;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.UserMap;
-import com.example.common.mapper.UserMapper;
 import com.example.controller.validation.UserValidator;
-import com.example.dao.impl.UserDAO;
-import com.example.dto.UserDTO;
+import com.example.dao.entity.UserDAO;
 import com.example.dto.UsersDTO;
 import com.example.entitymodal.User;
 

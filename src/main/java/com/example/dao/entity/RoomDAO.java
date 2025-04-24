@@ -8,44 +8,33 @@ import com.example.dto.RoomDTO;
 import com.example.model.Room;
 import com.example.model.RoomImages;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RoomDAO implements IRoomDAO {
 
     @Override
-    public boolean addRoom(RoomDTO roomDTO) throws DBException {
+    public boolean addRoom(RoomDTO room) throws DBException {
         EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-        boolean success = false;
-
         try {
-           em.getTransaction().begin();
+            em.getTransaction().begin();
+            Room room1 = new Room.Builder()
+                    .setRoomNumber(room.getRoomNumber())
+                    .setRoomType(room.getRoomType())
+                    .setPricePerNight(room.getPricePerNight())
+                    .setCapacity(room.getCapacity()).build();
+            em.persist(room1);
 
-            Room.Builder room = new Room.Builder();
-            room.setRoomNumber(roomDTO.getRoomNumber());
-            room.setRoomType(roomDTO.getRoomType());
-            room.setCapacity(roomDTO.getCapacity());
-            room.setPricePerNight(roomDTO.getPricePerNight());
-
-            // Persist the Room entity first to generate the ID
-            em.persist(room);
-
-            List<RoomImages> images = new ArrayList<>();
-            for (String imagePath : roomDTO.getImagePath()) {
-                RoomImages roomImage = new RoomImages();
-                roomImage.setImagepath(imagePath);
-                roomImage.setRoom(room.build()); // Set the relationship
-                em.persist(roomImage);
-                images.add(roomImage);
+            if (room.getImagePath() != null) {
+                for (String s : room.getImagePath()) {
+                    RoomImages roomImages = new RoomImages(s, room1);
+                    em.persist(roomImages);     //not neccessary due to cascadeType.All
+                    room1.getRoomImages().add(roomImages);
+                }
+                em.getTransaction().commit();
+                return true;
             }
-
-//            room.setRoomImages(images); // Optional: If you want to maintain the relationship in the Room entity as well
-
-            em.getTransaction().commit();
-            success = true;
-
         } catch (Exception e) {
             if (em.getTransaction() != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -56,7 +45,7 @@ public class RoomDAO implements IRoomDAO {
                 em.close();
             }
         }
-        return success;
+        return false;
     }
 
     @Override
@@ -66,7 +55,7 @@ public class RoomDAO implements IRoomDAO {
 
     @Override
     public boolean isRoomNumberExists(int roomNumber) throws DBException {
-        return false;
+       return false;
     }
 
     @Override

@@ -43,7 +43,7 @@ public class RoomService {
 
     public void isRoomNumberExists(int roomNumber) throws ApplicationException {
         if (iRoomDAO.isRoomNumberExists(roomNumber)) {
-            throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
+            throw new ApplicationException(Messages.RoomError.ROOM_NUMBER_EXISTS);
         }
     }
 

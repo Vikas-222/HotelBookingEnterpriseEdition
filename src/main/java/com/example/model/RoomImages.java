@@ -36,6 +36,12 @@ public class RoomImages implements Serializable {
     public RoomImages() {
     }
 
+    public RoomImages(String imagePath, Room room) {
+        this.imagePath = imagePath;
+        this.room = room;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -80,7 +86,6 @@ public class RoomImages implements Serializable {
     public String toString() {
         return "id=" + id +
                 ", imagepath='" + imagePath + '\'' +
-
                 ", created_at=" + createdAt +
                 ", updated_at=" + updatedAt;
     }

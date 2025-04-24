@@ -8,7 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "room")
@@ -38,8 +39,8 @@ public class Room implements Serializable {
     @Column(name = "room_status", nullable = false)
     private RoomStatus roomStatus = RoomStatus.AVAILABLE;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RoomImages> roomImages;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<RoomImages> roomImages = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -83,7 +84,7 @@ public class Room implements Serializable {
         return roomStatus;
     }
 
-    public List<RoomImages> getRoomImages() {
+    public Set<RoomImages> getRoomImages() {
         return roomImages;
     }
 
@@ -102,7 +103,7 @@ public class Room implements Serializable {
         private int capacity;
         private float pricePerNight;
         private RoomStatus roomStatus;
-        private List<RoomImages> roomImages;
+        private Set<RoomImages> roomImages;
 
         public Builder setRoomId(int roomId) {
             this.roomId = roomId;
@@ -134,8 +135,18 @@ public class Room implements Serializable {
             return this;
         }
 
-        public void setRoomImages(List<RoomImages> roomImages) {
+        public void setRoomImages(Set<RoomImages> roomImages) {
             this.roomImages = roomImages;
+        }
+
+        public void addImage(RoomImages image) {
+            roomImages.add(image);
+            image.setRoom(this.build()); // Set the relationship on the other side
+        }
+
+        public void removeImage(RoomImages image) {
+            roomImages.remove(image);
+            image.setRoom(null); // Remove the relationship on the other side
         }
 
         public Room build() {

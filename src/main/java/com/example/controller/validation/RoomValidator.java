@@ -10,19 +10,19 @@ public class RoomValidator {
         if (!isNullRoomValues(room)) {
             throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
         }
-        if (checkZeros(room.getRoomNumber())) {
+        if (checkZeros(room.getRoomNumber()) == false) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_NUMBER);
         }
-        if (checkZeros(room.getCapacity())) {
+        if (checkZeros(room.getCapacity()) == false) {
             throw new ApplicationException(Messages.RoomError.INVALID_CAPACITY);
         }
-        if (checkZeros(room.getPricePerNight())) {
+        if (checkZeros(room.getPricePerNight()) == false) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE);
         }
         if (!isValidCapacity(room.getCapacity())) {
             throw new ApplicationException(Messages.RoomError.INVALID_CAPACITY);
         }
-        if (!isValidRoomPrice(room.getPricePerNight())) {
+        if (isValidRoomPrice(room.getPricePerNight()) == false) {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE);
         }
         if (!isValidNumber(room.getRoomNumber())) {
@@ -61,11 +61,13 @@ public class RoomValidator {
     }
 
     public static boolean isValidRoomPrice(float price) {
-        String roomPrice = String.valueOf(price);
-        if (roomPrice.length() > 8) {
+        if (!Float.isFinite(price)) {
             return false;
         }
-        return roomPrice.chars().allMatch(Character::isDigit);
+        if (price <= 0) {
+            return false;
+        }
+        return true;
     }
 
     public static boolean isNullRoomValues(RoomDTO room) {
@@ -78,19 +80,26 @@ public class RoomValidator {
     }
 
     public static boolean checkZeros(int number) {
-        while (number > 0) {
+        if (number == 0) {
+            return false;
+        }
+        while (number != 0) {
             int digit = number % 10;
             if (digit != 0) {
                 return true;
             }
+            number /= 10;
         }
         return false;
     }
 
     public static boolean checkZeros(float number) {
-        while (number > 0) {
-            float digit = number % 10;
-            if (digit != 0) {
+        if (number == 0.0f) {
+            return false;
+        }
+        String numberStr = Float.toString(number);
+        for (char c : numberStr.toCharArray()) {
+            if (Character.isDigit(c) && c != '0') {
                 return true;
             }
         }

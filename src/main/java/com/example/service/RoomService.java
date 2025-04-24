@@ -1,12 +1,14 @@
 package com.example.service;
 
 import com.example.common.Messages;
+import com.example.common.enums.RoomStatus;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.RoomMapper;
 import com.example.controller.validation.RoomValidator;
 import com.example.dao.IRoomDAO;
 import com.example.dao.entity.RoomDAO;
+import com.example.dao.impl.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.model.Room;
 
@@ -53,9 +55,9 @@ public class RoomService {
         iRoomDAO.updateRoomPrice(roomNumber, room);
     }
 
-    public void updateRoomStatus(int roomId,String status) throws ApplicationException {
+    public void updateRoomStatus(int roomId, RoomStatus status) throws ApplicationException {
         try {
-            if (status.isBlank()) {
+            if (status == null) {
                 throw new ApplicationException(Messages.RoomError.INVALID_VALUES);
             }
             isValidRoomId(roomId);

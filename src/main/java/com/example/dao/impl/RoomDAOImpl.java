@@ -73,11 +73,11 @@ public class RoomDAOImpl implements IRoomDAO {
     }
 
     @Override
-    public void updateRoomStatus(int roomId, String status) throws DBException {
+    public void updateRoomStatus(int roomId, RoomStatus status) throws DBException {
         String updateStatus = "update room set room_status = ? where room_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pstUpdate = connection.prepareStatement(updateStatus)) {
-            pstUpdate.setString(1, status);
+            pstUpdate.setString(1, status.toString());
             pstUpdate.setInt(2, roomId);
             pstUpdate.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {

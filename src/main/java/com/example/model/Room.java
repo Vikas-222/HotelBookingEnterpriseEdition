@@ -2,6 +2,7 @@ package com.example.model;
 
 import com.example.common.enums.RoomStatus;
 import com.example.common.enums.RoomType;
+import com.example.entitymodal.RoomServiceCharge;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -41,6 +42,10 @@ public class Room implements Serializable {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<RoomImages> roomImages = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_type", referencedColumnName = "room_type", insertable = false, updatable = false)
+    private RoomServiceCharge serviceCharge;
 
     @CreationTimestamp
     @Column(name = "created_at")

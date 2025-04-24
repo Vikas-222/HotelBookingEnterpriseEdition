@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.common.Messages;
 import com.example.common.enums.BookingStatus;
+import com.example.common.enums.RoomStatus;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.BookingMapper;
@@ -44,7 +45,7 @@ public class BookingService {
         roomService.isValidRoomId(bookingdto.getRoomId());
         RoomDTO room = roomService.getRoomDetails(bookingdto.getRoomId());
         roomService.isCapacityValid(room.getRoomId(), bookingdto.getNumberOfGuests());
-        roomService.updateRoomStatus(room.getRoomId(),"OCCUPIED");
+        roomService.updateRoomStatus(room.getRoomId(), RoomStatus.OCCUPIED);
         long days = Duration.between(bookingdto.getCheckInTime(), bookingdto.getCheckOutTime()).toDays();
         float gstRate = roomService.getGstRatesByRoomPrice(room.getPricePerNight());
         float gstAmount = calculateGSTByRoomPrice(room.getPricePerNight(), gstRate);
@@ -87,7 +88,7 @@ public class BookingService {
             throw new ApplicationException(Messages.BookingError.CANNOT_MODIFY_CANCELLED_BOOKING);
         }
         RoomDTO room = roomService.getRoomDetails(bookingDTO.getRoomId());
-        roomService.updateRoomStatus(room.getRoomId(),"OCCUPIED");
+        roomService.updateRoomStatus(room.getRoomId(),RoomStatus.OCCUPIED);
         long days = Duration.between(bookingDTO.getCheckInTime(), bookingDTO.getCheckOutTime()).toDays();
         float gstRate = roomService.getGstRatesByRoomPrice(room.getPricePerNight());
         float gstAmount = calculateGSTByRoomPrice(room.getPricePerNight(), gstRate);
@@ -154,7 +155,7 @@ public class BookingService {
             throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
         }
         RoomDTO room = roomService.getRoomDetails(booking.getRoomId());
-        roomService.updateRoomStatus(room.getRoomId(),"AVAILABLE");
+        roomService.updateRoomStatus(room.getRoomId(),RoomStatus.AVAILABLE);
         if(cancelDate.isAfter(booking.getCheckOutTime())){
             throw new ApplicationException(Messages.BookingError.CANNOT_CANCEL_PREVIOUS_BOOKING);
         }

@@ -1,0 +1,1 @@
+insert into room_service_charge values('DELUXE',200),('SINGLEBED',300),('DOUBLEBED',400),('TRIPLE',500),('KING',700),('QUEEN',700);

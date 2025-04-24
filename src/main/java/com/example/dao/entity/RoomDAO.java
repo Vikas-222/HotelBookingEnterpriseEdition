@@ -1,5 +1,6 @@
 package com.example.dao.entity;
 
+import com.example.common.enums.RoomStatus;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.ManagerFactory;
@@ -8,8 +9,11 @@ import com.example.dto.RoomDTO;
 import com.example.model.Room;
 import com.example.model.RoomImages;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoomDAO implements IRoomDAO {
@@ -55,7 +59,25 @@ public class RoomDAO implements IRoomDAO {
 
     @Override
     public boolean isRoomNumberExists(int roomNumber) throws DBException {
-       return false;
+        EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+        String jpql = "select r from Room r where r.roomNumber = :roomNum";
+        try {
+            em.getTransaction().begin();
+            Query q1 = em.createQuery(jpql, Room.class);
+            q1.setParameter("roomNum", roomNumber);
+            return q1.getSingleResult() != null;
+        } catch (NoResultException e) {
+            return false;
+        } catch (Exception e) {
+            if (em.getTransaction() != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DBException(e);
+        } finally {
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
     }
 
     @Override
@@ -64,8 +86,27 @@ public class RoomDAO implements IRoomDAO {
     }
 
     @Override
-    public void updateRoomStatus(int roomNumber, String status) throws ApplicationException {
-
+    public void updateRoomStatus(int roomId, RoomStatus status) throws ApplicationException {
+        EntityManager em = null;
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            em.getTransaction().begin();
+            String jpqlUpdate = "UPDATE Room r SET r.roomStatus = :newStatus WHERE r.id = :roomId";
+            Query query = em.createQuery(jpqlUpdate);
+            query.setParameter("newStatus", status);
+            query.setParameter("roomId", roomId);
+            query.executeUpdate();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction() != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new DBException(e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     @Override
@@ -75,12 +116,33 @@ public class RoomDAO implements IRoomDAO {
 
     @Override
     public boolean isValidRoomId(int roomId) throws DBException {
-        return false;
+        EntityManager em = null;
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            em.getTransaction().begin();
+            Room room = em.find(Room.class, roomId);
+            return room != null;
+        } catch (NoResultException e) {
+            return false;
+        } catch (Exception e) {
+            throw new DBException(e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     @Override
     public List<RoomDTO> getAllRoomWithImage() throws DBException {
-        return null;
+            EntityManager em = null;
+            List<RoomDTO> roomDTOs = new ArrayList<>();
+            try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+                String jpql = "SELECT DISTINCT r FROM Room r LEFT JOIN FETCH r.serviceCharge sc LEFT JOIN FETCH r.roomImages i " +
+                        "WHERE r.roomStatus = 'AVAILABLE'";
+
+                TypedQuery<Room> query = em.createQuery(jpql, Room.class);
     }
 
     @Override
@@ -93,3 +155,7 @@ public class RoomDAO implements IRoomDAO {
         return null;
     }
 }
+
+
+
+

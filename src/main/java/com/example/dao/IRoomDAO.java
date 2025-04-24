@@ -1,5 +1,6 @@
 package com.example.dao;
 
+import com.example.common.enums.RoomStatus;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.dto.RoomDTO;
@@ -17,7 +18,7 @@ public interface IRoomDAO {
 
     void updateRoomPrice(int roomNumber, Room room) throws DBException;
 
-    void updateRoomStatus(int roomNumber, String status) throws ApplicationException;
+    void updateRoomStatus(int roomNumber, RoomStatus status) throws ApplicationException;
 
     boolean isCapacityValid(int roomNumber, int numberOfGuests) throws DBException;
 

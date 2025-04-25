@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Admin Dashboard - Sky Palace</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet"/>
+    <link rel="stylesheet" href="../../css/admin_style.css">
+    <!-- Toastr CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- Header will be loaded here -->
+<div id="header"></div>
+
+<div class="dashboard-container">
+    <div class="sidebar">
+        <!-- Sidebar will be loaded here -->
+        <div id="sidebar"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <main class="ml-64 p-6">   <!-- shift right when sidebar present -->
+                <h1 class="text-2xl font-semibold mb-6">Add New Room</h1>
+
+                <form id="addRoomForm"
+                      class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-white p-6 rounded-xl shadow">
+                    <!-- Room Number -->
+                    <label class="flex flex-col gap-1">
+                        <span class="font-medium">Room Number</span>
+                        <input type="number" name="roomNumber" min="1" required
+                               class="border rounded-lg p-2"/>
+                    </label>
+
+                    <!-- Room Type -->
+                    <label class="flex flex-col gap-1">
+                        <span class="font-medium">Room Type</span>
+                        <select name="roomType" required class="border rounded-lg p-2">
+                            <option value="">Select…</option>
+                            <option value="SINGLE">Single</option>
+                            <option value="DOUBLE">Double</option>
+                            <option value="TRIPLE">Triple</option>
+                            <option value="DOUBLEBED">Double Bed</option>
+                        </select>
+                    </label>
+
+                    <!-- Capacity -->
+                    <label class="flex flex-col gap-1">
+                        <span class="font-medium">Capacity</span>
+                        <input type="number" name="capacity" min="1" required
+                               class="border rounded-lg p-2"/>
+                    </label>
+
+                    <!-- Price/Night -->
+                    <label class="flex flex-col gap-1">
+                        <span class="font-medium">Price Per Night</span>
+                        <input type="number" name="pricePerNight" min="0" step="0.01" required
+                               class="border rounded-lg p-2"/>
+                    </label>
+
+                    <!-- Image paths (string) -->
+                    <label class="flex flex-col gap-1 sm:col-span-2">
+                        <span class="font-medium">Image Path 1</span>
+                        <input type="text" name="image" placeholder="RoomImages/img1.jpg"
+                               class="border rounded-lg p-2"/>
+                    </label>
+
+                    <!-- Submit -->
+                    <button type="submit"
+                            class="sm:col-span-2 mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
+                        Add Room
+                    </button>
+
+                </form>
+            </main>
+        </div>
+    </div>
+</div>
+
+<!-- shared layout & logout helpers -->
+<script src="../../js/common.js"></script>
+
+<!-- page‑specific logic -->
+<script>
+    function pageReady() {
+        document
+            .getElementById("addRoomForm")
+            .addEventListener("submit", handleAddRoom);
+    }
+
+    function handleAddRoom(e) {
+        e.preventDefault();
+        const f = e.target;
+        const payload = {
+            roomDetails: {
+                roomNumber: +f.roomNumber.value,
+                roomType: f.roomType.value,
+                capacity: +f.capacity.value,
+                pricePerNight: +f.pricePerNight.value
+            },
+            Images: f.image.value
+        };
+
+        fetch(
+            "http://192.168.1.102:8081/HotelBookingEnterpriseEdition_war_exploded/add-room",
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify(payload)
+            }
+        )
+            .then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                return r.json();
+            })
+            .then(({ message }) => {
+                toastr.success(message || "Room added successfully");
+                f.reset();
+            })
+            .catch(err => {
+                console.error("Add room failed:", err);
+                toastr.error("Could not add room – please try again.");
+            });
+    }
+</script>
+</body>
+</html>

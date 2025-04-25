@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Update Customer</title>
+    <link rel="stylesheet" href="../../css/admin_style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet"/>
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-container label {
+            display: block;
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }
+
+        .form-container input,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        .form-container button {
+            margin-top: 20px;
+            background-color: #c19b76;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .form-container button:hover {
+            background-color: #a78056;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header"></div>
+
+<div class="dashboard-container">
+    <div class="sidebar">
+        <div id="sidebar"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="form-container">
+            <h2>Update Customer</h2>
+            <form id="updateForm" enctype="multipart/form-data">
+                <input type="hidden" id="userId"/>
+                <label>First Name:</label>
+                <input type="text" id="firstName" required>
+
+                <label>Last Name:</label>
+                <input type="text" id="lastName" required>
+
+                <label>Contact Number:</label>
+                <input type="text" id="contactNumber" required>
+
+                <label>Gender:</label>
+                <select id="gender">
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Profile Image:</label>
+                <input type="file" id="image">
+
+                <button type="submit">Update Customer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Load header & sidebar
+    function includeHTML(id, url) {
+        fetch(url)
+            .then(res => res.text())
+            .then(data => document.getElementById(id).innerHTML = data);
+    }
+
+    includeHTML("header", "../components/Admin_Header.html");
+    includeHTML("sidebar", "../components/Admin_Sidebar.html");
+
+    const userId = localStorage.getItem("editUserId");
+    document.getElementById("userId").value = userId;
+
+    fetch(`http://192.168.1.102:8081/HotelBookingEnterpriseEdition_war_exploded/get-user?userId=${userId}`, {
+        method: "GET",
+        credentials: "include"
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.data) {
+                document.getElementById("firstName").value = data.data.firstName;
+                document.getElementById("lastName").value = data.data.lastName;
+                document.getElementById("contactNumber").value = data.data.contactNumber;
+                document.getElementById("gender").value = data.data.gender;
+            }
+        });
+
+    document.getElementById("updateForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+        const userDetails = {
+            userId: userId,
+            lastName: document.getElementById("lastName").value,
+            contactNumber: document.getElementById("contactNumber").value,
+            gender: document.getElementById("gender").value
+        };
+
+        formData.append("userDetails", new Blob([JSON.stringify(userDetails)], {type: "application/json"}));
+
+        const imageFile = document.getElementById("image").files[0];
+        if (imageFile) {
+            formData.append("image", imageFile);
+        }
+
+        fetch("http://192.168.1.102:8081/HotelBookingEnterpriseEdition_war_exploded/update-user", {
+            method: "PUT",
+            body: formData,
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => {
+                alert("User updated successfully!");
+                window.location.href = "Customer.html";
+            })
+            .catch(err => {
+                console.error("Update error:", err);
+                alert("Failed to update user.");
+            });
+    });
+</script>
+
+</body>
+</html>

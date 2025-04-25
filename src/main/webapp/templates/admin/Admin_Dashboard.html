@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Sky Palace</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/admin_style.css">
+</head>
+
+<body>
+
+<!-- Header will be loaded here -->
+<div id="header"></div>
+
+<div class="dashboard-container">
+    <div class="sidebar">
+        <!-- Sidebar will be loaded here -->
+        <div id="sidebar"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <h3>Total Bookings</h3>
+            <p>135 this month</p>
+        </div>
+        <div class="card">
+            <h3>Available Rooms</h3>
+            <p>24 rooms available</p>
+        </div>
+        <div class="card">
+            <h3>Revenue</h3>
+            <p>₹4,80,000</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function includeHTML(id, url) {
+        fetch(url)
+            .then(res => res.text())
+            .then(data => document.getElementById(id).innerHTML = data);
+    }
+
+    includeHTML("header", "../components/Admin_Header.html");
+    includeHTML("sidebar", "../components/Admin_Sidebar.html");
+</script>
+</body>
+</html>

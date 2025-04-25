@@ -1,5 +1,6 @@
 package com.example.entitymodal;
 
+import com.example.common.enums.RoomType;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,7 +10,7 @@ public class RoomServiceCharge {
     @Enumerated(EnumType.STRING)
     @Id
     @Column(name = "room_type")
-    private String roomType;
+    private RoomType roomType;
 
     @Column(name = "charge_per_night", nullable = false)
     private float chargePerNight;
@@ -17,12 +18,12 @@ public class RoomServiceCharge {
     public RoomServiceCharge() {
     }
 
-    public RoomServiceCharge(String roomType, float chargePerNight) {
+    public RoomServiceCharge(RoomType roomType, float chargePerNight) {
         this.roomType = roomType;
         this.chargePerNight = chargePerNight;
     }
 
-    public String getRoomType() {
+    public RoomType getRoomType() {
         return roomType;
     }
 
@@ -30,7 +31,7 @@ public class RoomServiceCharge {
         return chargePerNight;
     }
 
-    public void setRoomType(String roomType) {
+    public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
     }
 

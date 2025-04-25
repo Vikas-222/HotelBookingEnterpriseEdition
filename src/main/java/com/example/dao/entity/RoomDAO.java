@@ -1,6 +1,7 @@
 package com.example.dao.entity;
 
 import com.example.common.enums.RoomStatus;
+import com.example.common.enums.RoomType;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.ManagerFactory;
@@ -138,12 +139,48 @@ public class RoomDAO implements IRoomDAO {
             EntityManager em = null;
             List<RoomDTO> roomDTOs = new ArrayList<>();
             try {
-            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+                em = ManagerFactory.getEntityManagerFactory().createEntityManager();
                 String jpql = "SELECT DISTINCT r FROM Room r LEFT JOIN FETCH r.serviceCharge sc LEFT JOIN FETCH r.roomImages i " +
                         "WHERE r.roomStatus = 'AVAILABLE'";
-
+                em.getTransaction().begin();
                 TypedQuery<Room> query = em.createQuery(jpql, Room.class);
+                List<Room> roomList = query.getResultList();
+                for (Room room : roomList) {
+                    List<String> imagePaths = new ArrayList<>();
+                    if (room.getRoomImages() != null) {
+                        for (RoomImages image : room.getRoomImages()) {
+                            imagePaths.add(image.getImagepath());
+                        }
+                    }
+                    RoomDTO roomDTO = new RoomDTO.Builder()
+                            .setRoomId(room.getRoomId())
+                            .setRoomNumber(room.getRoomNumber())
+                            .setRoomType(room.getRoomType())
+                            .setCapacity(room.getCapacity())
+                            .setPricePerNight(room.getPricePerNight())
+                            .setRoomStatus(room.getRoomStatus())
+                            .setRoomServiceCharge(room.getServiceCharge() != null ? room.getServiceCharge().getChargePerNight() : 0.0f)
+                            .setImagePath(imagePaths)
+                            .build();
+                    roomDTOs.add(roomDTO);
+                }
+                em.getTransaction().commit();
+            } catch(NoResultException e) {
+                return new ArrayList<>();
+            }
+            catch (Exception e) {
+                if(em.getTransaction() != null && em.getTransaction().isActive()){
+                    em.getTransaction().rollback();
+                }
+                throw new DBException(e);
+            } finally {
+                if (em != null) {
+                   em.close();
+                }
+            }
+        return roomDTOs;
     }
+
 
     @Override
     public float getGstRatesByRoomPrice(float price) throws DBException {
@@ -155,6 +192,14 @@ public class RoomDAO implements IRoomDAO {
         return null;
     }
 }
+
+
+
+
+
+
+
+
 
 
 

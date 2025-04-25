@@ -161,47 +161,6 @@ public class RoomDAOImpl implements IRoomDAO {
         return new ArrayList<>(roomMap.values());
     }
 
-//    @Override
-//    public RoomDTO getRoom(int roomId) throws DBException {
-//        String sql = "SELECT r.room_number,r.room_type,r.capacity,r.price_per_night,r.room_status,img.imagepath " +
-//                "FROM room as r, room_images as img where r.room_id = img.room_id and r.room_id = ?";
-//        ResultSet rs = null;
-//        RoomDTO.Builder room = null;
-//        List<String> imageList = new ArrayList<>();
-//        try (Connection connection = DbConnect.instance.getConnection();
-//             PreparedStatement pst = connection.prepareStatement(sql);) {
-//            pst.setInt(1, roomId);
-//            rs = pst.executeQuery();
-//            while (rs.next()) {
-//                if (room == null) {
-//                    room = new RoomDTO.Builder()
-//                            .setRoomId(roomId)
-//                            .setRoomNumber(rs.getInt("room_number"))
-//                            .setRoomType(RoomType.fromString(rs.getString("room_type")))
-//                            .setPricePerNight(rs.getFloat("price_per_night"))
-//                            .setCapacity(rs.getInt("capacity"))
-//                            .setRoomStatus(RoomStatus.fromString(rs.getString("room_status")));
-//                }
-//                imageList.add(rs.getString("imagepath"));
-//            }
-//            RoomDTO roomDTO = null;
-//            if (room != null) {
-//                roomDTO = room.setImagePath(imageList).build();
-//            }
-//            return roomDTO;
-//        } catch (SQLException | ClassNotFoundException e) {
-//            throw new DBException(e);
-//        } finally {
-//            if (rs != null) {
-//                try {
-//                    rs.close();
-//                } catch (SQLException e) {
-//                    throw new DBException(e);
-//                }
-//            }
-//        }
-//    }
-
     @Override
     public float getGstRatesByRoomPrice(float price) throws DBException {
         String sql = "SELECT tax_rate FROM gst_rates WHERE min_price <= ?AND(max_price >= ? OR max_price IS NULL)";

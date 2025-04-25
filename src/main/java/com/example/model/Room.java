@@ -63,6 +63,7 @@ public class Room implements Serializable {
         this.roomType = builder.roomType;
         this.capacity = builder.capacity;
         this.pricePerNight = builder.pricePerNight;
+        this.serviceCharge = builder.serviceCharge;
     }
 
     public int getRoomId() {
@@ -93,6 +94,10 @@ public class Room implements Serializable {
         return roomImages;
     }
 
+    public RoomServiceCharge getServiceCharge() {
+        return serviceCharge;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -109,6 +114,7 @@ public class Room implements Serializable {
         private float pricePerNight;
         private RoomStatus roomStatus;
         private Set<RoomImages> roomImages;
+        private RoomServiceCharge serviceCharge;
 
         public Builder setRoomId(int roomId) {
             this.roomId = roomId;
@@ -154,6 +160,10 @@ public class Room implements Serializable {
             image.setRoom(null); // Remove the relationship on the other side
         }
 
+        public void setServiceCharge(RoomServiceCharge serviceCharge) {
+            this.serviceCharge = serviceCharge;
+        }
+
         public Room build() {
             return new Room(this);
         }
@@ -161,12 +171,14 @@ public class Room implements Serializable {
 
     @Override
     public String toString() {
-        return "roomId=" + roomId +
+        return  "roomId=" + roomId +
                 ", roomNumber=" + roomNumber +
                 ", roomType=" + roomType +
                 ", capacity=" + capacity +
                 ", pricePerNight=" + pricePerNight +
                 ", roomStatus=" + roomStatus +
+                ", roomImages=" + roomImages +
+                ", serviceCharge=" + serviceCharge +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt;
     }

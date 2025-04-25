@@ -81,6 +81,14 @@ public class BookingService {
         return BookingMapper.convertEntityToBookingDTO(iBookingDAO.getBookingDetails(bookingId));
     }
 
+    public BookingDTO getBookingDetails(int bookingId) throws ApplicationException {
+        if (bookingId <= 0) {
+            throw new ApplicationException(Messages.BookingError.INVALID_BOOKING_ID);
+        }
+        isValidBookingId(bookingId);
+        return BookingMapper.convertEntityToBookingDTO(iBookingDAO.getBookingDetails(bookingId));
+    }
+
     public void modifyBooking(BookingDTO bookingDTO, int userId) throws ApplicationException {
         isValidBookingId(bookingDTO.getBookingId());
         Booking booking = iBookingDAO.getBookingDetails(bookingDTO.getBookingId());

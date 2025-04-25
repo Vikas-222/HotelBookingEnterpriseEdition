@@ -8,11 +8,11 @@ public class Review {
     private int userId;
     private int bookingId;
     private String feedback;
-    private int rating;
+    private byte rating;
     private LocalDateTime createdAt;
     private LocalDateTime updateAt;
 
-    public Review(int reviewId, int userId, int bookingId, String feedback, int rating) {
+    public Review(int reviewId, int userId, int bookingId, String feedback, byte rating) {
         this.reviewId = reviewId;
         this.userId = userId;
         this.bookingId = bookingId;
@@ -55,11 +55,11 @@ public class Review {
         this.feedback = feedback;
     }
 
-    public int getRating() {
+    public byte getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(byte rating) {
         this.rating = rating;
     }
 

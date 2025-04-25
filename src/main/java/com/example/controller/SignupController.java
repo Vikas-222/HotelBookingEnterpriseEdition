@@ -7,7 +7,7 @@ import com.example.common.Messages;
 import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.dto.UsersDTO;
-import com.example.service.UserServices;
+import com.example.entityservice.UserServices;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;

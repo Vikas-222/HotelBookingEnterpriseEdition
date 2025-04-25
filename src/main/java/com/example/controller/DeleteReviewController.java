@@ -6,9 +6,9 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.common.utils.SessionValidator;
-import com.example.dto.UserDTO;
-import com.example.service.ReviewService;
+import com.example.common.utils.SessionChecker;
+import com.example.dto.UsersDTO;
+import com.example.entityservice.ReviewService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,16 +25,9 @@ public class DeleteReviewController extends HttpServlet {
         response.setContentType(AppConstants.APPLICATION_JSON);
         ReviewService reviewService = new ReviewService();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
+            UsersDTO user = SessionChecker.checkSession(request);
             String id = request.getParameter("reviewId");
-            if (id == null || id.isBlank()) {
-                throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
-            }
-            int reviewId = Integer.parseInt(id);
-            if (reviewId <= 0) {
-                throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
-            }
-            reviewService.deleteReview(reviewId, user.getUserId());
+            reviewService.deleteReview(id, user.getUserId());
             sendResponse(response, null, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();

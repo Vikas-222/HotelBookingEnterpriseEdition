@@ -6,11 +6,11 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.common.utils.SessionValidator;
+import com.example.common.utils.SessionChecker;
 import com.example.dto.ReviewDTO;
-import com.example.dto.UserDTO;
-import com.example.service.ReviewService;
+import com.example.dto.UsersDTO;
 import com.example.controller.validation.ReviewValidator;
+import com.example.entityservice.ReviewService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,25 +21,17 @@ import java.io.IOException;
 
 @WebServlet(name = "UpdateReviewController", value = "/update-review")
 public class UpdateReviewController extends HttpServlet {
-    private ReviewService reviewService = new ReviewService();
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType(AppConstants.APPLICATION_JSON);
+        ReviewService reviewService = new ReviewService();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
+            UsersDTO user = SessionChecker.checkSession(request);
             ReviewDTO reviewDTO = CustomObjectMapper.toObject(request.getReader(), ReviewDTO.class);
             String id = request.getParameter("reviewId");
-            if (id == null || id.isBlank()) {
-                throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
-            }
-            int reviewId = Integer.parseInt(id);
-            if (reviewId <= 0) {
-                throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
-            }
-            ReviewDTO review = setUserId(reviewDTO, user.getUserId(), reviewId);
-            ReviewValidator.isValidValues(review);
-            reviewService.updateReview(review);
+            ReviewDTO review = setUserId(reviewDTO, user.getUserId(), id);
+            reviewService.updateReview(review, user);
             sendResponse(response, null, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
@@ -59,10 +51,18 @@ public class UpdateReviewController extends HttpServlet {
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 
-    private ReviewDTO setUserId(ReviewDTO reviewDTO, int id, int reviewId) {
+
+    private ReviewDTO setUserId(ReviewDTO reviewDTO,int userId, String reviewId) throws ApplicationException {
+        if (reviewId == null || reviewId.isBlank()) {
+            throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
+        }
+        int reviewID = Integer.parseInt(reviewId);
+        if (reviewID <= 0) {
+            throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
+        }
         return new ReviewDTO.Builder()
-                .setUserId(id)
-                .setReviewId(reviewId)
+                .setUserId(userId)
+                .setReviewId(reviewID)
                 .setBookingId(reviewDTO.getBookingId())
                 .setFeedback(reviewDTO.getFeedback())
                 .setRating(reviewDTO.getRating())

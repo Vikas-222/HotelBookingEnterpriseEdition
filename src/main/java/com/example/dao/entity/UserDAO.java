@@ -76,11 +76,8 @@ public class UserDAO {
 
 
     public User fetchUserDetailsById(int id) throws DBException {
-        User user = null;
         try (EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()) {
-            String jpql = "select u from User u where userId = :userId";
-            TypedQuery<User> query = em.createQuery(jpql, User.class).setParameter("userId", id);
-            user = query.getSingleResult();
+            User user = em.find(User.class,id);
             return user;
         } catch (PersistenceException e) {
             throw new DBException(e);

@@ -1,12 +1,14 @@
 package com.example.dto;
 
+import com.example.common.exception.ApplicationException;
+
 public class ReviewDTO {
 
     private int reviewId;
     private int userId;
     private int bookingId;
     private String feedback;
-    private int rating;
+    private byte rating;
 
     private ReviewDTO(Builder builder) {
         this.reviewId = builder.reviewId;
@@ -15,7 +17,6 @@ public class ReviewDTO {
         this.feedback = builder.feedback;
         this.rating = builder.rating;
     }
-
     public ReviewDTO() {
     }
 
@@ -23,19 +24,19 @@ public class ReviewDTO {
         return reviewId;
     }
 
-    public int getBookingId() {
-        return bookingId;
-    }
-
     public int getUserId() {
         return userId;
+    }
+
+    public int getBookingId() {
+        return bookingId;
     }
 
     public String getFeedback() {
         return feedback;
     }
 
-    public int getRating() {
+    public byte getRating() {
         return rating;
     }
 
@@ -44,15 +45,10 @@ public class ReviewDTO {
         private int userId;
         private int bookingId;
         private String feedback;
-        private int rating;
+        private byte rating;
 
         public Builder setReviewId(int reviewId) {
             this.reviewId = reviewId;
-            return this;
-        }
-
-        public Builder setBookingId(int bookingId) {
-            this.bookingId = bookingId;
             return this;
         }
 
@@ -61,15 +57,21 @@ public class ReviewDTO {
             return this;
         }
 
+        public Builder setBookingId(int bookingId) {
+            this.bookingId = bookingId;
+            return this;
+        }
+
         public Builder setFeedback(String feedback) {
             this.feedback = feedback;
             return this;
         }
 
-        public Builder setRating(int rating) {
+        public Builder setRating(byte rating){
             this.rating = rating;
             return this;
         }
+
 
         public ReviewDTO build() {
             return new ReviewDTO(this);

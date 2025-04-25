@@ -6,11 +6,10 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.common.utils.SessionValidator;
+import com.example.common.utils.SessionChecker;
 import com.example.dto.ReviewDTO;
-import com.example.dto.UserDTO;
-import com.example.service.ReviewService;
-import com.example.controller.validation.ReviewValidator;
+import com.example.dto.UsersDTO;
+import com.example.entityservice.ReviewService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,11 +26,13 @@ public class AddReviewController extends HttpServlet {
         response.setContentType(AppConstants.APPLICATION_JSON);
         ReviewService reviewService = new ReviewService();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
+            UsersDTO user = SessionChecker.checkSession(request);
             ReviewDTO reviewDTO = CustomObjectMapper.toObject(request.getReader(), ReviewDTO.class);
-            ReviewDTO review = setUserId(reviewDTO, user.getUserId());
-            ReviewValidator.isValidValues(review);
-            reviewService.addReview(review);
+            /**
+                setUserId method is used when JPA is not implemented to set userId as logged-in user's ID
+             **/
+//            ReviewDTO review = setUserId(reviewDTO, user.getUserId());
+            reviewService.addReview(reviewDTO, user);
             sendResponse(response, null, null, null, 200);
         } catch (DBException e) {
             e.printStackTrace();
@@ -51,6 +52,9 @@ public class AddReviewController extends HttpServlet {
         response.getWriter().write(CustomObjectMapper.toString(apiResponse));
     }
 
+    /**
+        setUserId method is used when JPA is not implemented to set userId as logged-in user's ID
+     **/
     private ReviewDTO setUserId(ReviewDTO reviewDTO, int id) {
         return new ReviewDTO.Builder()
                 .setUserId(id)

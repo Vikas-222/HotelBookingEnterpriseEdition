@@ -1,10 +1,10 @@
-package com.example.service;
+package com.example.entityservice;
 
 import com.example.common.Messages;
 import com.example.common.enums.Role;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
-import com.example.common.mapper.UserMap;
+import com.example.common.entitymapper.UserMap;
 import com.example.controller.validation.UserValidator;
 import com.example.dao.entity.UserDAO;
 import com.example.dto.UsersDTO;
@@ -51,12 +51,12 @@ public class UserServices {
         if (Id <= 0) {
             throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
         }
-        UsersDTO userDTO = UserMap.toUserDTO(userDAO.fetchUserDetailsById(Id));
         boolean isOwner = (Id == user.getUserId());
         boolean isAdmin = (user.getRole() != null && Role.ADMIN.equals(user.getRole()));
         if (!(isOwner || isAdmin)) {
             throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
         }
+        UsersDTO userDTO = UserMap.toUserDTO(userDAO.fetchUserDetailsById(Id));
         return userDTO;
     }
 
@@ -89,6 +89,10 @@ public class UserServices {
             throw new ApplicationException(Messages.Error.INVALID_CURRENT_PASSWORD);
         }
         return userDAO.updatePassword(userId, newPassword);
+    }
+
+    public UsersDTO fetchUserDetailsById(int id) throws ApplicationException {
+        return UserMap.toUserDTO(userDAO.fetchUserDetailsById(id));
     }
 
 }

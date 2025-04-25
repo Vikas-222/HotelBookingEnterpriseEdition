@@ -19,7 +19,7 @@ public class ReviewDAOImpl implements IReviewDAO {
             ps.setInt(1, review.getBookingId());
             ps.setInt(2, review.getUserId());
             ps.setString(3, review.getFeedback());
-            ps.setInt(4, review.getRating());
+            ps.setByte(4, review.getRating());
             return ps.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
             throw new DBException(e);
@@ -32,7 +32,7 @@ public class ReviewDAOImpl implements IReviewDAO {
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, review.getFeedback());
-            ps.setInt(2, review.getRating());
+            ps.setByte(2, review.getRating());
             ps.setInt(3, review.getReviewId());
             return ps.executeUpdate() > 0;
         } catch (SQLException | ClassNotFoundException e) {
@@ -75,7 +75,7 @@ public class ReviewDAOImpl implements IReviewDAO {
                         rs.getInt("user_id"),
                         rs.getInt("booking_id"),
                         rs.getString("feedback"),
-                        rs.getInt("rating")
+                        rs.getByte("rating")
                 );
                 reviewList.add(review);
             }
@@ -108,7 +108,7 @@ public class ReviewDAOImpl implements IReviewDAO {
                         rs.getInt("user_id"),
                         rs.getInt("booking_id"),
                         rs.getString("feedback"),
-                        rs.getInt("rating")
+                        rs.getByte("rating")
                 );
                 reviewList.add(review);
             }

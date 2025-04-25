@@ -1,4 +1,4 @@
-package com.example.common.mapper;
+package com.example.common.entitymapper;
 
 import com.example.dto.UsersDTO;
 import com.example.entitymodal.User;
@@ -23,6 +23,18 @@ public class UserMap {
                 .setGender(user.getGender())
                 .setRole(user.getRole())
                 .setActive(user.getIsActive()).build();
+    }
+
+    public static User dtoToUser(UsersDTO user) {
+        return new User.Builder()
+                .setUserId(user.getUserId())
+                .setFirstName(user.getFirstName())
+                .setLastName(user.getLastName())
+                .setEmail(user.getEmail())
+                .setContactNumber(user.getContactNumber())
+                .setGender(user.getGender())
+                .setRole(user.getRole())
+                .setIsActive(user.getIsActive()).build();
     }
 
     public static List<UsersDTO> convertUserToUserDTOList(List<User> list) {

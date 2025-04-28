@@ -22,7 +22,7 @@ public class UserMap {
                 .setContactNumber(user.getContactNumber())
                 .setGender(user.getGender())
                 .setRole(user.getRole())
-                .setActive(user.getIsActive()).build();
+                .setIsActive(user.getIsActive()).build();
     }
 
     public static User dtoToUser(UsersDTO user) {
@@ -47,7 +47,7 @@ public class UserMap {
                         .setContactNumber(user.getContactNumber())
                         .setGender(user.getGender())
                         .setRole(user.getRole())
-                        .setActive(user.getIsActive())
+                        .setIsActive(user.getIsActive())
                         .build())
                 .collect(Collectors.toList());
     }

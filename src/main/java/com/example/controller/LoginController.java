@@ -6,6 +6,7 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
+import com.example.dto.UserLoginResponseDTO;
 import com.example.dto.UsersDTO;
 import com.example.controller.validation.UserValidator;
 import com.example.entityservice.UserServices;
@@ -34,8 +35,16 @@ public class LoginController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(5 * 60);
             session.setAttribute("user", userDTO);
-            UsersDTO user1 = new UsersDTO.Builder().setUserId(userDTO.getUserId()).setEmail(userDTO.getEmail()).setRole(userDTO.getRole()).build();
-            sendResponse(response, Messages.LOGIN_SUCCESSFUL, null, user1, 200);
+            /**
+             *When I use UsersDTO object that time isActive = true is also present in response.
+             *So I had to use another DTO for Login response which does not have isActive property.
+             */
+//            UsersDTO responseUser = new UsersDTO.Builder().setUserId(userDTO.getUserId()).setEmail(userDTO.getEmail()).setRole(userDTO.getRole()).build();
+            UserLoginResponseDTO loginResponse = new UserLoginResponseDTO();
+                    loginResponse.setUserId(userDTO.getUserId());
+                    loginResponse.setEmail(userDTO.getEmail());
+                    loginResponse.setRole(userDTO.getRole());
+            sendResponse(response, Messages.LOGIN_SUCCESSFUL, null, loginResponse, 200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);

@@ -2,8 +2,11 @@ package com.example.entitymodal;
 
 import com.example.common.enums.Gender;
 import com.example.common.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -37,34 +40,25 @@ public class User {
 
     @Column(name = "roles")
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
     @Column(name = "is_active", columnDefinition = "TINYINT default 1")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean isActive; //Default value
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private boolean isActive;
 
     @Column(name = "profilePic", length = 70)
     private String profilePic;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     //Public constructor for Hibernate
     public User() {
-    }
-
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public User(int id,String email, Role role) {
-        this.userId = id;
-        this.email = email;
-        this.role = role;
     }
 
     // Private constructor for Builder pattern
@@ -115,6 +109,7 @@ public class User {
         return role;
     }
 
+//    @JsonIgnore
     public boolean getIsActive() {
         return isActive;
     }
@@ -139,8 +134,8 @@ public class User {
         private String contactNumber;
         private Gender gender;
         private String password;
-        private Role role;
-        private boolean isActive;
+        private Role role = Role.USER;
+        private boolean isActive = true;
         private String profilePic;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -219,7 +214,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", gender=" + gender +
-                ", password='" + password + '\'' +
                 ", role=" + role +
                 ", isActive=" + isActive +
                 ", profilePic='" + profilePic + '\'' +

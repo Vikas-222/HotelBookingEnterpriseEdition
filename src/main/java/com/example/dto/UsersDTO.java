@@ -2,9 +2,10 @@ package com.example.dto;
 
 import com.example.common.enums.Gender;
 import com.example.common.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class UsersDTO {
     private int userId;
     private String firstName;
@@ -15,9 +16,8 @@ public class UsersDTO {
     private String password;
     private Gender gender;
     private String profilePic;
-    private Role role;
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean isActive;
+    private Role role;
 
     public UsersDTO(Builder builder) {
         this.userId = builder.userId;
@@ -72,6 +72,7 @@ public class UsersDTO {
         return password;
     }
 
+//    @JsonIgnore
     public boolean getIsActive() {
         return isActive;
     }
@@ -88,10 +89,10 @@ public class UsersDTO {
         private String contactNumber;
         private Gender gender;
         private String profilePic;
-        private Role role;
+        private Role role = Role.USER;
         private String password;
         private String newPassword;
-        private boolean isActive;
+        private boolean isActive = true;
 
         public Builder setUserId(int userId) {
             this.userId = userId;
@@ -138,7 +139,7 @@ public class UsersDTO {
             return this;
         }
 
-        public Builder setActive(boolean isActive) {
+        public Builder setIsActive(boolean isActive) {
             this.isActive = isActive;
             return this;
         }

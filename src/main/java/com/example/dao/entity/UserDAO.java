@@ -37,7 +37,6 @@ public class UserDAO {
         EntityManager em = null;
         try {
             em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-
             em.getTransaction().begin();
             em.persist(user);
             em.getTransaction().commit();
@@ -128,10 +127,7 @@ public class UserDAO {
                         .build();
                 em.merge(updatedUser);
                 em.getTransaction().commit();
-            } else {
-                throw new DBException("User with id " + user.getUserId() + " not found");
             }
-
         } catch (PersistenceException e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -153,11 +149,8 @@ public class UserDAO {
             Query query = em.createQuery("UPDATE User u SET u.isActive = :status WHERE u.userId = :userId");
             query.setParameter("status", status);
             query.setParameter("userId", userId);
-            int updatedCount = query.executeUpdate();
+            query.executeUpdate();
             em.getTransaction().commit();
-            if (updatedCount == 0) {
-                throw new DBException("No user found with ID: " + userId);
-            }
         } catch (PersistenceException e) {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
@@ -206,7 +199,7 @@ public class UserDAO {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-            throw new DBException("Error updating user password", e);
+            throw new DBException(e);
         } finally {
             if (em != null && em.isOpen()) {
                 em.close();

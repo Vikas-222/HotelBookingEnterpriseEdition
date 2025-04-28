@@ -19,7 +19,7 @@ public class UserServices {
     public void addUser(UsersDTO userDTO) throws ApplicationException {
         try {
             UserValidator.validate(userDTO);
-            if (userDAO.isUserEmailExists(userDTO.getEmail()) == true) {
+            if (userDAO.isUserEmailExists(userDTO.getEmail())) {
                 throw new ApplicationException(Messages.Error.ALREADY_EXISTS);
             }
             User user = UserMap.convertUserDTOToUserForSignup(userDTO);

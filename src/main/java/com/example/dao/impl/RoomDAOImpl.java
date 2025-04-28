@@ -89,7 +89,7 @@ public class RoomDAOImpl implements IRoomDAO {
     public boolean isCapacityValid(int roomId, int numberOfGuests) throws DBException {
         String sql = "SELECT capacity FROM room WHERE room_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(sql);) {
+             PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, roomId);
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
@@ -105,7 +105,7 @@ public class RoomDAOImpl implements IRoomDAO {
     @Override
     public boolean isValidRoomId(int roomId) throws DBException {
         String sql = "Select * from room where room_id = ?";
-        ResultSet rs = null;
+        ResultSet rs;
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setInt(1, roomId);
@@ -118,8 +118,8 @@ public class RoomDAOImpl implements IRoomDAO {
 
     @Override
     public List<RoomDTO> getAllRoomWithImage() throws DBException {
-        String sql = "SELECT r.*, rsc.charge_per_night,ri.imagepath FROM room r JOIN room_service_charge rsc JOIN room_images ri " +
-                "on r.room_id = ri.room_id and r.room_type = rsc.room_type and r.room_id = ri.room_id and r.room_status = 'AVAILABLE'";
+        String sql = "SELECT r.*, rsc.charge_per_night,ri.imagepath FROM room r JOIN room_service_charge rsc on r.room_type = rsc.room_type " +
+                "JOIN room_images ri on r.room_id = ri.room_id where r.room_status = 'AVAILABLE'";
         ResultSet rs = null;
         Map<Integer, RoomDTO> roomMap = new HashMap<>();
         try (Connection connection = DbConnect.instance.getConnection();
@@ -166,7 +166,7 @@ public class RoomDAOImpl implements IRoomDAO {
         String sql = "SELECT tax_rate FROM gst_rates WHERE min_price <= ?AND(max_price >= ? OR max_price IS NULL)";
         ResultSet rs = null;
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(sql);) {
+             PreparedStatement pst = connection.prepareStatement(sql)) {
             pst.setFloat(1, price);
             pst.setFloat(2, price);
             rs = pst.executeQuery();
@@ -281,7 +281,6 @@ public class RoomDAOImpl implements IRoomDAO {
                 }
             }
         }
-
     }
 }
 

@@ -3,13 +3,16 @@ package com.example.controller;
 import com.example.common.AppConstants;
 import com.example.common.Messages;
 import com.example.common.Response;
+import com.example.common.enums.Role;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
 import com.example.common.utils.ImageHandler;
+import com.example.common.utils.SessionChecker;
 import com.example.common.utils.SessionValidator;
 import com.example.dto.RoomDTO;
 import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
 import com.example.service.RoomService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -32,8 +35,8 @@ public class UpdateRoomController extends HttpServlet {
         response.setContentType(AppConstants.APPLICATION_JSON);
         RoomService roomService = new RoomService();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
-            if(!user.getRole().equalsIgnoreCase("admin")){
+            UsersDTO user = SessionChecker.checkSession(request);
+            if(user.getRole() != Role.ADMIN){
                 throw new ApplicationException(Messages.Error.UNAUTHORIZED_ACCESS);
             }
             String roomId = request.getParameter("roomId");

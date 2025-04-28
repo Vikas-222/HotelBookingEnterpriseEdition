@@ -5,6 +5,7 @@ import com.example.common.enums.RoomType;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.ManagerFactory;
+import com.example.config.DbConnect;
 import com.example.dao.IRoomDAO;
 import com.example.dto.RoomDTO;
 import com.example.model.Room;
@@ -14,7 +15,11 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RoomDAO implements IRoomDAO {
@@ -55,8 +60,81 @@ public class RoomDAO implements IRoomDAO {
 
     @Override
     public boolean updateRoom(RoomDTO room) throws DBException {
-        return false;
+        return true;
+//      EntityManager em = null;
+//      try{
+//          em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+//          em.getTransaction().begin();
+//          Room.Builder roomEntity = em.find(Room.Builder.class, room.getRoomId());
+//          if (roomEntity == null) {
+//              // Room not found, rollback and return false or throw a specific exception
+//              em.getTransaction().rollback();
+//              // Consider throwing an ApplicationException like RoomNotFoundException
+//              throw new DBException("Room with ID " + room.getRoomId() + " not found.");
+//              // return false; // Or just let the exception propagate
+//          }
+//
+//          // 2. Update Room properties
+//          // JPA tracks changes to managed entities. Just set the new values.
+//          roomEntity.setRoomNumber(room.getRoomNumber());
+//          roomEntity.setRoomType(room.getRoomType()); // Assuming RoomType is an Enum
+//          roomEntity.setCapacity(room.getCapacity());
+//          roomEntity.setPricePerNight(room.getPricePerNight());
+//          roomEntity.setRoomStatus(room.getRoomStatus()); // Assuming RoomStatus is an Enum
+//
+//          // 3. Delete existing images and insert new ones
+//          // This is where the power of JPA relationships and orphanRemoval shines.
+//          // Clearing the collection of managed entities triggers deletion on commit
+//          // thanks to orphanRemoval=true on the @OneToMany annotation.
+//          roomEntity.getImages().clear(); // This marks existing images for deletion
+//
+//          // Add the new images to the collection
+//          if (room.getImagePath() != null && !room.getImagePath().isEmpty()) {
+//              for (String imagePath : room.getImagePath()) {
+//                  RoomImage newImage = new RoomImage();
+//                  newImage.setImagepath(imagePath);
+//                  newImage.setRoom(roomEntity); // Set the Many-ToOne relationship
+//                  // Add the new image to the Room's collection.
+//                  // Due to cascade=PERSIST (or ALL) on the @OneToMany,
+//                  // persisting the Room or adding to its collection will cause
+//                  // the new RoomImage entities to be persisted automatically.
+//                  roomEntity.getImages().add(newImage);
+//
+//                  // Explicit persist is not strictly necessary if cascade=PERSIST or ALL is used,
+//                  // but some developers prefer to explicitly persist new entities.
+//                  // em.persist(newImage);
+//              }
+//          }
+//
+//          // 4. Commit the transaction
+//          // JPA flushes changes (updates, deletes due to orphanRemoval, inserts due to cascade)
+//          // to the database upon commit.
+//          transaction.commit();
+//
+//          // If we reached here, the operation was successful
+//          return true;
+//
+//      } catch (PersistenceException e) {
+//          // Catch JPA specific exceptions
+//          if (transaction != null && transaction.isActive()) {
+//              transaction.rollback(); // Rollback transaction on error
+//          }
+//          throw new DBException(e); // Wrap and rethrow as your custom exception
+//      } catch (Exception e) {
+//          // Catch any other unexpected exceptions
+//          if (transaction != null && transaction.isActive()) {
+//              transaction.rollback(); // Rollback transaction on error
+//          }
+//          throw new DBException(e); // Wrap and rethrow
+//      } finally {
+//          if (em != null && em.isOpen()) {
+//              em.close(); // Always close the EntityManager
+//          }
+//      }
+//      }
     }
+
+
 
     @Override
     public boolean isRoomNumberExists(int roomNumber) throws DBException {
@@ -136,48 +214,47 @@ public class RoomDAO implements IRoomDAO {
 
     @Override
     public List<RoomDTO> getAllRoomWithImage() throws DBException {
-            EntityManager em = null;
-            List<RoomDTO> roomDTOs = new ArrayList<>();
-            try {
-                em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-                String jpql = "SELECT DISTINCT r FROM Room r LEFT JOIN FETCH r.serviceCharge sc LEFT JOIN FETCH r.roomImages i " +
-                        "WHERE r.roomStatus = 'AVAILABLE'";
-                em.getTransaction().begin();
-                TypedQuery<Room> query = em.createQuery(jpql, Room.class);
-                List<Room> roomList = query.getResultList();
-                for (Room room : roomList) {
-                    List<String> imagePaths = new ArrayList<>();
-                    if (room.getRoomImages() != null) {
-                        for (RoomImages image : room.getRoomImages()) {
-                            imagePaths.add(image.getImagepath());
-                        }
+        EntityManager em = null;
+        List<RoomDTO> roomDTOs = new ArrayList<>();
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            String jpql = "SELECT DISTINCT r FROM Room r LEFT JOIN FETCH r.serviceCharge sc LEFT JOIN FETCH r.roomImages i " +
+                    "WHERE r.roomStatus = 'AVAILABLE'";
+            em.getTransaction().begin();
+            TypedQuery<Room> query = em.createQuery(jpql, Room.class);
+            List<Room> roomList = query.getResultList();
+            for (Room room : roomList) {
+                List<String> imagePaths = new ArrayList<>();
+                if (room.getRoomImages() != null) {
+                    for (RoomImages image : room.getRoomImages()) {
+                        imagePaths.add(image.getImagepath());
                     }
-                    RoomDTO roomDTO = new RoomDTO.Builder()
-                            .setRoomId(room.getRoomId())
-                            .setRoomNumber(room.getRoomNumber())
-                            .setRoomType(room.getRoomType())
-                            .setCapacity(room.getCapacity())
-                            .setPricePerNight(room.getPricePerNight())
-                            .setRoomStatus(room.getRoomStatus())
-                            .setRoomServiceCharge(room.getServiceCharge() != null ? room.getServiceCharge().getChargePerNight() : 0.0f)
-                            .setImagePath(imagePaths)
-                            .build();
-                    roomDTOs.add(roomDTO);
                 }
-                em.getTransaction().commit();
-            } catch(NoResultException e) {
-                return new ArrayList<>();
+                RoomDTO roomDTO = new RoomDTO.Builder()
+                        .setRoomId(room.getRoomId())
+                        .setRoomNumber(room.getRoomNumber())
+                        .setRoomType(room.getRoomType())
+                        .setCapacity(room.getCapacity())
+                        .setPricePerNight(room.getPricePerNight())
+                        .setRoomStatus(room.getRoomStatus())
+                        .setRoomServiceCharge(room.getServiceCharge() != null ? room.getServiceCharge().getChargePerNight() : 0.0f)
+                        .setImagePath(imagePaths)
+                        .build();
+                roomDTOs.add(roomDTO);
             }
-            catch (Exception e) {
-                if(em.getTransaction() != null && em.getTransaction().isActive()){
-                    em.getTransaction().rollback();
-                }
-                throw new DBException(e);
-            } finally {
-                if (em != null) {
-                   em.close();
-                }
+            em.getTransaction().commit();
+        } catch (NoResultException e) {
+            return new ArrayList<>();
+        } catch (Exception e) {
+            if (em.getTransaction() != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
             }
+            throw new DBException(e);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
         return roomDTOs;
     }
 

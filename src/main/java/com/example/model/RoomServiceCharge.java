@@ -1,18 +1,21 @@
 package com.example.model;
 
+import com.example.common.enums.RoomType;
+
 public class RoomServiceCharge {
-    private String roomType;
+
+    private RoomType roomType;
     private float chargePerNight;
 
     public RoomServiceCharge() {
     }
 
-    public RoomServiceCharge(String roomType, float chargePerNight) {
+    public RoomServiceCharge(RoomType roomType, float chargePerNight) {
         this.roomType = roomType;
         this.chargePerNight = chargePerNight;
     }
 
-    public String getRoomType() {
+    public RoomType getRoomType() {
         return roomType;
     }
 
@@ -21,7 +24,7 @@ public class RoomServiceCharge {
     }
 
 
-    public void setRoomType(String roomType) {
+    public void setRoomType(RoomType roomType) {
         this.roomType = roomType;
     }
 

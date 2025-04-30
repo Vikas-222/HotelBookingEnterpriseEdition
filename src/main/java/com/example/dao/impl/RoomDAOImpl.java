@@ -14,35 +14,87 @@ import java.util.*;
 public class RoomDAOImpl implements IRoomDAO {
 
     @Override
-    public boolean addRoom(RoomDTO room) throws DBException {
-        String insert = "INSERT INTO room(room_number, room_type, capacity, price_per_night) VALUES (?, ?, ?, ?)";
-        String roomImages = "INSERT INTO room_images(imagepath, room_id) VALUES (?, ?)";
+    public Room addRoom(RoomDTO roomDTO) throws DBException {
+        String insertRoomSql = "INSERT INTO room(room_number, room_type, capacity, price_per_night) VALUES (?, ?, ?, ?)";
+        String insertRoomImageSql = "INSERT INTO room_images(imagepath, room_id) VALUES (?, ?)";
 
-        try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(insert, Statement.RETURN_GENERATED_KEYS);
-             PreparedStatement pstImage = connection.prepareStatement(roomImages)) {
+        Connection connection = null;
+        PreparedStatement pstRoom = null;
+        PreparedStatement pstImage = null;
+        ResultSet generatedKeys = null;
+        Room newRoom;
 
-            pst.setInt(1, room.getRoomNumber());
-            pst.setString(2, room.getRoomType().toString());
-            pst.setInt(3, room.getCapacity());
-            pst.setFloat(4, room.getPricePerNight());
-            pst.executeUpdate();
+        try {
+            connection = DbConnect.instance.getConnection();
+            connection.setAutoCommit(false);
 
-            ResultSet rs = pst.getGeneratedKeys();
-            if (rs.next()) {
-                int roomId = rs.getInt(1);
-                for (String imagePath : room.getImagePath()) {
+            pstRoom = connection.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
+            pstRoom.setInt(1, roomDTO.getRoomNumber());
+            pstRoom.setString(2, roomDTO.getRoomType().toString());
+            pstRoom.setInt(3, roomDTO.getCapacity());
+            pstRoom.setFloat(4, roomDTO.getPricePerNight());
+
+            int affectedRows = pstRoom.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating room failed, no rows affected.");
+            }
+
+            //retrieve the roomId
+            int roomId = -1;
+            generatedKeys = pstRoom.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                roomId = generatedKeys.getInt(1);
+
+                newRoom = new Room.Builder().setRoomId(roomId)
+                        .setRoomNumber(roomDTO.getRoomNumber())
+                        .setRoomType(roomDTO.getRoomType()).setCapacity(roomDTO.getCapacity())
+                        .setPricePerNight(roomDTO.getPricePerNight()).build();
+                new ArrayList<>(roomDTO.getImagePath());
+            } else {
+                throw new SQLException("Creating room failed, no ID obtained.");
+            }
+
+            pstImage = connection.prepareStatement(insertRoomImageSql);
+
+            if (roomDTO.getImagePath() != null && !roomDTO.getImagePath().isEmpty()) {
+                for (String imagePath : roomDTO.getImagePath()) {
                     pstImage.setString(1, imagePath);
                     pstImage.setInt(2, roomId);
                     pstImage.addBatch();
                 }
+
                 int[] result = pstImage.executeBatch();
-                return Arrays.stream(result).allMatch(i -> i > 0);
+                boolean allImagesInsertedSuccessfully = Arrays.stream(result).allMatch(i -> i > 0);
+
+                if (!allImagesInsertedSuccessfully) {
+                    throw new SQLException("Not all images were inserted successfully.");
+                }
             }
+            connection.commit();
+            return newRoom;
+
         } catch (SQLException | ClassNotFoundException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    throw new DBException(ex);
+                }
+            }
             throw new DBException(e);
+        } finally {
+            try {
+                if (generatedKeys != null) generatedKeys.close();
+                if (pstRoom != null) pstRoom.close();
+                if (pstImage != null) pstImage.close();
+                if (connection != null) {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                }
+            } catch (SQLException ex) {
+                throw new DBException(ex);
+            }
         }
-        return false;
     }
 
     @Override
@@ -58,19 +110,6 @@ public class RoomDAOImpl implements IRoomDAO {
         }
     }
 
-    @Override
-    public void updateRoomPrice(int roomNumber, Room room) throws DBException {
-        String updatePrice = "update room set capacity = ? and price_per_night = ? where room_number = ?";
-        try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pstUpdate = connection.prepareStatement(updatePrice)) {
-            pstUpdate.setInt(1, room.getCapacity());
-            pstUpdate.setFloat(2, room.getPricePerNight());
-            pstUpdate.setInt(3, roomNumber);
-            pstUpdate.executeUpdate();
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new DBException(e);
-        }
-    }
 
     @Override
     public void updateRoomStatus(int roomId, RoomStatus status) throws DBException {
@@ -281,6 +320,25 @@ public class RoomDAOImpl implements IRoomDAO {
                 }
             }
         }
+    }
+
+    @Override
+    public Float getRoomServiceCharge(RoomType roomType) throws DBException {
+        String sql = "select charge_per_night from room_service_charge where room_type = ?";
+        ResultSet rs = null;
+        try (Connection connection = DbConnect.instance.getConnection();
+             PreparedStatement pst = connection.prepareStatement(sql)) {
+            pst.setString(1, roomType.toString());
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getFloat(1);
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new DBException(e);
+        }catch(Exception e){
+            throw new DBException(e);
+        }
+        return 0.0f;
     }
 }
 

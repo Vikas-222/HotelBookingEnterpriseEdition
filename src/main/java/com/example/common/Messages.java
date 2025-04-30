@@ -34,6 +34,7 @@ public class Messages {
         public static final String INVALID_NAME_LENGTH = "Name is too long.";
         public static final String INVALID_PASSWORD_LENGTH = "Password is too long.";
         public static final String LOGIN_FIRST = "Please log in to continue";
+        public static final String PAYLOAD_SIZE_EXCEED = "Request payload size exceeds the allowed limit";
     }
 
     public static class RoomError {
@@ -43,8 +44,11 @@ public class Messages {
         public static final String INVALID_ROOM_NUMBER = "Please enter valid room number";
         public static final String INVALID_VALUES = "Please provide all required room details.";
         public static final String ROOM_ID_NOT_FOUND = "Room not found";
+        public static final String INVALID_ROOMTYPE = "Invalid room type";
         public static final String INVALID_IMAGE_PATH = "Invalid Image path";
         public static final String IMAGE_NOT_FOUND = "Please upload an image.";
+        public static final String NUMBER_OF_IMAGES_EXCEEDED = "You can choose maximum 6 images at a time";
+        public static final String IMAGES_SIZE_TOO_LARGE = "Images size is too large";
     }
 
     public static class BookingError {

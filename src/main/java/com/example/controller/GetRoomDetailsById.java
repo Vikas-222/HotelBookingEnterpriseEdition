@@ -23,8 +23,7 @@ public class GetRoomDetailsById extends HttpServlet {
         RoomService service = new RoomService();
         try {
             String roomId = request.getParameter("roomId");
-            int roomID = setRoomId(roomId);
-            RoomDTO room = service.getRoomDetails(roomID);
+            RoomDTO room = service.getRoomDetails(setRoomId(roomId));
             sendResponse(response, null, null, room, 200);
         } catch (DBException e) {
             e.printStackTrace();

@@ -98,6 +98,21 @@ public class Room implements Serializable {
         return serviceCharge;
     }
 
+    public void addRoomImage(RoomImages image) {
+        if (this.roomImages == null) {
+            this.roomImages = new HashSet<>(); // Initialize if null
+        }
+        this.roomImages.add(image);
+        image.setRoom(this); // Set the owning side (the foreign key)
+    }
+
+    public void removeRoomImage(RoomImages image) {
+        if (this.roomImages != null) {
+            this.roomImages.remove(image);
+            image.setRoom(null); // Unset the owning side
+        }
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -146,19 +161,19 @@ public class Room implements Serializable {
             return this;
         }
 
-        public void setRoomImages(Set<RoomImages> roomImages) {
-            this.roomImages = roomImages;
-        }
-
-        public void addImage(RoomImages image) {
-            roomImages.add(image);
-            image.setRoom(this.build()); // Set the relationship on the other side
-        }
-
-        public void removeImage(RoomImages image) {
-            roomImages.remove(image);
-            image.setRoom(null); // Remove the relationship on the other side
-        }
+//        public void setRoomImages(Set<RoomImages> roomImages) {
+//            this.roomImages = roomImages;
+//        }
+//
+//        public void addImage(RoomImages image) {
+//            roomImages.add(image);
+//            image.setRoom(this.build()); // Set the relationship on the other side
+//        }
+//
+//        public void removeImage(RoomImages image) {
+//            roomImages.remove(image);
+//            image.setRoom(null); // Remove the relationship on the other side
+//        }
 
         public void setServiceCharge(RoomServiceCharge serviceCharge) {
             this.serviceCharge = serviceCharge;

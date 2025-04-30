@@ -2,13 +2,13 @@ package com.example.service;
 
 import com.example.common.Messages;
 import com.example.common.enums.RoomStatus;
+import com.example.common.enums.RoomType;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.RoomMapper;
 import com.example.controller.validation.RoomValidator;
 import com.example.dao.IRoomDAO;
 import com.example.dao.entity.RoomDAO;
-import com.example.dao.impl.RoomDAOImpl;
 import com.example.dto.RoomDTO;
 import com.example.model.Room;
 
@@ -18,10 +18,12 @@ public class RoomService {
 
     private IRoomDAO iRoomDAO = new RoomDAO();
 
-    public boolean addRoom(RoomDTO roomDTO) throws ApplicationException {
+    public RoomDTO addRoom(RoomDTO roomDTO) throws ApplicationException {
         RoomValidator.roomValidate(roomDTO);
         isRoomNumberExists(roomDTO.getRoomNumber());
-        return iRoomDAO.addRoom(roomDTO);
+        float roomServiceCharge = getRoomServiceCharge(roomDTO.getRoomType());
+        Room room = iRoomDAO.addRoom(roomDTO);
+        return RoomMapper.convertEntityToRoomDTO(room,roomServiceCharge);
     }
 
     public boolean updateRoom(RoomDTO room,String roomId) throws ApplicationException {
@@ -49,12 +51,6 @@ public class RoomService {
         }
     }
 
-    public void updateRoomPrice(int roomNumber, RoomDTO roomDTO) throws ApplicationException {
-        Room room = RoomMapper.convertRoomDTOToRoom(roomDTO);
-        isRoomNumberExists(room.getRoomNumber());
-        iRoomDAO.updateRoomPrice(roomNumber, room);
-    }
-
     public void updateRoomStatus(int roomId, RoomStatus status) throws ApplicationException {
         try {
             if (status == null) {
@@ -71,15 +67,15 @@ public class RoomService {
         return iRoomDAO.getAllRoomWithImage();
     }
 
-    public boolean isCapacityValid(int roomId, int numberOfGuest) throws ApplicationException {
-        if (iRoomDAO.isCapacityValid(roomId, numberOfGuest) == false) {
+    public void isCapacityValid(int roomId, int numberOfGuest) throws ApplicationException {
+        isValidRoomId(roomId);
+        if (!iRoomDAO.isCapacityValid(roomId, numberOfGuest)) {
             throw new ApplicationException(Messages.BookingError.CAPACITY_EXCEEDED);
         }
-        return true;
     }
 
     public void isValidRoomId(int roomId) throws ApplicationException {
-        if (iRoomDAO.isValidRoomId(roomId) == false) {
+        if (!iRoomDAO.isValidRoomId(roomId)) {
             throw new ApplicationException(Messages.RoomError.ROOM_ID_NOT_FOUND);
         }
     }
@@ -94,6 +90,13 @@ public class RoomService {
             throw new ApplicationException(Messages.RoomError.INVALID_ROOM_PRICE);
         }
         return iRoomDAO.getGstRatesByRoomPrice(price);
+    }
+
+    public float getRoomServiceCharge(RoomType roomType) throws ApplicationException {
+        if(roomType == null){
+            throw new ApplicationException(Messages.RoomError.INVALID_ROOMTYPE);
+        }
+        return iRoomDAO.getRoomServiceCharge(roomType);
     }
 
 }

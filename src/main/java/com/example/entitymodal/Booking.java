@@ -1,37 +1,74 @@
-package com.example.model;
+package com.example.entitymodal;
 
 import com.example.common.enums.BookingStatus;
+import com.example.model.Room;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "booking")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Booking {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "booking_id")
     private int bookingId;
-    private int userId;
-    private int roomId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private Room room;
+
+    @Column(name = "check_in", nullable = false)
     private LocalDateTime checkInTime;
+
+    @Column(name = "check_out", nullable = false)
     private LocalDateTime checkOutTime;
+
+    @Column(name = "total_amount", nullable = false)
     private float totalAmount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "booking_status", nullable = false)
     private BookingStatus bookingStatus;
+
+    @Column(name = "cancellation_date", columnDefinition = "DATE", nullable = true)
     private LocalDate cancellationDate;
+
+    @Column(name = "refund_amount")
     private float refundAmount;
+
+    @Column(name = "gstRate", nullable = false)
     private float gstRates;
+
+    @Column(name = "numberOfGuests", nullable = false)
     private int numberOfGuests;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public Booking() {
     }
 
-    private Booking(Builder builder) {
+    public Booking(Builder builder) {
         this.bookingId = builder.bookingId;
-        this.userId = builder.userId;
-        this.roomId = builder.roomId;
-        this.checkInTime = builder.checkInTime;
-        this.checkOutTime = builder.checkOutTime;
+        this.user = builder.user;
+        this.room = builder.room;
+        this.checkInTime = builder.checkIn;
+        this.checkOutTime = builder.checkOut;
         this.totalAmount = builder.totalAmount;
         this.bookingStatus = builder.bookingStatus;
         this.cancellationDate = builder.cancellationDate;
@@ -46,12 +83,12 @@ public class Booking {
         return bookingId;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public int getRoomId() {
-        return roomId;
+    public Room getRoom() {
+        return room;
     }
 
     public LocalDateTime getCheckInTime() {
@@ -96,10 +133,10 @@ public class Booking {
 
     public static class Builder {
         private int bookingId;
-        private int userId;
-        private int roomId;
-        private LocalDateTime checkInTime;
-        private LocalDateTime checkOutTime;
+        private User user;
+        private Room room;
+        private LocalDateTime checkIn;
+        private LocalDateTime checkOut;
         private float totalAmount;
         private BookingStatus bookingStatus;
         private LocalDate cancellationDate;
@@ -109,28 +146,28 @@ public class Booking {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
 
+        public Builder setUser(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public Builder setRoom(Room room) {
+            this.room = room;
+            return this;
+        }
+
         public Builder setBookingId(int bookingId) {
             this.bookingId = bookingId;
             return this;
         }
 
-        public Builder setUserId(int userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder setRoomId(int roomId) {
-            this.roomId = roomId;
-            return this;
-        }
-
         public Builder setCheckInTime(LocalDateTime checkInTime) {
-            this.checkInTime = checkInTime;
+            this.checkIn = checkInTime;
             return this;
         }
 
         public Builder setCheckOutTime(LocalDateTime checkOutTime) {
-            this.checkOutTime = checkOutTime;
+            this.checkOut = checkOutTime;
             return this;
         }
 
@@ -182,8 +219,8 @@ public class Booking {
     @Override
     public String toString() {
         return "bookingId=" + bookingId +
-                ", userId=" + userId +
-                ", roomId=" + roomId +
+                ", user=" + user +
+                ", room=" + room +
                 ", checkInTime=" + checkInTime +
                 ", checkOutTime=" + checkOutTime +
                 ", totalAmount=" + totalAmount +

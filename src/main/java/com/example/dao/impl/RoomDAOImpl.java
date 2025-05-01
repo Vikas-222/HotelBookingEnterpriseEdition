@@ -283,7 +283,7 @@ public class RoomDAOImpl implements IRoomDAO {
     @Override
     public RoomDTO getRoomById(int roomId) throws DBException {
         String sql = "SELECT r.*, rsc.charge_per_night,ri.imagepath FROM room r JOIN room_service_charge rsc JOIN room_images ri " +
-                "on r.room_id = ri.room_id and r.room_type = rsc.room_type and r.room_id = ri.room_id WHERE r.room_id = ?";
+                "on r.room_id = ri.room_id and r.room_type = rsc.room_type WHERE r.room_id = ?";
         RoomDTO.Builder room = null;
         List<String> imageList = new ArrayList<>();
         ResultSet rs = null;

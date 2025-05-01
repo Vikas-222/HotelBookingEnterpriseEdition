@@ -6,9 +6,9 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.common.utils.SessionValidator;
+import com.example.common.utils.SessionChecker;
 import com.example.dto.BookingDTO;
-import com.example.dto.UserDTO;
+import com.example.dto.UsersDTO;
 import com.example.service.BookingService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,9 +26,9 @@ public class ModifyBookingController extends HttpServlet {
         response.setContentType(AppConstants.APPLICATION_JSON);
         BookingService service = new BookingService();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
+            UsersDTO user = SessionChecker.checkSession(request);
             BookingDTO booking = CustomObjectMapper.toObject(request.getReader(), BookingDTO.class);
-            if(user.getIsActive() == false){
+            if(!user.getIsActive()){
                 throw new ApplicationException(Messages.BookingError.ACCOUNT_DEACTIVATE);
             }
             service.modifyBooking(booking,user.getUserId());

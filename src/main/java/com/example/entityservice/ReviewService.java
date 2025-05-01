@@ -1,22 +1,24 @@
 package com.example.entityservice;
 
 import com.example.common.Messages;
+import com.example.common.entitymapper.BookingMapper;
 import com.example.common.entitymapper.ReviewMapper;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
-import com.example.common.mapper.BookingMapper;
 import com.example.controller.validation.ReviewValidator;
 import com.example.dao.entity.ReviewDAO;
 import com.example.dto.BookingDTO;
 import com.example.dto.ReviewDTO;
+import com.example.dto.RoomDTO;
 import com.example.dto.UsersDTO;
 import com.example.entitymodal.Review;
-import com.example.service.BookingService;
+import com.example.service.RoomService;
 
 public class ReviewService {
     private ReviewDAO reviewDAO = new ReviewDAO();
     private UserServices userService = new UserServices();
     private BookingService bookingService = new BookingService();
+    private RoomService roomService = new RoomService();
 
     public boolean addReview(ReviewDTO reviewDTO,UsersDTO usersDTO) throws ApplicationException {
         if(!bookingService.isValidUserIdAndBookingId(usersDTO.getUserId(), reviewDTO.getBookingId())){
@@ -25,7 +27,8 @@ public class ReviewService {
         ReviewValidator.isValidValues(reviewDTO);
         UsersDTO user = userService.fetchUserDetailsById(usersDTO.getUserId());
         BookingDTO booking = bookingService.getBookingDetails(reviewDTO.getBookingId());
-        Review review = ReviewMapper.convertReviewDTOToEntity(reviewDTO,user,booking);
+        RoomDTO roomDTO = roomService.getRoomDetails(booking.getRoomId());
+        Review review = ReviewMapper.convertReviewDTOToEntity(reviewDTO,user,booking,roomDTO);
         return reviewDAO.addReview(review);
     }
 
@@ -42,13 +45,12 @@ public class ReviewService {
             throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
         }
         BookingDTO bookingDTO = BookingMapper.convertEntityToBookingDTO(existingReview.getBooking());
-        System.out.println("bookingdto in reviewservice "+bookingDTO);
-        Review review = ReviewMapper.convertReviewDTOToEntityForUpdate(reviewDTO,user,bookingDTO);
-        System.out.println("review "+review);
+        RoomDTO roomDTO = roomService.getRoomDetails(bookingDTO.getRoomId());
+        Review review = ReviewMapper.convertReviewDTOToEntityForUpdate(reviewDTO,user,bookingDTO,roomDTO);
         reviewDAO.updateReview(review);
     }
 
-    public boolean deleteReview(String reviewID, int userId) throws ApplicationException {
+    public void deleteReview(String reviewID, int userId) throws ApplicationException {
         if (reviewID == null || reviewID.isBlank()) {
             throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
         }
@@ -61,13 +63,12 @@ public class ReviewService {
         if (reviewId <= 0) {
             throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
         }
-        if (userService.isValidUserId(userId) == false) {
+        if (!userService.isValidUserId(userId)) {
             throw new ApplicationException(Messages.Error.USER_NOT_FOUND);
         }
-        if (reviewDAO.deleteReview(reviewId, userId) == false) {
+        if (!reviewDAO.deleteReview(reviewId, userId)) {
             throw new ApplicationException(Messages.ReviewError.INVALID_REVIEW_ID);
         }
-        return true;
     }
 
 //    public List<ReviewDTO> getReviewsByUserId(int userId) throws ApplicationException {

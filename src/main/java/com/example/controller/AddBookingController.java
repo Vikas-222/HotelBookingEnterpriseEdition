@@ -6,10 +6,11 @@ import com.example.common.Response;
 import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.utils.CustomObjectMapper;
-import com.example.common.utils.SessionValidator;
+import com.example.common.utils.SessionChecker;
 import com.example.dto.BookingDTO;
-import com.example.dto.UserDTO;
-import com.example.service.BookingService;
+import com.example.dto.UsersDTO;
+import com.example.entitymodal.Booking;
+import com.example.entityservice.BookingService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -26,13 +27,13 @@ public class AddBookingController extends HttpServlet {
         response.setContentType(AppConstants.APPLICATION_JSON);
         BookingService bookingService = new BookingService();
         try {
-            UserDTO user = SessionValidator.checkSession(request);
+            UsersDTO user = SessionChecker.checkSession(request);
             BookingDTO bookingDTO = CustomObjectMapper.toObject(request.getReader(), BookingDTO.class);
-            if(user.getIsActive() == false){
+            if(!user.getIsActive()){
                 throw new ApplicationException(Messages.BookingError.ACCOUNT_DEACTIVATE);
             }
-            bookingService.addBooking(bookingDTO,user.getUserId());
-            sendResponse(response, Messages.BOOKING_SUCCESS, null, null, 200);
+            Booking booking = bookingService.addBooking(bookingDTO,user);
+            sendResponse(response, Messages.BOOKING_SUCCESS, null, booking, 200);
         } catch (DBException e) {
             e.printStackTrace();
             sendResponse(response, Messages.Error.FAILED, e.getMessage(), null, 500);

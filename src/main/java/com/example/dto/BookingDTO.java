@@ -3,6 +3,7 @@ package com.example.dto;
 import com.example.common.enums.BookingStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -17,7 +18,7 @@ public class BookingDTO {
     private float totalAmount;
     private float roomServiceCharge;
     private BookingStatus bookingStatus;
-    private Date cancellationDate;
+    private LocalDate cancellationDate;
     private float refundAmount;
     private float gstRates;
     private int numberOfGuests;
@@ -66,7 +67,7 @@ public class BookingDTO {
         return bookingStatus;
     }
 
-    public Date getCancellationDate() {
+    public LocalDate getCancellationDate() {
         return cancellationDate;
     }
 
@@ -96,7 +97,7 @@ public class BookingDTO {
         private float totalAmount;
         private float roomServiceCharge;
         private BookingStatus bookingStatus;
-        private Date cancellationDate;
+        private LocalDate cancellationDate;
         private float refundAmount;
         private float gstRates;
         private int numberOfGuests;
@@ -142,7 +143,7 @@ public class BookingDTO {
             return this;
         }
 
-        public Builder setCancellationDate(Date cancellationDate) {
+        public Builder setCancellationDate(LocalDate cancellationDate) {
             this.cancellationDate = cancellationDate;
             return this;
         }

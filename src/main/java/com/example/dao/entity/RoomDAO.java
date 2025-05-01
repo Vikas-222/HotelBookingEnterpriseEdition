@@ -7,19 +7,19 @@ import com.example.common.exception.DBException;
 import com.example.common.utils.ManagerFactory;
 import com.example.dao.IRoomDAO;
 import com.example.dto.RoomDTO;
+import com.example.entitymodal.RoomServiceCharge;
 import com.example.model.Room;
 import com.example.model.RoomImages;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class RoomDAO implements IRoomDAO {
 
     @Override
     public Room addRoom(RoomDTO roomDTO) throws DBException {
         EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager();
-        String jpql = "select rsc.chargePerNight from RoomServiceCharge rsc where rsc.roomType";
         try {
             em.getTransaction().begin();
             Room room1 = new Room.Builder()
@@ -30,9 +30,9 @@ public class RoomDAO implements IRoomDAO {
             em.persist(room1);
             if (roomDTO.getImagePath() != null && !roomDTO.getImagePath().isEmpty()) {
                 for (String imagePath : roomDTO.getImagePath()) {
-                    RoomImages roomImage = new RoomImages(); // Create RoomImages entity
+                    RoomImages roomImage = new RoomImages();
                     roomImage.setImagepath(imagePath);
-                    room1.addRoomImage(roomImage); // Assumes addRoomImage method exists on Room
+                    room1.addRoomImage(roomImage);
                     em.persist(roomImage);
                 }
             }
@@ -95,8 +95,8 @@ public class RoomDAO implements IRoomDAO {
                 return false;
             }
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
+            if (em.getTransaction().isActive() && em.getTransaction() != null){
+                    em.getTransaction().rollback();
             }
             throw new DBException(e);
         }
@@ -159,9 +159,7 @@ public class RoomDAO implements IRoomDAO {
         query.setParameter("roomId", roomId);
         int capacity = query.getSingleResult();
         return numberOfGuests <= capacity;
-        }catch (PersistenceException e) {
-            throw new DBException(e);
-        }catch(Exception e) {
+        } catch (Exception e) {
             throw new DBException(e);
         }
     }
@@ -237,16 +235,66 @@ public class RoomDAO implements IRoomDAO {
 
     @Override
     public float getGstRatesByRoomPrice(float price) throws DBException {
-        return 0;
+        String sql = "SELECT tax_rate FROM gst_rates WHERE min_price <= ? AND (max_price >= ? OR max_price IS NULL)";
+        EntityManager em = null;
+        try {
+            em = ManagerFactory.getEntityManagerFactory().createEntityManager();
+            Query query = em.createNativeQuery(sql, Float.class);
+            query.setParameter(1, price);
+            query.setParameter(2, price);
+            return (Float) query.getSingleResult();
+        } catch (NoResultException e) {
+            throw new DBException(e);
+        } catch (NonUniqueResultException e) {
+            throw new DBException(e);
+        } catch (Exception e) {
+            throw new DBException(e);
+        }
     }
 
     @Override
     public RoomDTO getRoomById(int roomId) throws DBException {
-//        try(EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()){
-//
-//        }
-        return null;
+        String jpql = "SELECT r FROM Room r LEFT JOIN FETCH r.serviceCharge rsc LEFT JOIN FETCH r.roomImages ri " +
+                "WHERE r.roomId = :roomId";
+        try(EntityManager em = ManagerFactory.getEntityManagerFactory().createEntityManager()){
+            em.getTransaction().begin();
+            TypedQuery<Room> query = em.createQuery(jpql, Room.class);
+            query.setParameter("roomId", roomId);
+            List<Room> resultList = query.getResultList();
+            if (resultList.isEmpty()) {
+                return null;
+            }
+            Room roomEntity = resultList.get(0);
+            RoomDTO.Builder roomDTO = new RoomDTO.Builder()     //setting values to roomDTO
+                    .setRoomId(roomEntity.getRoomId())
+                    .setRoomNumber(roomEntity.getRoomNumber())
+                    .setRoomType(roomEntity.getRoomType())
+                    .setPricePerNight(roomEntity.getPricePerNight())
+                    .setCapacity(roomEntity.getCapacity())
+                    .setRoomStatus(roomEntity.getRoomStatus());
+            RoomServiceCharge serviceChargeEntity = roomEntity.getServiceCharge();      //fetching RoomServiceCharge entity
+            if (serviceChargeEntity != null) {
+                roomDTO.setRoomServiceCharge(serviceChargeEntity.getChargePerNight());      //chargePerNight value set to roomDTO
+            }
+
+            List<String> imagePaths = new ArrayList<>();
+            Set<RoomImages> imageSet = roomEntity.getRoomImages(); // already initialized by FETCH JOIN
+            if (imageSet != null) {
+                for (RoomImages imageEntity : imageSet) {
+                    if (imageEntity.getImagepath() != null) { 
+                        imagePaths.add(imageEntity.getImagepath());
+                    }
+                }
+            }
+            roomDTO.setImagePath(imagePaths);
+            return roomDTO.build();
+        } catch (NoResultException e) {
+            return null; 
+        } catch (PersistenceException e) {
+            throw new DBException(e);
+        }
     }
+
 
     @Override
     public Float getRoomServiceCharge(RoomType roomType) throws DBException {
@@ -256,13 +304,7 @@ public class RoomDAO implements IRoomDAO {
             Query query = em.createQuery(jpql);
             query.setParameter("roomType",roomType);
             return (Float) query.getSingleResult();
-        }catch(NoResultException e){
-            throw new DBException(e);
-        }
-        catch(PersistenceException e){
-            throw new DBException(e);
-        }
-        catch(Exception e){
+        } catch(PersistenceException e){
             throw new DBException(e);
         }
     }

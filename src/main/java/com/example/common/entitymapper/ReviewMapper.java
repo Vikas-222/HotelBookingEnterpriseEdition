@@ -1,8 +1,8 @@
 package com.example.common.entitymapper;
 
-import com.example.common.mapper.BookingMapper;
 import com.example.dto.BookingDTO;
 import com.example.dto.ReviewDTO;
+import com.example.dto.RoomDTO;
 import com.example.dto.UsersDTO;
 import com.example.entitymodal.Review;
 
@@ -11,20 +11,20 @@ import java.util.stream.Collectors;
 
 public class ReviewMapper {
 
-    public static Review convertReviewDTOToEntity(ReviewDTO reviewDTO, UsersDTO user, BookingDTO booking) {
+    public static Review convertReviewDTOToEntity(ReviewDTO reviewDTO, UsersDTO userDTO, BookingDTO booking, RoomDTO roomDTO) {
         Review review = new Review();
-        review.setUser(UserMap.dtoToUser(user));
-        review.setBooking(BookingMapper.convertBookingDTOToEntity(booking));
+        review.setUser(UserMap.dtoToUser(userDTO));
+        review.setBooking(BookingMapper.convertBookingDTOToEntity(booking,userDTO,roomDTO));
         review.setFeedback(reviewDTO.getFeedback());
         review.setRating(reviewDTO.getRating());
         return review;
     }
 
-    public static Review convertReviewDTOToEntityForUpdate(ReviewDTO reviewDTO, UsersDTO user, BookingDTO booking) {
+    public static Review convertReviewDTOToEntityForUpdate(ReviewDTO reviewDTO, UsersDTO user, BookingDTO booking,RoomDTO roomDTO) {
         Review review = new Review();
         review.setReviewId(reviewDTO.getReviewId());
         review.setUser(UserMap.dtoToUser(user));
-        review.setBooking(BookingMapper.convertBookingDTOToEntity(booking));
+        review.setBooking(BookingMapper.convertBookingDTOToEntity(booking,user,roomDTO));
         review.setFeedback(reviewDTO.getFeedback());
         review.setRating(reviewDTO.getRating());
         return review;

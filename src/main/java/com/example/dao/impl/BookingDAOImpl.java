@@ -8,6 +8,7 @@ import com.example.dto.RoomDTO;
 import com.example.model.Booking;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class BookingDAOImpl implements IBookingDAO {
     public void addBooking(Booking booking, RoomDTO room) throws DBException {
         String insert = "insert into booking (user_id,room_id,check_in,check_out,total_amount,numberOfGuests,refund_amount,gstRate) values (?,?,?,?,?,?,?,?)";
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(insert);) {
+             PreparedStatement pst = connection.prepareStatement(insert)) {
             pst.setInt(1, booking.getUserId());
             pst.setInt(2, booking.getRoomId());
             pst.setTimestamp(3, Timestamp.valueOf(booking.getCheckInTime()));
@@ -42,6 +43,11 @@ public class BookingDAOImpl implements IBookingDAO {
             pst.setInt(1, id);
             rs = pst.executeQuery();
             while (rs.next()) {
+                Date sqlDate = rs.getDate("cancellation_date");
+                LocalDate cancellationDate = null;
+                if (sqlDate != null) {
+                    cancellationDate = sqlDate.toLocalDate();
+                }
                 booking = new Booking.Builder()
                         .setBookingId(rs.getInt("booking_id"))
                         .setUserId(rs.getInt("user_id"))
@@ -51,7 +57,7 @@ public class BookingDAOImpl implements IBookingDAO {
                         .setTotalAmount(rs.getFloat("total_amount"))
                         .setGstRates(rs.getFloat("gstRate"))
                         .setBookingStatus(BookingStatus.fromString(rs.getString("booking_status")))
-                        .setCancellationDate(rs.getDate("cancellation_date"))
+                        .setCancellationDate(cancellationDate)
                         .setRefundAmount(rs.getFloat("refund_amount")).build();
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -73,7 +79,7 @@ public class BookingDAOImpl implements IBookingDAO {
     public void updateBookingStatus(int id, String status) throws DBException {
         String update = "update Booking set booking_status = ? where booking_id = ?";
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(update);) {
+             PreparedStatement pst = connection.prepareStatement(update)) {
             pst.setString(1, status);
             pst.setInt(2, id);
             pst.executeUpdate();
@@ -88,9 +94,14 @@ public class BookingDAOImpl implements IBookingDAO {
         ResultSet rs = null;
         List<Booking> list = new ArrayList<>();
         try (Connection connection = DbConnect.instance.getConnection();
-             PreparedStatement pst = connection.prepareStatement(fetch);) {
+             PreparedStatement pst = connection.prepareStatement(fetch)) {
             rs = pst.executeQuery();
             while (rs.next()) {
+                Date sqlDate = rs.getDate("cancellation_date");
+                LocalDate cancellationDate = null;
+                if (sqlDate != null) {
+                    cancellationDate = sqlDate.toLocalDate();
+                }
                 Booking booking = new Booking.Builder()
                         .setBookingId(rs.getInt("booking_id"))
                         .setUserId(rs.getInt("user_id"))
@@ -100,7 +111,7 @@ public class BookingDAOImpl implements IBookingDAO {
                         .setTotalAmount(rs.getFloat("total_amount"))
                         .setGstRates(rs.getFloat("gstRate"))
                         .setBookingStatus(BookingStatus.fromString(rs.getString("booking_status")))
-                        .setCancellationDate(rs.getDate("cancellation_date"))
+                        .setCancellationDate(cancellationDate)
                         .setRefundAmount(rs.getFloat("refund_amount"))
                         .setNumberOfGuests(rs.getInt("numberOfGuests"))
                         .build();
@@ -213,6 +224,11 @@ public class BookingDAOImpl implements IBookingDAO {
             pst.setInt(1, userId);
             rs = pst.executeQuery();
             while (rs.next()) {
+                Date sqlDate = rs.getDate("cancellation_date");
+                LocalDate cancellationDate = null;
+                if (sqlDate != null) {
+                    cancellationDate = sqlDate.toLocalDate();
+                }
                 Booking booking = new Booking.Builder()
                         .setBookingId(rs.getInt("booking_id"))
                         .setUserId(rs.getInt("user_id"))
@@ -222,7 +238,7 @@ public class BookingDAOImpl implements IBookingDAO {
                         .setTotalAmount(rs.getFloat("total_amount"))
                         .setGstRates(rs.getFloat("gstRate"))
                         .setBookingStatus(BookingStatus.fromString(rs.getString("booking_status")))
-                        .setCancellationDate(rs.getDate("cancellation_date"))
+                        .setCancellationDate(cancellationDate)
                         .setRefundAmount(rs.getFloat("refund_amount"))
                         .setNumberOfGuests(rs.getInt("numberOfGuests")).build();
                 list.add(booking);

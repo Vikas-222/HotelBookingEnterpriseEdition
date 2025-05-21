@@ -1,0 +1,206 @@
+/* General Body Styling */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f7fa; /* Very light gray-blue background */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header Styling */
+header {
+    background-color: #2d3e50; /* Darker navy header */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+}
+
+/* Header Menu for navigation links */
+.header-menu {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+}
+
+.header-menu a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.header-menu a:hover {
+    text-decoration: underline;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    display: flex;
+    height: calc(100vh - 60px); /* Adjust height based on header */
+    flex-direction: row;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 220px;
+    background-color: #34495e; /* Dark grayish-blue sidebar */
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 10px 0;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.sidebar a:hover {
+    background-color: #1f5b83; /* Teal hover effect */
+    border-radius: 5px;
+    padding-left: 10px;
+    transition: 0.3s;
+}
+
+/* Main Content Area */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #ffffff;
+    overflow-y: auto;
+}
+
+/* Card Component Styling */
+.card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    color: #34495e; /* Darker text color */
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #34495e; /* Matching dark header */
+    color: white;
+}
+
+td {
+    background-color: #f9f9f9;
+}
+
+/* Action Buttons for Update and Delete */
+.btn-update {
+    background-color: #3498db; /* Blue for update */
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-update:hover {
+    background-color: #2980b9;
+}
+
+.btn-delete {
+    background-color: #e74c3c; /* Red for delete */
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+/* Add User Button Styling */
+button {
+    padding: 8px 16px;
+    background-color: #1f5b83; /* Teal button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #1f5b83; /* Darker teal on hover */
+}
+
+/* Logout Button Styling */
+.logoutBtn {
+    padding: 8px 16px;
+
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logoutBtn:hover {
+    background-color: #c0392b;
+}
+/* simple iOS‑style switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+}
+.switch input { display:none; }
+.slider {
+    position: absolute; cursor:pointer;
+    top:0; left:0; right:0; bottom:0;
+    background-color:#ccc; transition:.4s; border-radius:24px;
+}
+.slider:before {
+    position:absolute; content:"";
+    height:20px; width:20px; left:2px; bottom:2px;
+    background-color:white; transition:.4s; border-radius:50%;
+}
+input:checked + .slider { background-color:#4caf50; }
+input:checked + .slider:before { transform:translateX(22px); }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    table {
+        font-size: 14px;
+    }
+}

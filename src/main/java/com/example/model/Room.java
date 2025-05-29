@@ -3,6 +3,7 @@ package com.example.model;
 import com.example.common.enums.RoomStatus;
 import com.example.common.enums.RoomType;
 import com.example.entitymodal.RoomServiceCharge;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -40,11 +41,13 @@ public class Room implements Serializable {
     @Column(name = "room_status", nullable = false)
     private RoomStatus roomStatus = RoomStatus.AVAILABLE;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference   //"managed" side, it will be serialized
     private Set<RoomImages> roomImages = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_type", referencedColumnName = "room_type", insertable = false, updatable = false)
+    @JsonManagedReference
     private RoomServiceCharge serviceCharge;
 
     @CreationTimestamp

@@ -16,7 +16,8 @@ public class BookingDAOImpl implements IBookingDAO {
 
     @Override
     public void addBooking(Booking booking, RoomDTO room) throws DBException {
-        String insert = "insert into booking (user_id,room_id,check_in,check_out,total_amount,numberOfGuests,refund_amount,gstRate) values (?,?,?,?,?,?,?,?)";
+        String insert = "insert into booking (user_id,room_id,check_in,check_out,total_amount,numberOfGuests,refund_amount,gstRate) " +
+                "values (?,?,?,?,?,?,?,?)";
         try (Connection connection = DbConnect.instance.getConnection();
              PreparedStatement pst = connection.prepareStatement(insert)) {
             pst.setInt(1, booking.getUserId());

@@ -7,12 +7,8 @@ import com.example.common.exception.ApplicationException;
 import com.example.common.exception.DBException;
 import com.example.common.mapper.BookingMapper;
 import com.example.controller.validation.BookingValidator;
-import com.example.dao.IRoomDAO;
-import com.example.dao.IUserDAO;
 import com.example.dao.impl.BookingDAOImpl;
 import com.example.dao.IBookingDAO;
-import com.example.dao.impl.RoomDAOImpl;
-import com.example.dao.impl.UserDAOImpl;
 import com.example.dto.BookingDTO;
 import com.example.dto.RoomDTO;
 import com.example.dto.UserDTO;
@@ -20,24 +16,19 @@ import com.example.model.Booking;
 
 import java.sql.Date;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.Temporal;
 import java.util.List;
 
 public class BookingService {
 
-    private IBookingDAO iBookingDAO = new BookingDAOImpl();
-    private RoomService roomService = new RoomService();
-    private UserService userService = new UserService();
+    private final IBookingDAO iBookingDAO = new BookingDAOImpl();
+    private final RoomService roomService = new RoomService();
+    private final UserService userService = new UserService();
 
-    public boolean isValidBookingId(int id) throws ApplicationException {
-        if (iBookingDAO.isValidBookingId(id) == false) {
+    public void isValidBookingId(int id) throws ApplicationException {
+        if (!iBookingDAO.isValidBookingId(id)) {
             throw new ApplicationException(Messages.BookingError.BOOKING_NOT_FOUND);
         }
-        return true;
     }
 
     public void addBooking(BookingDTO bookingdto, int userId) throws ApplicationException {
@@ -69,6 +60,8 @@ public class BookingService {
                 .setGstRates(gstRate).build();
     }
 
+
+
     public BookingDTO getBookingDetails(String id) throws ApplicationException {
         if (id == null || id.isBlank()) {
             throw new ApplicationException(Messages.BookingError.INVALID_BOOKING_ID);
@@ -92,7 +85,7 @@ public class BookingService {
     public void modifyBooking(BookingDTO bookingDTO, int userId) throws ApplicationException {
         isValidBookingId(bookingDTO.getBookingId());
         Booking booking = iBookingDAO.getBookingDetails(bookingDTO.getBookingId());
-        if(booking.getBookingStatus().toString() == "CANCELLATION"){
+        if(booking.getBookingStatus().equals(BookingStatus.CANCELLATION)){
             throw new ApplicationException(Messages.BookingError.CANNOT_MODIFY_CANCELLED_BOOKING);
         }
         RoomDTO room = roomService.getRoomDetails(bookingDTO.getRoomId());
